@@ -14,18 +14,8 @@
     }
   ],
   "paths": {
-    "/users/{userId}": {
-      "parameters": [
-        {
-          "schema": {
-            "type": "integer"
-          },
-          "name": "userId",
-          "in": "path",
-          "required": true,
-          "description": "Id of an existing user."
-        }
-      ],
+    "/users": {
+      "parameters": [],
       "get": {
         "summary": "Get User Info by User ID",
         "tags": [],
@@ -58,7 +48,8 @@
           }
         },
         "operationId": "get-users-userId",
-        "description": "Retrieve the information of the user with the matching user ID."
+        "description": "Retrieve the information of the user with the matching user ID.",
+        "parameters": []
       },
       "patch": {
         "summary": "Update User Information",
@@ -137,7 +128,15 @@
             }
           },
           "description": "Patch user properties to update."
-        }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          }
+        ]
       }
     },
     "/user": {
@@ -222,58 +221,247 @@
   },
   "components": {
     "schemas": {
-      "User": {
-        "title": "User",
+      "Article": {
+        "title": "Article",
         "type": "object",
         "description": "",
         "x-examples": {
-          "Alice Smith": {
-            "id": 142,
-            "firstName": "Alice",
-            "lastName": "Smith",
-            "email": "alice.smith@gmail.com",
-            "dateOfBirth": "1997-10-31",
-            "emailVerified": true,
-            "signUpDate": "2019-08-24"
+          "Example": {
+            "title": "First COVID Case in Sydney",
+            "url": "https://fakenews.com.au/first-covid-case-sydney",
+            "location": "Sydney",
+            "startDate": "user@example.com",
+            "endDate": "1997-10-31",
+            "cases": 0
           }
         },
         "properties": {
-          "id": {
-            "type": "integer",
-            "description": "Unique identifier for the given user."
-          },
-          "firstName": {
+          "headline": {
+            "description": "Unique identifier for the given user.",
             "type": "string"
           },
-          "lastName": {
+          "url": {
             "type": "string"
           },
-          "email": {
-            "type": "string",
-            "format": "email"
+          "location": {
+            "$ref": "#/components/schemas/Location"
           },
-          "dateOfBirth": {
-            "type": "string",
-            "format": "date",
-            "example": "1997-10-31"
+          "reports": {
+            "type": "array",
+            "description": "Set to true if the user's email has been verified.",
+            "items": {
+              "$ref": "#/components/schemas/Report"
+            }
           },
-          "emailVerified": {
-            "type": "boolean",
-            "description": "Set to true if the user's email has been verified."
+          "termsFound": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
-          "createDate": {
-            "type": "string",
-            "format": "date",
-            "description": "The date that the user was created."
+          "main_text": {
+            "type": "string"
+          },
+          "date_of_publication": {
+            "$ref": "#/components/schemas/Dates"
           }
         },
         "required": [
-          "id",
-          "firstName",
-          "lastName",
-          "email",
-          "emailVerified"
+          "headline",
+          "url",
+          "location",
+          "reports"
         ]
+      },
+      "UserInput": {
+        "title": "UserInput",
+        "type": "object",
+        "x-examples": {
+          "SydneyRequest": {
+            "startDate": "2019-01-11T09:02:00",
+            "endDate": "2019-01-16T11:02:10",
+            "keyTerms": "anthrax,zika",
+            "location": "Sydney"
+          }
+        },
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "example": "YYYY-MM-DDtHH:MM:SS"
+          },
+          "endDate": {
+            "type": "string",
+            "example": "YYYY-MM-DDtHH:MM:SS"
+          },
+          "keyTerms": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "startDate",
+          "endDate",
+          "keyTerms",
+          "location"
+        ]
+      },
+      "Report": {
+        "title": "Report",
+        "type": "object",
+        "x-examples": {
+          "Example": {
+            "diseases": [
+              "COVID",
+              "Malaria"
+            ],
+            "syndromes": [],
+            "event_date": "2019-05-05T11:22:01",
+            "locations": [
+              "Sydney",
+              "Melbourne",
+              "Perth"
+            ]
+          }
+        },
+        "properties": {
+          "diseases": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Disease"
+            }
+          },
+          "syndromes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Syndrome"
+            }
+          },
+          "event_date": {
+            "$ref": "#/components/schemas/Dates"
+          },
+          "locations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Location"
+            }
+          }
+        },
+        "required": [
+          "event_date"
+        ]
+      },
+      "Dates": {
+        "title": "Dates",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/DateExact"
+          },
+          {
+            "$ref": "#/components/schemas/DateRange"
+          }
+        ]
+      },
+      "DateRange": {
+        "type": "string",
+        "title": "DateRange",
+        "pattern": "^(\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx) to (\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx)$"
+      },
+      "DateExact": {
+        "type": "string",
+        "title": "DateExact",
+        "x-examples": {
+          "example-1": "string"
+        },
+        "pattern": "^(\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx)$"
+      },
+      "Disease": {
+        "title": "Disease",
+        "type": "string"
+      },
+      "Syndrome": {
+        "title": "Syndrome",
+        "type": "string"
+      },
+      "Location": {
+        "title": "Location",
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          }
+        }
+      },
+      "EventType": {
+        "title": "EventType",
+        "type": "string"
+      }
+    },
+    "responses": {
+      "ArticleList": {
+        "description": "Example response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "articles": {
+                  "$ref": "#/components/schemas/Article"
+                },
+                "debugInfo": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "accessTime": {
+                      "type": "number"
+                    },
+                    "serviceTime": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "articles"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "periodOfInterest": {
+        "name": "periodOfInterest",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Either a single date or date range"
+      },
+      "location": {
+        "name": "location",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The city or country of interest"
+      },
+      "keyTerms": {
+        "name": "keyTerms",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "array"
+        },
+        "description": "Words to filter the search"
       }
     }
   }
