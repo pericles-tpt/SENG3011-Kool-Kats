@@ -139,7 +139,7 @@
         ]
       }
     },
-    "/user": {
+    "/getReports": {
       "post": {
         "summary": "Create New User",
         "operationId": "post-user",
@@ -216,7 +216,148 @@
           "description": "Post the necessary fields for the API to create a new user."
         },
         "description": "Create a new user."
+      },
+      "parameters": [],
+      "get": {
+        "summary": "",
+        "operationId": "get-getReports",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
+    },
+    "/getArticles": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "articles": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Article"
+                      }
+                    },
+                    "team": {
+                      "$ref": "#/components/schemas/DebugInfo"
+                    }
+                  }
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "articles": [
+                        {
+                          "headline": "Coronavirus Spreading in Sydney",
+                          "url": "https://epiwatch.com/five-new-cases-discovered-in-sydney",
+                          "location": {
+                            "country": "Australia",
+                            "location": "Sydney"
+                          },
+                          "reports": [
+                            {
+                              "diseases": [
+                                "Coronavirus"
+                              ],
+                              "syndromes": [],
+                              "event_date": "2019-03-10Txx:xx:xx",
+                              "locations": [
+                                {
+                                  "country": "Austrlia",
+                                  "location": "Sydney"
+                                }
+                              ]
+                            }
+                          ],
+                          "termsFound": [
+                            "Coronavirus",
+                            "Pandemic"
+                          ],
+                          "main_text": "Five new case of the Coronavirus have been discovered in Balmain...",
+                          "date_of_publication": "2019-03-10T10:10:10"
+                        }
+                      ],
+                      "team": {
+                        "name": "KoolKats",
+                        "accessTime": 133,
+                        "serviceTime": 150
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "operationId": "get-getArticles",
+        "description": "Gets all articles from scraped World Health Organisation (WHO) source filtered by date range, location and key terms.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/keyTerms"
+          },
+          {
+            "$ref": "#/components/parameters/location"
+          },
+          {
+            "$ref": "#/components/parameters/startDate"
+          },
+          {
+            "$ref": "#/components/parameters/endDate"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "keyTerms": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "location": {
+                    "type": "string"
+                  },
+                  "startDate": {
+                    "$ref": "#/components/schemas/DateExact"
+                  },
+                  "endDate": {
+                    "$ref": "#/components/schemas/DateExact"
+                  }
+                }
+              }
+            }
+          },
+          "description": "This is the result\n"
+        }
+      },
+      "parameters": []
     }
   },
   "components": {
@@ -237,7 +378,7 @@
         },
         "properties": {
           "headline": {
-            "description": "Unique identifier for the given user.",
+            "description": "",
             "type": "string"
           },
           "url": {
@@ -248,7 +389,7 @@
           },
           "reports": {
             "type": "array",
-            "description": "Set to true if the user's email has been verified.",
+            "description": "",
             "items": {
               "$ref": "#/components/schemas/Report"
             }
@@ -399,6 +540,21 @@
       "EventType": {
         "title": "EventType",
         "type": "string"
+      },
+      "DebugInfo": {
+        "title": "DebugInfo",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "accessTime": {
+            "type": "integer"
+          },
+          "serviceTime": {
+            "type": "integer"
+          }
+        }
       }
     },
     "responses": {
@@ -436,19 +592,19 @@
       }
     },
     "parameters": {
-      "periodOfInterest": {
-        "name": "periodOfInterest",
+      "startDate": {
+        "name": "startDate",
         "in": "query",
-        "required": false,
         "schema": {
           "type": "string"
         },
-        "description": "Either a single date or date range"
+        "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DD HH:MM:SS'",
+        "required": true
       },
       "location": {
         "name": "location",
         "in": "query",
-        "required": false,
+        "required": true,
         "schema": {
           "type": "string"
         },
@@ -457,11 +613,20 @@
       "keyTerms": {
         "name": "keyTerms",
         "in": "query",
-        "required": false,
+        "required": true,
         "schema": {
           "type": "array"
         },
         "description": "Words to filter the search"
+      },
+      "endDate": {
+        "name": "endDate",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The desired end date to fetch articles for in the form 'YYYY-MM-DD HH:MM:SS'"
       }
     }
   }
