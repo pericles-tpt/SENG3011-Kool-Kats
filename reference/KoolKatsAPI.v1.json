@@ -139,91 +139,52 @@
         ]
       }
     },
-    "/getReports": {
-      "post": {
-        "summary": "Create New User",
-        "operationId": "post-user",
+    "/occurrencesByLocation": {
+      "parameters": [],
+      "get": {
+        "summary": "",
+        "operationId": "get-occurrences-by-location",
+        "description": "Get the number of occurences of different diseases/key terms by location/country",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/periodOfInterest"
+          },
+          {
+            "$ref": "#/components/parameters/location"
+          },
+          {
+            "$ref": "#/components/parameters/keyTerms"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "User Created",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
-                },
-                "examples": {
-                  "New User Bob Fellow": {
-                    "value": {
-                      "id": 12,
-                      "firstName": "Bob",
-                      "lastName": "Fellow",
-                      "email": "bob.fellow@gmail.com",
-                      "dateOfBirth": "1996-08-24",
-                      "emailVerified": false,
-                      "createDate": "2020-11-18"
+                  "type": "object",
+                  "properties": {
+                    "locations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "occurrences": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    },
+                    "debugInfo": {
+                      "$ref": "#/components/schemas/DebugInfo"
                     }
                   }
                 }
               }
             }
-          },
-          "400": {
-            "description": "Missing Required Information"
-          },
-          "409": {
-            "description": "Email Already Taken"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "firstName": {
-                    "type": "string"
-                  },
-                  "lastName": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string"
-                  },
-                  "dateOfBirth": {
-                    "type": "string",
-                    "format": "date"
-                  }
-                },
-                "required": [
-                  "firstName",
-                  "lastName",
-                  "email",
-                  "dateOfBirth"
-                ]
-              },
-              "examples": {
-                "Create User Bob Fellow": {
-                  "value": {
-                    "firstName": "Bob",
-                    "lastName": "Fellow",
-                    "email": "bob.fellow@gmail.com",
-                    "dateOfBirth": "1996-08-24"
-                  }
-                }
-              }
-            }
-          },
-          "description": "Post the necessary fields for the API to create a new user."
-        },
-        "description": "Create a new user."
-      },
-      "parameters": [],
-      "get": {
-        "summary": "",
-        "operationId": "get-getReports",
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
@@ -569,18 +530,7 @@
                   "$ref": "#/components/schemas/Article"
                 },
                 "debugInfo": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "accessTime": {
-                      "type": "number"
-                    },
-                    "serviceTime": {
-                      "type": "number"
-                    }
-                  }
+                  "$ref": "#/components/schemas/DebugInfo"
                 }
               },
               "required": [
@@ -595,6 +545,7 @@
       "startDate": {
         "name": "startDate",
         "in": "query",
+        "required": true,
         "schema": {
           "type": "string"
         },
