@@ -475,6 +475,7 @@
       "DebugInfo": {
         "title": "DebugInfo",
         "type": "object",
+        "description": "Additional information",
         "properties": {
           "name": {
             "type": "string"
@@ -484,9 +485,13 @@
           },
           "serviceTime": {
             "type": "integer"
+          },
+          "dataSource": {
+            "type": "string",
+            "default": "WHO",
+            "readOnly": true
           }
-        },
-        "description": "Additional information"
+        }
       },
       "Occurrences": {
         "title": "Occurrences",
