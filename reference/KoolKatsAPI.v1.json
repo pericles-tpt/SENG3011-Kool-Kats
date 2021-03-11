@@ -549,8 +549,7 @@
         "schema": {
           "type": "string"
         },
-        "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DD HH:MM:SS'",
-        "required": true
+        "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DD HH:MM:SS'"
       },
       "location": {
         "name": "location",
