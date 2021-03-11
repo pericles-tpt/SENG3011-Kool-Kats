@@ -75,6 +75,12 @@ class WebDriverWrapper:
     def find(self, xpath):
         return self._driver.find_element_by_xpath(xpath)
     
+    def find_name(self, name):
+        return self._driver.find_element_by_class_name(name)
+
+    def find_by_tag_name(self, name):
+        return self._driver.find_elements_by_tag_name(name)
+    
     def close(self):
         # Close webdriver connection
         self._driver.quit()
