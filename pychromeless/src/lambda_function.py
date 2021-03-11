@@ -12,7 +12,7 @@ def lambda_handler(*args, **kwargs):
    
     countries = get_countries()
     diseases = get_diseases()
-    articles = get_articles("Moldova", 2000, None)
+    articles = get_articles("Australia", 2000, None)
     print('diseases ' + str(diseases))
     print("Space")
     print('countries ' + str(countries))
@@ -68,13 +68,14 @@ def get_articles(country = None, date_from = None, date_to = None):
     if date_to is None:
         date_to = 2020
     if date_from is None:
-        date_from = str(2020)
+        date_from = 2020
     else:
         date_from = date_from
     driver = WebDriverWrapper()
 
     articles = {}
-    from_time = int(date_from)
+    
+    from_time = date_from
     for from_time in range(date_from, date_to):
         year = "https://www.who.int/csr/don/archive/year/{}/en/".format(from_time)
         print(year)
@@ -86,8 +87,10 @@ def get_articles(country = None, date_from = None, date_to = None):
         for items in tags:
             if country is not None:
                 # Pull data
-                if country.lower() in items.text:
+                if country.lower() in items.text.lower():
                     articles[items.text] = items.text
+                    # Open Link
+                    # Get Data!
             else:
                 articles[items.text] = "n/a"
 
@@ -96,6 +99,5 @@ def get_articles(country = None, date_from = None, date_to = None):
 
     driver.close()
     return articles
-    ## Diseases
-    # Sars! and then Articles
+
 
