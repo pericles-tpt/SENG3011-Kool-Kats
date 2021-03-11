@@ -68,7 +68,7 @@
     "/occurrences": {
       "parameters": [],
       "get": {
-        "summary": "",
+        "summary": "Get Occurrences of disease breakdown by location",
         "operationId": "get-occurrences-by-location",
         "description": "Get the number of occurences of different diseases/key terms by location/country",
         "parameters": [
@@ -109,7 +109,7 @@
     },
     "/articles": {
       "get": {
-        "summary": "Your GET endpoint",
+        "summary": "Get articles matching search",
         "tags": [],
         "responses": {
           "200": {
@@ -287,7 +287,7 @@
       "Article": {
         "title": "Article",
         "type": "object",
-        "description": "",
+        "description": "Information on an article including headline, url and main text",
         "x-examples": {
           "Example": {
             "title": "First COVID Case in Sydney",
@@ -368,7 +368,8 @@
           "endDate",
           "keyTerms",
           "location"
-        ]
+        ],
+        "description": "Data the user can input"
       },
       "Report": {
         "title": "Report",
@@ -413,7 +414,8 @@
         },
         "required": [
           "event_date"
-        ]
+        ],
+        "description": "One case of disease"
       },
       "Dates": {
         "title": "Dates",
@@ -424,12 +426,14 @@
           {
             "$ref": "#/components/schemas/DateRange"
           }
-        ]
+        ],
+        "description": "Either in the form of a single date or a range"
       },
       "DateRange": {
         "type": "string",
         "title": "DateRange",
-        "pattern": "^(\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx) to (\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx)$"
+        "pattern": "^(\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx) to (\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx)$",
+        "description": "Date range"
       },
       "DateExact": {
         "type": "string",
@@ -437,15 +441,18 @@
         "x-examples": {
           "example-1": "string"
         },
-        "pattern": "^(\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx)$"
+        "pattern": "^(\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx)$",
+        "description": "Single date"
       },
       "Disease": {
         "title": "Disease",
-        "type": "string"
+        "type": "string",
+        "description": "Disease name"
       },
       "Syndrome": {
         "title": "Syndrome",
-        "type": "string"
+        "type": "string",
+        "description": "Syndrome name"
       },
       "Location": {
         "title": "Location",
@@ -457,11 +464,13 @@
           "location": {
             "type": "string"
           }
-        }
+        },
+        "description": "Country and location name e.g. state/city"
       },
       "EventType": {
         "title": "EventType",
-        "type": "string"
+        "type": "string",
+        "description": "'presence', 'death', 'infected', 'hospitalised', 'recovered'"
       },
       "DebugInfo": {
         "title": "DebugInfo",
@@ -476,7 +485,8 @@
           "serviceTime": {
             "type": "integer"
           }
-        }
+        },
+        "description": "Additional information"
       },
       "Occurrences": {
         "title": "Occurrences",
@@ -488,12 +498,13 @@
           "occurrences": {
             "type": "string"
           }
-        }
+        },
+        "description": "Name of disease/location and occurence of disease"
       }
     },
     "responses": {
       "ArticleList": {
-        "description": "Example response",
+        "description": "List of articles",
         "content": {
           "application/json": {
             "schema": {
