@@ -34,7 +34,7 @@
                           "$ref": "#/components/schemas/Occurrences"
                         },
                         "articlesFound": {
-                          "type": "string"
+                          "type": "integer"
                         }
                       }
                     },
@@ -491,15 +491,15 @@
       "Occurrences": {
         "title": "Occurrences",
         "type": "object",
+        "description": "Name of disease/location and occurence of disease",
         "properties": {
           "name": {
             "type": "string"
           },
           "occurrences": {
-            "type": "string"
+            "type": "integer"
           }
-        },
-        "description": "Name of disease/location and occurence of disease"
+        }
       }
     },
     "responses": {
