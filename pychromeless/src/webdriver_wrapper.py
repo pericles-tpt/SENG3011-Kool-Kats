@@ -3,6 +3,7 @@ import shutil
 import uuid
 
 from selenium import webdriver
+from selenium.webdriver.common.by import By # ADDED BY PERI
 
 
 class WebDriverWrapper:
@@ -83,6 +84,9 @@ class WebDriverWrapper:
 
     def find_by_tag_name(self, name):
         return self._driver.find_elements_by_tag_name(name)
+
+    def find_by_id(self, idf):
+        return self._driver.find_element(By.ID, idf)
     
     def close(self):
         # Close webdriver connection

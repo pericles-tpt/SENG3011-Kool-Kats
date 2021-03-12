@@ -18,7 +18,7 @@ def lambda_handler(*args, **kwargs):
     #print("Space")
     #print('countries ' + str(countries))
     #print('Articles ' + str(articles))
-    get_specific_disease(['cholera', 'Acute diarrhoeal syndrome', 'fish'])
+    get_specific_disease(['Hepatitis', 'Acute diarrhoeal syndrome', 'fish'])
 
 
     return None
@@ -128,13 +128,33 @@ def get_specific_disease(diseases):
             for i in article_list:
                 article_url = i.find_elements_by_tag_name('a')[0].get_attribute('href')
                 # Go into article and count case numbers
-                cases += 1 #get_articles_cases(article_url)
+                cases += get_articles_cases(article_url)
             ret['diseases'].append({"name": name, "cases": cases, "articles_found_in": totalArticles})
 
         exists = True
 
     print(json.dumps(ret))
     return json.dumps(ret)
+
+
+def get_articles_cases(url):
+    driver = WebDriverWrapper()
+    ccount = 0
+    driver.get_url(url)
+    paragraph_list = driver.find_by_id("primary").find_elements_by_tag_name("p")
+
+    for i in paragraph_list:
+        if (len(i.find_elements_by_tag_name("span")) > 0):
+            p_text = i.find_elements_by_tag_name("span")[0].get_attribute('innerHTML')
+            words = p_text.split()
+            n = 'a'
+            for j in range(len(words)):
+                if words[j] == 'cases' and words[j-1].isdigit():
+                    ccount += int(words[j-1])
+                    break # <-- This mightn't be the best idea but I'm a bit impatient
+
+    return ccount
+
 
 
 def get_occurance_disease():
