@@ -101,3 +101,6 @@ def get_articles(country = None, date_from = None, date_to = None):
     return articles
 
 
+def get_specific_disease():
+
+def get_occurance_disease():
