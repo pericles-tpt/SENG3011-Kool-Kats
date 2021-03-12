@@ -64,9 +64,12 @@ class WebDriverWrapper:
         elem_send = self._driver.find_element_by_xpath(xpath)
         elem_send.send_keys(value)
 
-    def click(self, xpath):
+    def click_x_path(self, xpath):
         elem_click = self._driver.find_element_by_xpath(xpath)
         elem_click.click()
+
+    def click_element(self,element):
+        element.click()
 
     def get_inner_html(self, xpath):
         elem_value = self._driver.find_element_by_xpath(xpath)
