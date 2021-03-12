@@ -331,7 +331,7 @@
               }
             }
           },
-          "description": "This is the result\n"
+          "description": "Example of queries"
         }
       },
       "parameters": []
@@ -773,7 +773,8 @@
         "schema": {
           "type": "integer",
           "default": "10"
-        }
+        },
+        "description": "Number of diseases required for popularity"
       }
     }
   }
