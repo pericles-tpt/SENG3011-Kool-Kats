@@ -1,4 +1,5 @@
 import time
+import json # STEPHEN: I added this
 
 from webdriver_wrapper import WebDriverWrapper
 from selenium.webdriver.common.keys import Keys
@@ -10,13 +11,14 @@ from selenium.webdriver.common.by import By
 def lambda_handler(*args, **kwargs):
 
    
-    countries = get_countries()
-    diseases = get_diseases()
-    articles = get_articles("Australia", 2000, None)
-    print('diseases ' + str(diseases))
-    print("Space")
-    print('countries ' + str(countries))
-    print('Articles ' + str(articles))
+    #countries = get_countries()
+    #diseases = get_diseases()
+    #articles = get_articles("Australia", 2000, None)
+    #print('diseases ' + str(diseases))
+    #print("Space")
+    #print('countries ' + str(countries))
+    #print('Articles ' + str(articles))
+    get_specific_disease(['cholera', 'Acute diarrhoeal syndrome', 'fish'])
 
 
     return None
@@ -101,6 +103,39 @@ def get_articles(country = None, date_from = None, date_to = None):
     return articles
 
 
-def get_specific_disease():
+def get_specific_disease(diseases):
+    # Returns  {disease: [{name, cases, article}], totalArticles: int, team:{name:'KoolKats', accessedTime:'', serviceTime:''}
+    # Go to the articles
+    driver = WebDriverWrapper()
+    ret = {}
+    ret['diseases'] = []
+    exists = True
+    for i in diseases:
+        diseasef = i.lower().replace(' ', '_')
+        driver.get_url("https://www.who.int/csr/don/archive/disease/{}/en/".format(diseasef))
+
+        try:
+            article_list = driver.find_name('col_2-1_1').find_elements_by_tag_name('li')
+        except:
+            exists = False
+        
+        if exists:
+            article_list = driver.find_name('col_2-1_1').find_elements_by_tag_name('li')
+            totalArticles = len(article_list)
+
+            cases = 0
+            name = diseasef
+            for i in article_list:
+                article_url = i.find_elements_by_tag_name('a')[0].get_attribute('href')
+                # Go into article and count case numbers
+                cases += 1 #get_articles_cases(article_url)
+            ret['diseases'].append({"name": name, "cases": cases, "articles_found_in": totalArticles})
+
+        exists = True
+
+    print(json.dumps(ret))
+    return json.dumps(ret)
+
 
 def get_occurance_disease():
+    print('jsdkjs')
