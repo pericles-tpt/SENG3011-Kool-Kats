@@ -43,7 +43,7 @@ class WebDriverWrapper:
         chrome_options.add_argument('--enable-logging')
         chrome_options.add_argument('--log-level=0')
         chrome_options.add_argument('--v=99')
-        chrome_options.add_argument('--single-process')
+       # chrome_options.add_argument('--single-process')
         chrome_options.add_argument('--data-path={}'.format(self._tmp_folder + '/data-path'))
         chrome_options.add_argument('--ignore-certificate-errors')
         chrome_options.add_argument('--homedir={}'.format(self._tmp_folder))
@@ -64,12 +64,18 @@ class WebDriverWrapper:
     def set_input_value(self, xpath, value):
         elem_send = self._driver.find_element_by_xpath(xpath)
         elem_send.send_keys(value)
+    def current_url(self):
+        return self._driver.current_url
+        
+    def click_link(self, link):
+        self._driver.find_element_by_partial_link_text(link)
 
     def click_x_path(self, xpath):
         elem_click = self._driver.find_element_by_xpath(xpath)
         elem_click.click()
 
     def click_element(self,element):
+        print('Clicked')
         element.click()
 
     def get_inner_html(self, xpath):
@@ -82,12 +88,17 @@ class WebDriverWrapper:
     def find_name(self, name):
         return self._driver.find_element_by_class_name(name)
 
+    def find_name_byId(self, name):
+        return self._driver.find_element_by_id(name)
+
     def find_by_tag_name(self, name):
         return self._driver.find_elements_by_tag_name(name)
 
     def find_by_id(self, idf):
         return self._driver.find_element(By.ID, idf)
     
+    def return_raw(self):
+        return self._driver
     def close(self):
         # Close webdriver connection
         self._driver.quit()
