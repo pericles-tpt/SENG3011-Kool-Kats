@@ -13,12 +13,12 @@ def lambda_handler(*args, **kwargs):
    
     #countries = get_countries()
     #diseases = get_diseases()
-    articles = get_articles(None, None, None)
+    #articles = get_articles(None, None, None)
     #print('diseases ' + str(diseases))
     #print("Space")
     #print('countries ' + str(countries))
     #print('Articles ' + str(articles))
-    get_specific_disease(['cholera', 'Acute diarrhoeal syndrome', 'hepatitis'])
+    get_specific_disease(['Acute diarrhoeal syndrome', 'hepatitis'])
 
 
     return None
