@@ -10,12 +10,12 @@ from selenium.webdriver.common.by import By
 def lambda_handler(*args, **kwargs):
 
    
-    countries = get_countries()
-    diseases = get_diseases()
-    articles = get_articles("Australia", 2000, None)
-    print('diseases ' + str(diseases))
+    #countries = get_countries()
+    #diseases = get_diseases()
+    articles = get_articles("Australia", 2018, None)
+    #print('diseases ' + str(diseases))
     print("Space")
-    print('countries ' + str(countries))
+    #print('countries ' + str(countries))
     print('Articles ' + str(articles))
 
 
@@ -71,26 +71,41 @@ def get_articles(country = None, date_from = None, date_to = None):
         date_from = 2020
     else:
         date_from = date_from
-    driver = WebDriverWrapper()
 
+    driver = WebDriverWrapper()
     articles = {}
-    
+    articles[country] = []
+    article_driver = WebDriverWrapper()
+
     from_time = date_from
     for from_time in range(date_from, date_to):
-        year = "https://www.who.int/csr/don/archive/year/{}/en/".format(from_time)
-        print(year)
         driver.get_url("https://www.who.int/csr/don/archive/year/{}/en/".format(from_time))
-        print (from_time)
+        print(from_time)
         element_list = driver.find_name('col_2-1_1')
-        tags = element_list.find_elements_by_tag_name('span')
+        tags = element_list.find_elements_by_tag_name('li')
         ## Search Title for Country if specified
         for items in tags:
-            if country is not None:
-                # Pull data
-                if country.lower() in items.text.lower():
-                    articles[items.text] = items.text
-                    # Open Link
-                    # Get Data!
+            a_tag = items.find_elements_by_tag_name('a')
+            country_to_look = items.find_elements_by_tag_name('span')
+            if len(country_to_look) > 0:
+                if country.lower() in country_to_look[0].text.lower():
+                    if a_tag is not None:
+                        article_list = {}
+                        article_list['name'] = country_to_look[0].text
+                        article_list['Articles'] = []
+                        article_driver.get_url("https://www.who.int/csr/don/archive/year/{}/en/".format(from_time))
+                        time.sleep(1)
+                        article_driver.click_link(a_tag[0].text)
+                        article_driver.get_url("{}".format(a_tag[0].get_attribute('href')))
+                        time.sleep(1)
+                        wrapper =  article_driver.find_name_byId('primary')
+                        info = wrapper.find_elements_by_tag_name('span')
+                        # Add article name and Information
+                        for information in info:
+                            article_list['Articles'].append(information.text)
+                            print(information.text)
+                        articles[country].append(article_list)
+                        #wait(1)
             else:
                 articles[items.text] = "n/a"
 
@@ -98,9 +113,5 @@ def get_articles(country = None, date_from = None, date_to = None):
         from_time += 1
 
     driver.close()
+    article_driver.close()
     return articles
-
-
-def get_specific_disease():
-
-def get_occurance_disease():
