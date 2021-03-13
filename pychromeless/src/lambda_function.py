@@ -13,13 +13,13 @@ def lambda_handler(*args, **kwargs):
    
     #countries = get_countries()
     #diseases = get_diseases()
-    articles = get_articles(None, None, None)
+    #articles = get_articles(None, None, None)
     #print('diseases ' + str(diseases))
     #print("Space")
     #print('countries ' + str(countries))
-    print('Articles ' + str(articles))
+    #print('Articles ' + str(articles))
     #get_specific_disease(['Hepatitis', 'Acute diarrhoeal syndrome', 'fish'])
-
+    send_to_sql()
 
     return None
 
@@ -207,3 +207,22 @@ def get_articles_cases(url):
 
 def get_occurance_disease():
     print('jsdkjs')
+
+def send_to_sql():
+    import pymysql
+
+    # Open database connection
+    db = pymysql.connect(host="database-1.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",password="koolkats",db="testdb", port=3306)
+
+    # prepare a cursor object using cursor() method
+    cursor = db.cursor()
+
+    # execute SQL query using execute() method.
+    cursor.execute("SELECT VERSION()")
+
+    # Fetch a single row using fetchone() method.
+    data = cursor.fetchone()
+    print ("Database version : %s " % data)
+
+    # disconnect from server
+    db.close()
