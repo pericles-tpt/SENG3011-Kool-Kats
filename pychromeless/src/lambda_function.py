@@ -173,10 +173,11 @@ def get_specific_disease(diseases):
 
             cases = 0
             name = diseasef
-            for i in article_list:
-                article_url = i.find_elements_by_tag_name('a')[0].get_attribute('href')
+            for j in article_list:
+                article_url = j.find_elements_by_tag_name('a')[0].get_attribute('href')
                 # Go into article and count case numbers
-                cases += get_articles_cases(article_url)
+                print(article_url)
+                cases += get_articles_cases(article_url, i.lower().replace('_', ' '))
             ret['diseases'].append({"name": name, "cases": cases, "articles_found_in": totalArticles})
 
         exists = True
@@ -184,8 +185,10 @@ def get_specific_disease(diseases):
     print(json.dumps(ret))
     return json.dumps(ret)
 
-
-def get_articles_cases(url):
+# Very basic and slow atm: Looks for word 'cases' and checks if word before it is a number, if so adds it to ccount
+# Maybe we could put a limit on the number of articles the user can request for this function?
+# e.g. 'cholera' has 280 articles and took upwards of 15 minutes to complete this.
+def get_articles_cases(url, disease_name_spaces):
     driver = WebDriverWrapper()
     ccount = 0
     driver.get_url(url)
@@ -197,13 +200,24 @@ def get_articles_cases(url):
             words = p_text.split()
             n = 'a'
             for j in range(len(words)):
-                if words[j] == 'cases' and words[j-1].isdigit():
-                    ccount += int(words[j-1])
-                    break # <-- This mightn't be the best idea but I'm a bit impatient
+                stat = words[j-1].replace(',','')
+                if 'cases' in words[j] and stat.isdigit():
+                    ccount += int(stat)
+                    # break # <-- This mightn't be the best idea but I'm a bit impatient
+                elif 'cases' in words[j]:
+                    found = True
+                    for k in range(0, len(disease_name_spaces)):
+                        if (words[j-k] != disease_name_spaces[len(disease_name_spaces)-1-k]):
+                            found = False
+                            #break
+                    if j-len(disease_name_spaces)-1 >= 0:
+                        print('Index of number should be ' + words[j-len(disease_name_spaces)-1])
+                        found_stat = words[j-len(disease_name_spaces)-1].replace(',','')
+                        if (found == True) and found_stat.isdigit():
+                            ccount += int(found_stat)
 
+    print(ccount)
     return ccount
-
-
 
 def get_occurance_disease():
     print('jsdkjs')
