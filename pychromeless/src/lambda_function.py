@@ -17,12 +17,13 @@ def lambda_handler(*args, **kwargs):
     #diseases = get_diseases()
     #1996
     articles = get_articles(None, 2019, None)
+    #handle_get_articles('2019-06-06 00:00:00', '2019-09-09 00:00:00')
     #print('diseases ' + str(diseases))
     #print("Space")
     #print('countries ' + str(countries))
-    print('Articles ' + str(articles))
+    #print('Articles ' + str(articles))
     #get_specific_disease(['Hepatitis', 'Acute diarrhoeal syndrome', 'fish'])
-   # send_to_sql()
+    #send_to_sql()
 
     return None
 
@@ -182,13 +183,29 @@ def get_articles(country = None, date_from = None, date_to = None):
             day = date[0]
             month = month_string_to_number(date[1])
             year = date[2]
-            cases = 1
             url = occurence['url']
+            cases = get_articles_cases(url) # TODO: Get the disease name and put it in as 2nd argument here
             maintxt = occurence['Articles']
             now = datetime.datetime(int(year), int(month), int(day), 0, 0, 0)
             now.strftime('%Y-%m-%d %H:%M:%S')
             maintxt = "\n".join(maintxt)
             #flattened = [val for sublist in maintxt for val in sublist]
+
+            # TODO: Come back here, I have no idea why this doesn't work...
+            # Convert k (country) from "TITLE - COUNTRY" to "COUNTRY"
+            cargs = k.split()
+            newk = ''
+            for i in range(len(cargs)):
+                #print(str(i) + " cargs[i] " + cargs[i] )
+                if str(cargs[i]) == "-":
+                    # Connect every index after this one into a string separated by spaces
+                    #print('Stopped at cargs[i] is ' + cargs[i])
+                    print(cargs[i+1:])
+                    newk = ' '.join(cargs[i+1:])
+                    break
+            print('Cargs is ' + str(cargs))
+            print('Old k is ' + k)
+            print('newk is ' + newk)
 
             articles_for_sql.append((str(k), str(occurence['name']), now, str(cases), str(url), str('Standard Text (MainText)')))
 
@@ -256,13 +273,13 @@ def get_specific_disease(diseases):
 
         exists = True
 
-    print(json.dumps(ret))
+    #print(json.dumps(ret))
     return json.dumps(ret)
 
 # Very basic and slow atm: Looks for word 'cases' and checks if word before it is a number, if so adds it to ccount
 # Maybe we could put a limit on the number of articles the user can request for this function?
 # e.g. 'cholera' has 280 articles and took upwards of 15 minutes to complete this.
-def get_articles_cases(url, disease_name_spaces):
+def get_articles_cases(url, disease_name_spaces = None):
     driver = WebDriverWrapper()
     ccount = 0
     driver.get_url(url)
@@ -278,7 +295,7 @@ def get_articles_cases(url, disease_name_spaces):
                 if 'cases' in words[j] and stat.isdigit():
                     ccount += int(stat)
                     # break # <-- This mightn't be the best idea but I'm a bit impatient
-                elif 'cases' in words[j]:
+                elif 'cases' in words[j] and disease_name_spaces != None:
                     found = True
                     for k in range(0, len(disease_name_spaces)):
                         if (words[j-k] != disease_name_spaces[len(disease_name_spaces)-1-k]):
@@ -290,11 +307,45 @@ def get_articles_cases(url, disease_name_spaces):
                         if (found == True) and found_stat.isdigit():
                             ccount += int(found_stat)
 
-    print(ccount)
+    #print(ccount)
     return ccount
 
 def get_occurance_disease():
     print('jsdkjs')
+
+def handle_get_articles(date_start, date_end, country = None, disease = None):
+    import pymysql
+    db = pymysql.connect(host="database-1.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
+    cursor = db.cursor()
+
+    # Creates the WHERE part of the query
+    filters = []
+    where_query = ''
+    if country != None:
+        filters.append('Country=' + country)
+    elif disease != None:
+        filters.append('Disease=' + disease)
+    if len(filters) > 0:
+        where_query = 'AND '
+        for i in range(len(filters)):
+            if i == 0:
+                where_query += filters[i]
+            else:
+                where_query += ' AND ' + filters[i]
+
+    try:
+      query = "SELECT * FROM Articles WHERE Date >= '{}' AND Date <= '{}' {} ORDER BY Date;".format(date_start, date_end, where_query)
+      cursor.execute(query)
+    except:
+      print("Oops we had an error")
+
+    response = []
+    for (Country, Disease, Date, Cases, Url, MainText) in cursor:
+        response.append({"headline": "test", "url": Url, "location": Country, "reports": ["a", "b", "c"], "termsFound": Disease, "main_text": MainText, "date_of_publication": str(Date)})
+
+    ret = json.dumps(response)
+    print(ret)
+
 
 def send_to_sql(articles):
     import pymysql
@@ -335,7 +386,7 @@ def send_to_sql(articles):
     # execute SQL query using execute() method.
     #result = cursor.execute("SELECT * FROM Articles;")
 
-    db.commit()
+    #db.commit()
     # Fetch a single row using fetchone() method.
 
     # disconnect from server
