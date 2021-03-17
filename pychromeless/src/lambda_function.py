@@ -12,18 +12,21 @@ from selenium.webdriver.common.by import By
 
 def lambda_handler(*args, **kwargs):
 
-   
+    print("runnnning")
     #countries = get_countries()
     #diseases = get_diseases()
     #1996
-    articles = get_articles(None, 2019, None)
-    #handle_get_articles('2019-06-06 00:00:00', '2019-09-09 00:00:00')
+    # articles = get_articles(None, 2019, None)
+    # handle_get_articles('2019-06-06 00:00:00', '2019-09-09 00:00:00')
     #print('diseases ' + str(diseases))
     #print("Space")
     #print('countries ' + str(countries))
     #print('Articles ' + str(articles))
     #get_specific_disease(['Hepatitis', 'Acute diarrhoeal syndrome', 'fish'])
-    #send_to_sql()
+
+    # API endpoints functions
+    # handle_get_articles('2019-06-06 00:00:00', '2019-09-09 00:00:00')
+    handle_get_disease(['yellow fever', 'measles'], '2019-01-01 00:00:00', '2019-12-12 00:00:00')
 
     return None
 
@@ -273,7 +276,7 @@ def get_specific_disease(diseases):
 
         exists = True
 
-    #print(json.dumps(ret))
+    print(json.dumps(ret))
     return json.dumps(ret)
 
 # Very basic and slow atm: Looks for word 'cases' and checks if word before it is a number, if so adds it to ccount
@@ -345,6 +348,58 @@ def handle_get_articles(date_start, date_end, country = None, disease = None):
 
     ret = json.dumps(response)
     print(ret)
+
+def handle_get_disease(diseases, date_start, date_end, country = None):
+    print(f'Get Disease call for {diseases}')
+    
+    import pymysql
+    db = pymysql.connect(host="database-1.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
+    cursor = db.cursor()
+
+    # Creates the WHERE part of the query
+    filters = []
+    where_query = ''
+    if country != None:
+        filters.append('Country=' + country)
+
+    filters.append("Disease IN ('" + "', '".join(diseases) + "')")
+
+
+    # creating where query
+    if len(filters) > 0:
+        where_query = 'AND '
+        for i in range(len(filters)):
+            if i == 0:
+                where_query += filters[i]
+            else:
+                where_query += ' AND ' + filters[i]
+
+    print(where_query)
+
+    try:
+      query = "CREATE VIEW tempView(Disease, nCases, nArticles) as SELECT Disease, sum(Cases), count(Disease) FROM Articles WHERE Date >= '{}' AND Date <= '{}' {} GROUP BY Disease".format(date_start, date_end, where_query)
+      cursor.execute(query)
+      query = "SELECT * FROM tempView ORDER BY nCases DESC"
+      cursor.execute(query)
+
+    except:
+      print("Oops we had an error")
+
+    response = []
+    for (Disease, nCases, nArticles) in cursor:
+        response.append({
+          "disease": {
+            "diseaseInfo": {
+              "name": Disease,
+              "occurences": int(nCases)
+            },
+          "articlesFound": nArticles
+        }})
+
+    print(response)
+    # ret = json.dumps(response)
+    # print(ret)
+    cursor.execute("DROP VIEW tempView")
 
 
 def send_to_sql(articles):
