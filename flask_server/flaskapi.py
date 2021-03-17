@@ -12,3 +12,4 @@ def get_articles():
 
 if __name__ == '__main__':
     app.run(host= '0.0.0.0')
+    # Changed from app.run()
