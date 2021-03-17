@@ -11,5 +11,5 @@ def get_articles():
     return json.dumps(pychromeless.src.db_functions.handle_get_articles('2019-01-01', '2019-12-31', None, 'measles'))
 
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0')
+    api.run(host= '0.0.0.0')
     # Changed from app.run()
