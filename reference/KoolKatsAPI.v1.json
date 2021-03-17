@@ -636,7 +636,8 @@
         "type": "string",
         "description": "Syndrome name",
         "x-examples": {
-          "Dry eye syndrome": "Dry eye syndrome"
+          "Dry eye syndrome": "Dry eye syndrome",
+          "Holt–Oram syndrome": "Holt–Oram syndrome"
         }
       },
       "Location": {
