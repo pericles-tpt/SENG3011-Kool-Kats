@@ -594,7 +594,11 @@
             "$ref": "#/components/schemas/DateRange"
           }
         ],
-        "description": "Either in the form of a single date or a range"
+        "description": "Either in the form of a single date or a range",
+        "x-examples": {
+          "date range": "2018-11-01 17:xx:xx to 2018-12-xx xx:xx:xx",
+          "date exact": "2015-10-01 xx:xx:xx"
+        }
       },
       "DateRange": {
         "type": "string",
@@ -602,7 +606,9 @@
         "pattern": "^(\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx) to (\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx)$",
         "description": "Date range",
         "x-examples": {
-          "Example of date range": "2015-10-01 08:45:10 to 2016-10-01 08:45:10"
+          "Example of date range": "2015-10-01 08:45:10 to 2016-10-01 08:45:10",
+          "example-2": "2018-xx-xx xx:xx:xx to 2019-xx-xx xx:xx:xx",
+          "example-3": "2018-11-01 17:xx:xx to 2018-12-xx xx:xx:xx"
         }
       },
       "DateExact": {
@@ -619,25 +625,23 @@
         "type": "string",
         "description": "Disease name",
         "x-examples": {
-          "Coronavirus": "Coronavirus"
+          "Coronavirus": "Coronavirus",
+          "Malaria": "Malaria",
+          "Measles": "Measles",
+          "Tuberculosis": "Tuberculosis"
         }
       },
       "Syndrome": {
         "title": "Syndrome",
         "type": "string",
-        "description": "Syndrome name"
+        "description": "Syndrome name",
+        "x-examples": {
+          "Dry eye syndrome": "Dry eye syndrome"
+        }
       },
       "Location": {
         "title": "Location",
         "type": "object",
-        "properties": {
-          "country": {
-            "type": "string"
-          },
-          "location": {
-            "type": "string"
-          }
-        },
         "description": "Country and location name e.g. state/city",
         "x-examples": {
           "example-1": {
@@ -647,6 +651,14 @@
           "example-2": {
             "country": "Australia",
             "location": "New South Wales"
+          }
+        },
+        "properties": {
+          "country": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
           }
         }
       },
@@ -704,6 +716,16 @@
           },
           "occurrences": {
             "type": "integer"
+          }
+        },
+        "x-examples": {
+          "15 different diseases occur in Australia": {
+            "name": "Australia",
+            "occurrences": 15
+          },
+          "COVID-19 occurs in 30 countries": {
+            "name": "COVID-19",
+            "occurrences": 30
           }
         }
       }
