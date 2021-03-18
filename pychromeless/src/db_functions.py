@@ -76,7 +76,7 @@ def handle_get_occurrences(keyTerms, startDate = None, endDate = None):
     db = pymysql.connect(host="database-1.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
     cursor = db.cursor()
 
-    where_query = 'Disease IN (\'' + '\', \''.join(keyTerms) + '\')'
+    where_query = 'WHERE Disease IN (\'' + '\', \''.join(keyTerms) + '\')'
     if (startDate != None and endDate != None):
         where_query = " AND Date >= '{}' AND Date <= '{}'".format(startDate, endDate) 
 
