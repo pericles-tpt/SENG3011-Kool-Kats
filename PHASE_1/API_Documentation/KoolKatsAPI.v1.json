@@ -123,6 +123,24 @@
             "name": "keyTerms",
             "required": true,
             "description": "Words to filter the search"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2019-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "startDate",
+            "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2020-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "endDate",
+            "description": "The desired end date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'"
           }
         ],
         "responses": {
@@ -133,10 +151,15 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "locations": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Occurrences"
+                    "diseases": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "$ref": "#/components/schemas/Disease"
+                        },
+                        "locations": {
+                          "$ref": "#/components/schemas/Occurrences"
+                        }
                       }
                     },
                     "debugInfo": {
