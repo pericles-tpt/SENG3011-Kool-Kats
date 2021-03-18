@@ -77,26 +77,7 @@
           {
             "$ref": "#/components/parameters/location"
           }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserInput"
-              },
-              "examples": {
-                "example-1": {
-                  "value": {
-                    "startDate": "2021-01-01T00:00:00",
-                    "endDate": "2021-03-12T00:00:00",
-                    "keyTerms": "Influenza A"
-                  }
-                }
-              }
-            }
-          },
-          "description": "Example params"
-        }
+        ]
       }
     },
     "/occurrences": {
@@ -162,23 +143,6 @@
               }
             }
           }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserInput"
-              },
-              "examples": {
-                "example": {
-                  "value": {
-                    "keyTerms": "Typhoid fever"
-                  }
-                }
-              }
-            }
-          },
-          "description": "Example params"
         }
       }
     },
@@ -262,21 +226,6 @@
                 }
               }
             }
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "503": {
-            "description": "Service Unavailable"
           }
         },
         "operationId": "get-getArticles",
@@ -294,46 +243,7 @@
           {
             "$ref": "#/components/parameters/endDate"
           }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "keyTerms": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "location": {
-                    "type": "string"
-                  },
-                  "startDate": {
-                    "$ref": "#/components/schemas/DateExact"
-                  },
-                  "endDate": {
-                    "$ref": "#/components/schemas/DateExact"
-                  }
-                }
-              },
-              "examples": {
-                "example-1": {
-                  "value": {
-                    "keyTerms": [
-                      "Yellow fever"
-                    ],
-                    "location": "Senegal",
-                    "startDate": "2019-10-12 00:00:00",
-                    "endDate": "2020-12-31 00:00:00"
-                  }
-                }
-              }
-            }
-          },
-          "description": "Example of queries"
-        }
+        ]
       },
       "parameters": []
     },
@@ -413,25 +323,7 @@
           {
             "$ref": "#/components/parameters/numDiseases"
           }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserInput"
-              },
-              "examples": {
-                "example": {
-                  "value": {
-                    "startDate": "2021-01-01T00:00:00",
-                    "endDate": "2021-03-12T00:00:00"
-                  }
-                }
-              }
-            }
-          },
-          "description": "Example of query params"
-        }
+        ]
       },
       "parameters": []
     }
