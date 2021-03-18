@@ -6,7 +6,8 @@
     "contact": {
       "name": "Peri Telemachou",
       "email": "z5214738@ad.unsw.edu.au"
-    }
+    },
+    "description": "Our data is scraped from the WHO website.\n\nThe data is updated everyday at 6am. Depending on when API requests are sent, it may not be the most updated version. "
   },
   "servers": [
     {
