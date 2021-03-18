@@ -9,14 +9,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
+def lambda_handler():
 
-def lambda_handler(*args, **kwargs):
-
-   
+    #driver = webdriver.Chrome('/path/to/chromedriver')
     #countries = get_countries()
     #diseases = get_diseases()
     #1996
-    articles = get_articles(None, 2019, None)
+
+    articles = get_articles('Australia', 2018, 2020)
+    
     #handle_get_articles('2019-06-06 00:00:00', '2019-09-09 00:00:00')
     #print('diseases ' + str(diseases))
     #print("Space")
@@ -94,7 +95,7 @@ def get_articles(country = None, date_from = None, date_to = None):
     articles_for_sql = []
 
     from_time = date_from
-    for from_time in range(date_from, date_to):
+    for from_time in range(date_from, date_to+1):
         driver.get_url("https://www.who.int/csr/don/archive/year/{}/en/".format(from_time))
         print(from_time)
         element_list = driver.find_name('col_2-1_1')
@@ -106,6 +107,7 @@ def get_articles(country = None, date_from = None, date_to = None):
             if len(country_to_look) > 0:
                 # Check it is the country you are looking for
                 if country is not None:
+                    print('country ' + str(country_to_look[0].text))
                     if country.lower() in country_to_look[0].text.lower():
                         # Look for a link
                         if a_tag is not None:
@@ -120,14 +122,15 @@ def get_articles(country = None, date_from = None, date_to = None):
                             # add the name of the dict as the name of the country
                             article_list['name'] = d_name
                             article_list['Articles'] = []
+                            article_list['Headline'] = country_to_look[0].text
                             article_driver.get_url("https://www.who.int/csr/don/archive/year/{}/en/".format(from_time))
-                            time.sleep(1)
+                            time.sleep(3)
                             article_driver.click_link(a_tag[0].text)
                             article_list['date'] = a_tag[0].text
                             print('date ' + str(a_tag[0].text))
                             article_driver.get_url("{}".format(a_tag[0].get_attribute('href')))
                             article_list['url'] = a_tag[0].get_attribute('href')
-                            time.sleep(1)
+                            time.sleep(3)
                             wrapper =  article_driver.find_name_byId('primary')
                             info = wrapper.find_elements_by_tag_name('span')
                             # Add article name and Information
@@ -136,11 +139,15 @@ def get_articles(country = None, date_from = None, date_to = None):
                                 #print(information.text)
                             articles[country].append(article_list)
                 else:
-                    country_name = country_to_look[0].text.split(" - ")
+                    country_name = country_to_look[0].text.split("–")
+                    print('country ' + str(country_name))
+                    c_name = ""
                     if len(country_name) > 1:
                         articles[country_name[1]] = []
+                        c_name = country_name[1]
                     else:
                         articles[country_name[0]] = []
+                        c_name = country_name[0]
                     ## Get the articles within a time frame
                     if a_tag is not None:
                         ## Get name
@@ -150,15 +157,17 @@ def get_articles(country = None, date_from = None, date_to = None):
                                     d_name = disease_name.lower()
                             article_list = {}
                             # add the name of the dict as the name of the country
+                            
                             article_list['name'] = d_name
                             article_list['Articles'] = []
+                            article_list['Headline'] = country_to_look[0].text
                             article_driver.get_url("https://www.who.int/csr/don/archive/year/{}/en/".format(from_time))
-                            time.sleep(1)
+                            time.sleep(3)
                             article_driver.click_link(a_tag[0].text)
                             article_list['date'] = a_tag[0].text
                             article_driver.get_url("{}".format(a_tag[0].get_attribute('href')))
                             article_list['url'] = a_tag[0].get_attribute('href')
-                            time.sleep(1)
+                            time.sleep(3)
                             wrapper =  article_driver.find_name_byId('primary')
                             info = wrapper.find_elements_by_tag_name('span')
                             # Add article name and Information
@@ -166,11 +175,7 @@ def get_articles(country = None, date_from = None, date_to = None):
                                 article_list['Articles'].append(information.text)
                                # print(information.text)
                             # Get name of Country
-                            country_name = country_to_look[0].text.split(" - ")
-                            if len(country_name) > 1:
-                                articles[country_name[1]].append(article_list)
-                            else:
-                                articles[country_name[0]].append(article_list)
+                            articles[c_name].append(article_list)
     # Here
     for k,v in articles.items():
         list_of_items = articles[k]
@@ -189,6 +194,7 @@ def get_articles(country = None, date_from = None, date_to = None):
             now = datetime.datetime(int(year), int(month), int(day), 0, 0, 0)
             now.strftime('%Y-%m-%d %H:%M:%S')
             maintxt = "\n".join(maintxt)
+            headline = occurence['Headline']
             #flattened = [val for sublist in maintxt for val in sublist]
 
             # TODO: Come back here, I have no idea why this doesn't work...
@@ -207,7 +213,7 @@ def get_articles(country = None, date_from = None, date_to = None):
             print('Old k is ' + k)
             print('newk is ' + newk)
 
-            articles_for_sql.append((str(k), str(occurence['name']), now, str(cases), str(url), str('Standard Text (MainText)')))
+            articles_for_sql.append((headline, str(k), str(occurence['name']), now, str(cases), str(url), str(maintxt)))
 
         ## Get Link, Save the info in the dict
         from_time += 1
@@ -357,7 +363,7 @@ def send_to_sql(articles):
     
     # prepare a cursor object using cursor() method
     cursor = db.cursor()
-    #print(str(articles))
+    print(str(articles))
     #query ="INSERT INTO Articles ({}, {}, {}, {});".format(str('IceLand'),str('Cold'),date,int(4)))
     #print(now)
     ## Get data
@@ -370,7 +376,7 @@ def send_to_sql(articles):
     ## Cases
 
     ## Url
-    query = "INSERT INTO Articles(Country, Disease, Date, Cases, Url, MainText) VALUES (%s, %s, %s, %s, %s, %s);"
+    query = "INSERT INTO Articles(Headline, Country, Disease, Date, Cases, Url, MainText) VALUES (%s, %s, %s, %s, %s, %s, %s);"
     cursor.executemany(query, articles)
     ## MainText
     #query = 'INSERT INTO table_name(column,column_1,column_2,column_3)
@@ -386,8 +392,11 @@ def send_to_sql(articles):
     # execute SQL query using execute() method.
     #result = cursor.execute("SELECT * FROM Articles;")
 
-    #db.commit()
+    db.commit()
     # Fetch a single row using fetchone() method.
 
     # disconnect from server
     db.close()
+
+if __name__ == '__main__':
+    lambda_handler()
