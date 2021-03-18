@@ -6,18 +6,19 @@
     "contact": {
       "name": "Peri Telemachou",
       "email": "z5214738@ad.unsw.edu.au"
-    }
+    },
+    "description": "Our data is scraped from the WHO website.\n\nThe data is updated everyday at 6am. Depending on when API requests are sent, it may not be the most updated version. "
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "http://52.87.94.130:5000"
     }
   ],
   "paths": {
     "/disease": {
       "parameters": [],
       "get": {
-        "summary": "Get disease breakdown in date range",
+        "summary": "Get Disease",
         "tags": [],
         "responses": {
           "200": {
@@ -101,7 +102,7 @@
     "/occurrences": {
       "parameters": [],
       "get": {
-        "summary": "Get Occurrences of disease breakdown by location",
+        "summary": "Get Occurrences",
         "operationId": "get-occurrences-by-location",
         "description": "Get the number of occurences of different diseases/key terms by location/country",
         "parameters": [
@@ -183,7 +184,7 @@
     },
     "/articles": {
       "get": {
-        "summary": "Get articles matching search",
+        "summary": "Get Articles",
         "tags": [],
         "responses": {
           "200": {
@@ -338,7 +339,7 @@
     },
     "/popularDiseases": {
       "get": {
-        "summary": "Get popular diseases in date range",
+        "summary": "Get Popular Diseases",
         "tags": [],
         "responses": {
           "200": {
@@ -775,7 +776,6 @@
       "keyTerms": {
         "name": "keyTerms",
         "in": "query",
-        "required": true,
         "schema": {
           "type": "array"
         },
