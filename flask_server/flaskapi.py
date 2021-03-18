@@ -34,7 +34,7 @@ def get_occurences():
     startDate = request.args.get('startDate')
     endDate = request.args.get('endDate')
 
-    return json.dumps(pychromeless.src.db_functions.handle_get_occurrences(startDate, endDate, keyTerms))
+    return json.dumps(pychromeless.src.db_functions.handle_get_occurrences(keyTerms, startDate, endDate))
 
 @api.route('/popularDiseases', methods=['GET'])
 @cross_origin()

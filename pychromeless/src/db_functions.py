@@ -47,8 +47,8 @@ def handle_get_diseases(date_start, date_end, country = None, keyTerms = None):
     where_query = ''
     if country != None:
         filters.append('Country=\'' + country + '\'')
-    elif disease != None:
-        filters.append('Disease=\'' + disease + '\'')
+    elif keyTerms != None:
+        filters.append('Disease IN (\'' + '\', \''.join(keyTerms) + '\')')
     if len(filters) > 0:
         where_query = 'AND '
         for i in range(len(filters)):
@@ -67,11 +67,11 @@ def handle_get_diseases(date_start, date_end, country = None, keyTerms = None):
 
     response = []
     for (Disease, Cases) in cursor:
-        response.append({"Disease": Disease, "Cases": Cases})
+        response.append({"Disease": Disease, "Cases": int(Cases)})
     
     return response
 
-def handle_get_occurrences(startDate = None, endDate = None, keyTerms):
+def handle_get_occurrences(keyTerms, startDate = None, endDate = None):
     import pymysql
     db = pymysql.connect(host="database-1.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
     cursor = db.cursor()
