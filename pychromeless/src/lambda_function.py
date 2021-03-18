@@ -122,7 +122,7 @@ def get_articles(country = None, date_from = None, date_to = None):
                             # add the name of the dict as the name of the country
                             article_list['name'] = d_name
                             article_list['Articles'] = []
-                            article_list['Headline'] = country_to_look
+                            article_list['Headline'] = country_to_look[0].text
                             article_driver.get_url("https://www.who.int/csr/don/archive/year/{}/en/".format(from_time))
                             time.sleep(3)
                             article_driver.click_link(a_tag[0].text)
@@ -160,7 +160,7 @@ def get_articles(country = None, date_from = None, date_to = None):
                             
                             article_list['name'] = d_name
                             article_list['Articles'] = []
-                            article_list['Headline'] = country_to_look
+                            article_list['Headline'] = country_to_look[0].text
                             article_driver.get_url("https://www.who.int/csr/don/archive/year/{}/en/".format(from_time))
                             time.sleep(3)
                             article_driver.click_link(a_tag[0].text)
