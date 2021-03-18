@@ -15,7 +15,7 @@ def get_articles():
     keyTerms = request.args.get('keyTerms')
     location = request.args.get('location')
 
-    return json.dumps(pychromeless.src.db_functions.handle_get_articles('2019-01-01', '2021-01-01', 'France', None))
+    return json.dumps(pychromeless.src.db_functions.handle_get_articles(startDate, endDate, location, keyTerms))
 
 @api.route('/disease', methods=['GET'])
 @cross_origin()
