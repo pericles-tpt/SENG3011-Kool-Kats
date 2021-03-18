@@ -777,7 +777,7 @@
         "name": "keyTerms",
         "in": "query",
         "schema": {
-          "type": "array"
+          "type": "string"
         },
         "description": "Words to filter the search"
       },
