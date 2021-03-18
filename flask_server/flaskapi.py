@@ -29,7 +29,7 @@ def get_diseases():
     return (startDate + " " + endDate + " " + keyTerms + " " + location)
     #return json.dumps(pychromeless.src.db_functions.handle_get_articles('2019-01-01', '2021-01-01', 'France', None))
 
-@api.route('/occurences', methods=['GET'])
+@api.route('/occurrences', methods=['GET'])
 @cross_origin()
 def get_occurences():
     keyTerms = request.args.get('keyTerms')
@@ -45,7 +45,7 @@ def get_popular_diseases():
     numDiseases = request.args.get('numDiseases')
     location = request.args.get('location')
     #return (startDate + " " + endDate + " " + keyTerms + " " + location) 
-    return (startDate + " " + endDate + " " + keyTerms + " " + location)
+    return (startDate + " " + endDate + " " + numDiseases + " " + location)
     #return json.dumps(pychromeless.src.db_functions.handle_get_articles('2019-01-01', '2021-01-01', 'France', None))
 
 
