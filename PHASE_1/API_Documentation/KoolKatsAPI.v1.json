@@ -6,18 +6,19 @@
     "contact": {
       "name": "Peri Telemachou",
       "email": "z5214738@ad.unsw.edu.au"
-    }
+    },
+    "description": "Our data is scraped from the WHO website.\n\nThe data is updated everyday at 6am. Depending on when API requests are sent, it may not be the most updated version. "
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "http://52.87.94.130:5000"
     }
   ],
   "paths": {
     "/disease": {
       "parameters": [],
       "get": {
-        "summary": "Get disease breakdown in date range",
+        "summary": "Get Disease",
         "tags": [],
         "responses": {
           "200": {
@@ -62,51 +63,84 @@
           }
         },
         "operationId": "get-disease-info",
-        "description": "Get the number of cases of a disease within a date range",
+        "description": "Get the number of cases of 1 or more diseases within a date range",
         "parameters": [
           {
-            "$ref": "#/components/parameters/startDate"
+            "schema": {
+              "type": "string",
+              "example": "2019-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "startDate",
+            "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'",
+            "required": true
           },
           {
-            "$ref": "#/components/parameters/endDate"
+            "schema": {
+              "type": "string",
+              "example": "2020-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "endDate",
+            "description": "The desired end date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'",
+            "required": true
           },
           {
-            "$ref": "#/components/parameters/keyTerms"
+            "schema": {
+              "type": "string",
+              "example": "Anthrax,Zika"
+            },
+            "in": "query",
+            "name": "keyTerms",
+            "description": "Words to filter the search",
+            "required": true
           },
           {
-            "$ref": "#/components/parameters/location"
+            "schema": {
+              "type": "string",
+              "example": "Sydney"
+            },
+            "in": "query",
+            "name": "location",
+            "description": "The city or country of interest"
           }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserInput"
-              },
-              "examples": {
-                "example-1": {
-                  "value": {
-                    "startDate": "2021-01-01T00:00:00",
-                    "endDate": "2021-03-12T00:00:00",
-                    "keyTerms": "Influenza A"
-                  }
-                }
-              }
-            }
-          },
-          "description": "Example params"
-        }
+        ]
       }
     },
     "/occurrences": {
       "parameters": [],
       "get": {
-        "summary": "Get Occurrences of disease breakdown by location",
+        "summary": "Get Occurrences",
         "operationId": "get-occurrences-by-location",
         "description": "Get the number of occurences of different diseases/key terms by location/country",
         "parameters": [
           {
-            "$ref": "#/components/parameters/keyTerms"
+            "schema": {
+              "type": "string",
+              "example": "Anthrax,Zika"
+            },
+            "in": "query",
+            "name": "keyTerms",
+            "required": true,
+            "description": "Words to filter the search"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2019-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "startDate",
+            "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2020-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "endDate",
+            "description": "The desired end date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'"
           }
         ],
         "responses": {
@@ -117,10 +151,15 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "locations": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Occurrences"
+                    "diseases": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "$ref": "#/components/schemas/Disease"
+                        },
+                        "locations": {
+                          "$ref": "#/components/schemas/Occurrences"
+                        }
                       }
                     },
                     "debugInfo": {
@@ -161,29 +200,12 @@
               }
             }
           }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserInput"
-              },
-              "examples": {
-                "example": {
-                  "value": {
-                    "keyTerms": "Typhoid fever"
-                  }
-                }
-              }
-            }
-          },
-          "description": "Example params"
         }
       }
     },
     "/articles": {
       "get": {
-        "summary": "Get articles matching search",
+        "summary": "Get Articles",
         "tags": [],
         "responses": {
           "200": {
@@ -261,84 +283,58 @@
                 }
               }
             }
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "503": {
-            "description": "Service Unavailable"
           }
         },
         "operationId": "get-getArticles",
         "description": "Gets all articles from scraped World Health Organisation (WHO) source filtered by date range, location and key terms.",
         "parameters": [
           {
-            "$ref": "#/components/parameters/keyTerms"
+            "schema": {
+              "type": "string",
+              "example": "Anthrax,Zika"
+            },
+            "in": "query",
+            "name": "keyTerms",
+            "description": "Words to filter the search",
+            "required": true
           },
           {
-            "$ref": "#/components/parameters/location"
+            "schema": {
+              "type": "string",
+              "example": "Sydney"
+            },
+            "in": "query",
+            "name": "location",
+            "description": "The city or country of interest",
+            "required": true
           },
           {
-            "$ref": "#/components/parameters/startDate"
+            "schema": {
+              "type": "string",
+              "example": "2019-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "startDate",
+            "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'",
+            "required": true
           },
           {
-            "$ref": "#/components/parameters/endDate"
+            "schema": {
+              "type": "string",
+              "example": "2020-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "endDate",
+            "description": "The desired end date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'",
+            "required": true
           }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "keyTerms": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "location": {
-                    "type": "string"
-                  },
-                  "startDate": {
-                    "$ref": "#/components/schemas/DateExact"
-                  },
-                  "endDate": {
-                    "$ref": "#/components/schemas/DateExact"
-                  }
-                }
-              },
-              "examples": {
-                "example-1": {
-                  "value": {
-                    "keyTerms": [
-                      "Yellow fever"
-                    ],
-                    "location": "Senegal",
-                    "startDate": "2019-10-12 00:00:00",
-                    "endDate": "2020-12-31 00:00:00"
-                  }
-                }
-              }
-            }
-          },
-          "description": "Example of queries"
-        }
+        ]
       },
       "parameters": []
     },
     "/popularDiseases": {
       "get": {
-        "summary": "Get popular diseases in date range",
+        "summary": "Get Popular Diseases",
         "tags": [],
         "responses": {
           "200": {
@@ -401,36 +397,38 @@
         "description": "Get a ranking of diseases mentioned based on popularity",
         "parameters": [
           {
-            "$ref": "#/components/parameters/startDate"
-          },
-          {
-            "$ref": "#/components/parameters/endDate"
-          },
-          {
-            "$ref": "#/components/parameters/location"
-          },
-          {
             "$ref": "#/components/parameters/numDiseases"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserInput"
-              },
-              "examples": {
-                "example": {
-                  "value": {
-                    "startDate": "2021-01-01T00:00:00",
-                    "endDate": "2021-03-12T00:00:00"
-                  }
-                }
-              }
-            }
           },
-          "description": "Example of query params"
-        }
+          {
+            "schema": {
+              "type": "string",
+              "example": "2019-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "startDate",
+            "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2020-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "endDate",
+            "description": "The desired end date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "Sydney"
+            },
+            "in": "query",
+            "name": "location",
+            "description": "The city or country of interest"
+          }
+        ]
       },
       "parameters": []
     }
@@ -524,7 +522,7 @@
         "properties": {
           "startDate": {
             "type": "string",
-            "example": "YYYY-MM-DDtHH:MM:SS"
+            "example": "YYYY-MM-DDTHH:MM:SS"
           },
           "endDate": {
             "type": "string",
@@ -755,41 +753,6 @@
       }
     },
     "parameters": {
-      "startDate": {
-        "name": "startDate",
-        "in": "query",
-        "required": true,
-        "schema": {
-          "type": "string"
-        },
-        "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DD HH:MM:SS'"
-      },
-      "location": {
-        "name": "location",
-        "in": "query",
-        "schema": {
-          "type": "string"
-        },
-        "description": "The city or country of interest"
-      },
-      "keyTerms": {
-        "name": "keyTerms",
-        "in": "query",
-        "required": true,
-        "schema": {
-          "type": "array"
-        },
-        "description": "Words to filter the search"
-      },
-      "endDate": {
-        "name": "endDate",
-        "in": "query",
-        "required": true,
-        "schema": {
-          "type": "string"
-        },
-        "description": "The desired end date to fetch articles for in the form 'YYYY-MM-DD HH:MM:SS'"
-      },
       "numDiseases": {
         "name": "numDiseases",
         "in": "query",
@@ -799,6 +762,7 @@
         },
         "description": "Number of diseases required for popularity"
       }
-    }
+    },
+    "securitySchemes": {}
   }
 }
