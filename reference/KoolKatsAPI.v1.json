@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "52.87.94.130:5000"
     }
   ],
   "paths": {
