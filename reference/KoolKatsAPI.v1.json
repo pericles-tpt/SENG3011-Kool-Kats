@@ -799,6 +799,7 @@
         },
         "description": "Number of diseases required for popularity"
       }
-    }
+    },
+    "securitySchemes": {}
   }
 }
