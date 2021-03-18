@@ -63,19 +63,46 @@
           }
         },
         "operationId": "get-disease-info",
-        "description": "Get the number of cases of a disease within a date range",
+        "description": "Get the number of cases of 1 or more diseases within a date range",
         "parameters": [
           {
-            "$ref": "#/components/parameters/startDate"
+            "schema": {
+              "type": "string",
+              "example": "2019-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "startDate",
+            "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'",
+            "required": true
           },
           {
-            "$ref": "#/components/parameters/endDate"
+            "schema": {
+              "type": "string",
+              "example": "2020-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "endDate",
+            "description": "The desired end date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'",
+            "required": true
           },
           {
-            "$ref": "#/components/parameters/keyTerms"
+            "schema": {
+              "type": "string",
+              "example": "Anthrax,Zika"
+            },
+            "in": "query",
+            "name": "keyTerms",
+            "description": "Words to filter the search",
+            "required": true
           },
           {
-            "$ref": "#/components/parameters/location"
+            "schema": {
+              "type": "string",
+              "example": "Sydney"
+            },
+            "in": "query",
+            "name": "location",
+            "description": "The city or country of interest"
           }
         ]
       }
@@ -88,7 +115,32 @@
         "description": "Get the number of occurences of different diseases/key terms by location/country",
         "parameters": [
           {
-            "$ref": "#/components/parameters/keyTerms"
+            "schema": {
+              "type": "string",
+              "example": "Anthrax,Zika"
+            },
+            "in": "query",
+            "name": "keyTerms",
+            "required": true,
+            "description": "Words to filter the search"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2019-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "startDate",
+            "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2020-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "endDate",
+            "description": "The desired end date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'"
           }
         ],
         "responses": {
@@ -99,10 +151,15 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "locations": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Occurrences"
+                    "diseases": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "$ref": "#/components/schemas/Disease"
+                        },
+                        "locations": {
+                          "$ref": "#/components/schemas/Occurrences"
+                        }
                       }
                     },
                     "debugInfo": {
@@ -232,16 +289,44 @@
         "description": "Gets all articles from scraped World Health Organisation (WHO) source filtered by date range, location and key terms.",
         "parameters": [
           {
-            "$ref": "#/components/parameters/keyTerms"
+            "schema": {
+              "type": "string",
+              "example": "Anthrax,Zika"
+            },
+            "in": "query",
+            "name": "keyTerms",
+            "description": "Words to filter the search",
+            "required": true
           },
           {
-            "$ref": "#/components/parameters/location"
+            "schema": {
+              "type": "string",
+              "example": "Sydney"
+            },
+            "in": "query",
+            "name": "location",
+            "description": "The city or country of interest",
+            "required": true
           },
           {
-            "$ref": "#/components/parameters/startDate"
+            "schema": {
+              "type": "string",
+              "example": "2019-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "startDate",
+            "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'",
+            "required": true
           },
           {
-            "$ref": "#/components/parameters/endDate"
+            "schema": {
+              "type": "string",
+              "example": "2020-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "endDate",
+            "description": "The desired end date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'",
+            "required": true
           }
         ]
       },
@@ -312,16 +397,36 @@
         "description": "Get a ranking of diseases mentioned based on popularity",
         "parameters": [
           {
-            "$ref": "#/components/parameters/startDate"
-          },
-          {
-            "$ref": "#/components/parameters/endDate"
-          },
-          {
-            "$ref": "#/components/parameters/location"
-          },
-          {
             "$ref": "#/components/parameters/numDiseases"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2019-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "startDate",
+            "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "2020-01-10T00:00:00"
+            },
+            "in": "query",
+            "name": "endDate",
+            "description": "The desired end date to fetch articles for in the form 'YYYY-MM-DDTHH:MM:SS'",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "Sydney"
+            },
+            "in": "query",
+            "name": "location",
+            "description": "The city or country of interest"
           }
         ]
       },
@@ -417,7 +522,7 @@
         "properties": {
           "startDate": {
             "type": "string",
-            "example": "YYYY-MM-DDtHH:MM:SS"
+            "example": "YYYY-MM-DDTHH:MM:SS"
           },
           "endDate": {
             "type": "string",
@@ -648,40 +753,6 @@
       }
     },
     "parameters": {
-      "startDate": {
-        "name": "startDate",
-        "in": "query",
-        "required": true,
-        "schema": {
-          "type": "string"
-        },
-        "description": "The desired starting date to fetch articles for in the form 'YYYY-MM-DD HH:MM:SS'"
-      },
-      "location": {
-        "name": "location",
-        "in": "query",
-        "schema": {
-          "type": "string"
-        },
-        "description": "The city or country of interest"
-      },
-      "keyTerms": {
-        "name": "keyTerms",
-        "in": "query",
-        "schema": {
-          "type": "string"
-        },
-        "description": "Words to filter the search"
-      },
-      "endDate": {
-        "name": "endDate",
-        "in": "query",
-        "required": true,
-        "schema": {
-          "type": "string"
-        },
-        "description": "The desired end date to fetch articles for in the form 'YYYY-MM-DD HH:MM:SS'"
-      },
       "numDiseases": {
         "name": "numDiseases",
         "in": "query",
