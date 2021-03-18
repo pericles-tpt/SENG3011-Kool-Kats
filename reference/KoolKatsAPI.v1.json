@@ -10,14 +10,14 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "http://52.87.94.130:5000"
     }
   ],
   "paths": {
     "/disease": {
       "parameters": [],
       "get": {
-        "summary": "Get disease breakdown in date range",
+        "summary": "Get Disease",
         "tags": [],
         "responses": {
           "200": {
@@ -101,7 +101,7 @@
     "/occurrences": {
       "parameters": [],
       "get": {
-        "summary": "Get Occurrences of disease breakdown by location",
+        "summary": "Get Occurrences",
         "operationId": "get-occurrences-by-location",
         "description": "Get the number of occurences of different diseases/key terms by location/country",
         "parameters": [
@@ -183,7 +183,7 @@
     },
     "/articles": {
       "get": {
-        "summary": "Get articles matching search",
+        "summary": "Get Articles",
         "tags": [],
         "responses": {
           "200": {
@@ -338,7 +338,7 @@
     },
     "/popularDiseases": {
       "get": {
-        "summary": "Get popular diseases in date range",
+        "summary": "Get Popular Diseases",
         "tags": [],
         "responses": {
           "200": {
@@ -752,7 +752,6 @@
       "keyTerms": {
         "name": "keyTerms",
         "in": "query",
-        "required": true,
         "schema": {
           "type": "array"
         },
