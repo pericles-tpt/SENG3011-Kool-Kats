@@ -32,7 +32,7 @@ def handle_get_articles(date_start, date_end, country = None, keyTerms = None):
       return
 
     response = []
-    for (Headline, Country, Disease, Date, Cases, Url, MainText) in cursor:
+    for (Country, Disease, Date, Cases, Url, MainText, Headline) in cursor:
         response.append({"headline": Headline, "url": Url, "location": Country, "reports": ["a", "b", "c"], "termsFound": Disease, "main_text": MainText, "date_of_publication": str(Date)})
 
     
