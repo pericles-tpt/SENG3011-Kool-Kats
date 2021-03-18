@@ -6,152 +6,106 @@
     "contact": {
       "name": "Peri Telemachou",
       "email": "z5214738@ad.unsw.edu.au"
-    }
+    },
+    "description": "Our data is scraped from the WHO website.\n\nThe data is updated everyday at 6am. Depending on when API requests are sent, it may not be the most updated version. "
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "http://52.87.94.130:5000"
     }
   ],
   "paths": {
-    "/users": {
+    "/disease": {
       "parameters": [],
       "get": {
-        "summary": "Get User Info by User ID",
+        "summary": "Get Disease",
         "tags": [],
         "responses": {
           "200": {
-            "description": "User Found",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "type": "object",
+                  "properties": {
+                    "disease": {
+                      "type": "object",
+                      "properties": {
+                        "diseaseInfo": {
+                          "$ref": "#/components/schemas/Occurrences"
+                        },
+                        "articlesFound": {
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    "totalArticles": {
+                      "type": "integer"
+                    }
+                  }
                 },
                 "examples": {
-                  "Get User Alice Smith": {
+                  "example": {
                     "value": {
-                      "id": 142,
-                      "firstName": "Alice",
-                      "lastName": "Smith",
-                      "email": "alice.smith@gmail.com",
-                      "dateOfBirth": "1997-10-31",
-                      "emailVerified": true,
-                      "signUpDate": "2019-08-24"
+                      "diseases": {
+                        "diseaseInfo": {
+                          "name": "Influenza A",
+                          "occurrences": 3
+                        },
+                        "articlesFound": 3
+                      },
+                      "totalArticles": 8
                     }
                   }
                 }
               }
             }
-          },
-          "404": {
-            "description": "User Not Found"
           }
         },
-        "operationId": "get-users-userId",
-        "description": "Retrieve the information of the user with the matching user ID.",
-        "parameters": []
-      },
-      "patch": {
-        "summary": "Update User Information",
-        "operationId": "patch-users-userId",
-        "responses": {
-          "200": {
-            "description": "User Updated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                },
-                "examples": {
-                  "Updated User Rebecca Baker": {
-                    "value": {
-                      "id": 13,
-                      "firstName": "Rebecca",
-                      "lastName": "Baker",
-                      "email": "rebecca@gmail.com",
-                      "dateOfBirth": "1985-10-02",
-                      "emailVerified": false,
-                      "createDate": "2019-08-24"
-                    }
-                  }
-                }
-              }
-            }
+        "operationId": "get-disease-info",
+        "description": "Get the number of cases of a disease within a date range",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/startDate"
           },
-          "404": {
-            "description": "User Not Found"
+          {
+            "$ref": "#/components/parameters/endDate"
           },
-          "409": {
-            "description": "Email Already Taken"
+          {
+            "$ref": "#/components/parameters/keyTerms"
+          },
+          {
+            "$ref": "#/components/parameters/location"
           }
-        },
-        "description": "Update the infromation of an existing user.",
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "firstName": {
-                    "type": "string"
-                  },
-                  "lastName": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "If a new email is given, the user's email verified property will be set to false."
-                  },
-                  "dateOfBirth": {
-                    "type": "string"
-                  }
-                }
+                "$ref": "#/components/schemas/UserInput"
               },
               "examples": {
-                "Update First Name": {
+                "example-1": {
                   "value": {
-                    "firstName": "Rebecca"
-                  }
-                },
-                "Update Email": {
-                  "value": {
-                    "email": "rebecca@gmail.com"
-                  }
-                },
-                "Update Last Name & Date of Birth": {
-                  "value": {
-                    "lastName": "Baker",
-                    "dateOfBirth": "1985-10-02"
+                    "startDate": "2021-01-01T00:00:00",
+                    "endDate": "2021-03-12T00:00:00",
+                    "keyTerms": "Influenza A"
                   }
                 }
               }
             }
           },
-          "description": "Patch user properties to update."
-        },
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "query"
-          }
-        ]
+          "description": "Example params"
+        }
       }
     },
-    "/occurrencesByLocation": {
+    "/occurrences": {
       "parameters": [],
       "get": {
-        "summary": "",
+        "summary": "Get Occurrences",
         "operationId": "get-occurrences-by-location",
         "description": "Get the number of occurences of different diseases/key terms by location/country",
         "parameters": [
-          {
-            "$ref": "#/components/parameters/periodOfInterest"
-          },
-          {
-            "$ref": "#/components/parameters/location"
-          },
           {
             "$ref": "#/components/parameters/keyTerms"
           }
@@ -167,31 +121,70 @@
                     "locations": {
                       "type": "array",
                       "items": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string"
-                          },
-                          "occurrences": {
-                            "type": "integer"
-                          }
-                        }
+                        "$ref": "#/components/schemas/Occurrences"
                       }
                     },
                     "debugInfo": {
                       "$ref": "#/components/schemas/DebugInfo"
                     }
                   }
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "locations": [
+                        {
+                          "name": "Democratic Republic of Congo",
+                          "occurrences": 2
+                        },
+                        {
+                          "name": "Islamic Republic of Pakistan",
+                          "occurrences": 1
+                        },
+                        {
+                          "name": "Haiti",
+                          "occurrences": 1
+                        },
+                        {
+                          "name": "Uganda",
+                          "occurrences": 1
+                        }
+                      ],
+                      "debugInfo": {
+                        "name": "KoolKats",
+                        "accessTime": 0,
+                        "serviceTime": 0,
+                        "dataSource": "WHO"
+                      }
+                    }
+                  }
                 }
               }
             }
           }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserInput"
+              },
+              "examples": {
+                "example": {
+                  "value": {
+                    "keyTerms": "Typhoid fever"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Example params"
         }
       }
     },
     "/articles": {
       "get": {
-        "summary": "Your GET endpoint",
+        "summary": "Get Articles",
         "tags": [],
         "responses": {
           "200": {
@@ -218,39 +211,51 @@
                     "value": {
                       "articles": [
                         {
-                          "headline": "Coronavirus Spreading in Sydney",
-                          "url": "https://epiwatch.com/five-new-cases-discovered-in-sydney",
+                          "headline": "Yellow fever -Senegal",
+                          "url": "https://www.who.int/csr/don/29-december-2020-yellow-fever-senegal/en/",
                           "location": {
-                            "country": "Australia",
-                            "location": "Sydney"
+                            "country": "Senegal",
+                            "location": "Kidira"
                           },
                           "reports": [
                             {
                               "diseases": [
-                                "Coronavirus"
+                                "Yellow fever"
                               ],
                               "syndromes": [],
-                              "event_date": "2019-03-10Txx:xx:xx",
+                              "event_date": "2020-10-18 xx:xx:xx",
                               "locations": [
                                 {
-                                  "country": "Austrlia",
-                                  "location": "Sydney"
+                                  "country": "Senegal",
+                                  "location": "Tambacounda"
+                                },
+                                {
+                                  "country": "Senegal",
+                                  "location": "Kedougou"
+                                },
+                                {
+                                  "country": "Senegal",
+                                  "location": "Saraya"
+                                },
+                                {
+                                  "country": "Senegal",
+                                  "location": "Thilogne"
                                 }
                               ]
                             }
                           ],
                           "termsFound": [
-                            "Coronavirus",
-                            "Pandemic"
+                            "Yellow fever"
                           ],
-                          "main_text": "Five new case of the Coronavirus have been discovered in Balmain...",
-                          "date_of_publication": "2019-03-10T10:10:10"
+                          "main_text": "From October to December 2020, a total of seven confirmed cases of yellow fever (YF) have been reported from four health districts in three regions in Senegal. The outbreak consists of a cluster of four confirmed cases from three health zones in Kidira health district, Tambacounda region; one case in the neighbouring Kedougou health district, Kedougou region; one case in Saraya health district, Kedougou region; and one case in Thilogne health district, Matam region. In Tambacounda region, on 18 October 2020, a sample was collected from a 40 year-old female living in Kidira district during an investigation for West Nile virus infection. On 29 October, Institut Pasteur de Dakar (IPD) confirmed the case as yellow fever. On 31 October, IPD reported results of a second confirmed case of YF to national health authorities, following a notification by Bakel health zone, Kidira health district. The case was an 8 year-old boy whose illness began in Kidira health district and died on 31 October. On 12 November, IPD notified national health authorities about a third confirmed case, a 23 year-old male, who was detected by routine surveillance and died on 5 November. On 16 November, a fourth confirmed case, a 15 year-old boy from Kidira health district, was reported to national health authorities. The two deaths among the four cases reported in Kidira health district occurred at two hospitals: one at the Matam regional hospital and the other at the Tambacounda regional hospital. In Kedougou and Matam regions, three confirmed cases were reported in December 2020, whose samples were collected during various investigations. In Kedougou region, laboratory tests conducted by IPD revealed that out of the 16 samples received from region, there were: one confirmed case [polymerase chain reaction (PCR) and IgM positive] living in Saraya district; one confirmed case [IgM positive and confirmed by plaque reduction neutralization test (PRNT)] living in Kedougou district; and two presumptive cases (IgM positive and PRNT in progress). In Matam region, one case was confirmed as YF by IgM and PRNT. The case is a 90-year-old male from Thilogne health district, who is hospitalized in a private clinic in Dakar. The Strategic Tool for Assessing Risks (STAR), which was used prior to notification of the third case in Kidira health district, classified YF as 'low', where small outbreaks can be observed but likely not a large outbreak. Public health response. The Ministry of Health is coordinating a rapid response. Recommended response activities include immunization of the local population, enhanced surveillance, risk communication, community engagement and vector control. Additional potential support for vaccines and operational costs may be requested by the country.WHO risk assessment. The detection of YF cases in the Tambacounda and Kedougou regions demonstrates the possibility of sylvatic spread of YF to unvaccinated people in a rural area and emphasizes the importance of maintaining high population immunity in all countries located in areas at high risk for YF. Recent epidemiological studies have reported that the villages are in a savanna area with non-human primates. Permanent or temporary pools of water are observed at the outskirts of residential areas. Although mass vaccination took place in Senegal in 2007, the eastern part of the country is considered to be at high risk of endemic YF transmission. Unvaccinated individuals remain vulnerable to infection with YF due to the persistence of the disease in primates (sylvatic cycle), especially in rural areas. The two affected regions are also difficult to reach, making vaccination efforts challenging. Intensive care units in the regions are far from the district (186 km) with poor road conditions. Affected districts are rural, largely consisted of forests, making it difficult to control the vector and mitigate the combined sylvatic-urban cycle. The COVID-19 pandemic poses a risk of disruption to routine immunization activities due to the burden on health systems and declining immunization uptake due to physical distancing or community reluctance. Disruption of immunization services, even for brief periods, will increase the number of susceptible individuals and increase the likelihood of outbreaks of vaccine-preventable diseases. As of 27 December 2020, there were 18 523 confirmed cases of COVID-19 and 387 deaths reported in Senegal. WHO advice. YF is an acute viral haemorrhagic disease transmitted by infected mosquitoes and has the potential to spread rapidly and have serious public health consequences. There is no specific treatment, although the disease can be prevented with a single dose of YF vaccine, which confers lifelong immunity. Supportive care to treat dehydration, respiratory failure and fever, and antibiotic treatment for associated bacterial infections are recommended. Senegal is considered a high priority country by the Eliminate Yellow Fever Epidemics (EYE) strategy. The introduction of YF vaccination into routine vaccination took place in January 2005. Vaccination is the primary means of preventing and controlling YF. In urban centres, targeted vector control measures are also useful to stop transmission. WHO and partners will continue to support local authorities in implementing these interventions to control the current epidemic. WHO recommends YF vaccination for all international travelers aged 9-months or older traveling to Senegal. Senegal also requires a YF vaccination certificate for travelers aged 9-months or older from countries at risk of YF transmission and travelers who have transited more than 12 hours at an airport of a country that is at risk of transmitting YF. YF vaccination is safe, highly effective and offers protection for life. In accordance with the International Health Regulaions (2005), third edition, the validity of the international YF vaccination certificate extends to the life of the person vaccinated. A booster dose of YF vaccine cannot be required from international travelers as a condition of entry. WHO has published guidelines for vaccination activities during the COVID-19 pandemic and is currently developing specific operational guidelines for conducting mass vaccination campaigns in the context of COVID-19. Where conditions permit, the EYE strategy will support the rapid resumption of YF prevention activities. WHO encourages Member States to take all necessary measures to keep travelers well informed of risks and preventive measures, including vaccination. Travelers should also be aware of the signs and symptoms of YF and should consult a physician promptly when showing signs. Returning viremic travelers may pose a risk to the establishment of local YF transmission cycles in areas where the competent vector is present. WHO does not recommend any restrictions on travel and trade to Senegal based on the information available on this outbreak.",
+                          "date_of_publication": "2020-12-29 10:10:10"
                         }
                       ],
                       "team": {
                         "name": "KoolKats",
                         "accessTime": 133,
-                        "serviceTime": 150
+                        "serviceTime": 150,
+                        "dataSource": "WHO"
                       }
                     }
                   }
@@ -312,10 +317,120 @@
                     "$ref": "#/components/schemas/DateExact"
                   }
                 }
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "keyTerms": [
+                      "Yellow fever"
+                    ],
+                    "location": "Senegal",
+                    "startDate": "2019-10-12 00:00:00",
+                    "endDate": "2020-12-31 00:00:00"
+                  }
+                }
               }
             }
           },
-          "description": "This is the result\n"
+          "description": "Example of queries"
+        }
+      },
+      "parameters": []
+    },
+    "/popularDiseases": {
+      "get": {
+        "summary": "Get Popular Diseases",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rankings": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Occurrences"
+                      }
+                    },
+                    "debugInfo": {
+                      "$ref": "#/components/schemas/DebugInfo"
+                    }
+                  }
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "rankings": [
+                        {
+                          "name": "Influenza A",
+                          "occurrences": 3
+                        },
+                        {
+                          "name": "Ebola virus disease",
+                          "occurrences": 2
+                        },
+                        {
+                          "name": "Cholera",
+                          "occurrences": 1
+                        },
+                        {
+                          "name": "Rift Valley fever",
+                          "occurrences": 1
+                        },
+                        {
+                          "name": "MERS-CoV",
+                          "occurrences": 1
+                        }
+                      ],
+                      "debugInfo": {
+                        "name": "KoolKats",
+                        "accessTime": 0,
+                        "serviceTime": 0,
+                        "dataSource": "WHO"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-popular-diseases",
+        "description": "Get a ranking of diseases mentioned based on popularity",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/startDate"
+          },
+          {
+            "$ref": "#/components/parameters/endDate"
+          },
+          {
+            "$ref": "#/components/parameters/location"
+          },
+          {
+            "$ref": "#/components/parameters/numDiseases"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserInput"
+              },
+              "examples": {
+                "example": {
+                  "value": {
+                    "startDate": "2021-01-01T00:00:00",
+                    "endDate": "2021-03-12T00:00:00"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Example of query params"
         }
       },
       "parameters": []
@@ -326,15 +441,35 @@
       "Article": {
         "title": "Article",
         "type": "object",
-        "description": "",
+        "description": "Information on an article including headline, url and main text",
         "x-examples": {
-          "Example": {
-            "title": "First COVID Case in Sydney",
-            "url": "https://fakenews.com.au/first-covid-case-sydney",
-            "location": "Sydney",
-            "startDate": "user@example.com",
-            "endDate": "1997-10-31",
-            "cases": 0
+          "example": {
+            "headline": "Listeriosis - Australia",
+            "url": "https://www.who.int/csr/don/09-april-2018-listeriosis-australia/en/",
+            "location": {
+              "country": "Australia",
+              "location": "Australia"
+            },
+            "reports": [
+              {
+                "diseases": [
+                  "Listeriosis"
+                ],
+                "syndromes": [],
+                "event_date": "2018-04-06",
+                "locations": [
+                  {
+                    "country": "Australia",
+                    "location": "Australia"
+                  }
+                ]
+              }
+            ],
+            "termsFound": [
+              "Listeriosis"
+            ],
+            "main_text": "On 2 March 2018, the Australian National Focal Point (NFP) notified WHO of an outbreak of Listeria monocytogenes infection (listeriosis) associated with the consumption of rockmelons (cantaloupe) from a single grower. From 17 January 2018 through to 6 April 2018, 20 outbreak cases (19 confirmed and 1 probable) of listeriosis were reported. All of the cases were hospitalized and there have been seven deaths and one miscarriage associated with the outbreak. All of the outbreak cases have had illness onset since 17 January 2018. Public health response. Epidemiological investigations suggested that the source of the outbreak was rockmelon (cantaloupe melons) from a single grower in Australia. Epidemiological and environmental investigations were undertaken, which led to the recall of rockmelons produced by the single grower on 27 February 2018. On 1 March 2018, the Australian NFP was notified that international distribution of the affected product had occurred. Australian authorities received information from trace forward investigations on 2 March 2018 that the rockmelons from this grower were exported to eight countries; Hong Kong Special Administrative Region (China), Japan, Kuwait, Malaysia, Oman, Qatar, Singapore, and United Arab Emirates. The Australian NFP directly advised these countries on 3 March 2018 about the export of rockmelons from Australia to their country. In parallel, a notification via the International Food Safety Authorities Network (INFOSAN) was also sent on 3 March 2018.Further trace forward investigations on 7 March 2018 identified that Bahrain also received an export of the rockmelons from this grower and on 8 March 2018, investigations further identified that the affected rockmelons may have been included in a consignment to the Seychelles. The Australian NFP advised the Bahrain NFP directly on 8 March 2018 and the Seychelles NFP directly on 9 March 2018. As of 8 March, trace forward activities have been concluded.The INFOSAN emergency contact points in the importing countries were provided with specific distribution details of the rockmelons to their respective countries by the INFOSAN emergency contact point in Australia, as they became available. On 4 April 2018, it was reported that more than 30 samples of melons from the grower through the supply chain, including retail and on farm, tested positive to Listeria monocytogenes. Additional testing found L. monocytogenes in the packing area. All L. monocytogenes samples had the same genetic sequence as the human cases. It is believed that the cause of the outbreak was a combination of environmental conditions and weather contaminating the surface of the fruit, with low levels of the bacteria persisting after the washing process. The grower continues to work closely with the relevant authorities and has returned to supply rockmelons (during the week starting 2 April) after testing cleared the property. WHO risk assessment.The prompt epidemiological and environmental investigation carried out led to the identification of the outbreak source and enabled the issuing of a recall. Due to the potentially long incubation period of L. monocytogenes, further outbreak cases may be reported. Import details have been provided though INFOSAN to the affected countries to enable them to take appropriate management measures including local recalls and risk communication. Cases in the affected countries may still be identified.WHO advice. Pregnant women, the elderly and immunocompromised individuals should take precautions to avoid infection by Listeria by avoiding the consumption of high risk foods including dairy products made of unpasteurized milk, soft cheeses, deli meat products (ready-to eat meat cuts, pâté, etc.); ice creams, raw seafood, crustaceans, and shellfish. These are the most common foods associated with Listeria infection. In recent years, melon, and other fruits and vegetables have been implicated on rare occasions in outbreaks of listeriosis. To reduce the risk, it is important to thoroughly wash all fruits and vegetables. It is recommended that risk communication messages regarding listeriosis be targeted to at-risk groups, primarily pregnant women, older persons and people with weakened immune systems, for example people with cancer, HIV, diabetes, kidney or liver disease or those taking immunosuppressive medications. These messages should recommend avoiding the consumption of high-risk foods.",
+            "date_of_publication": "2018-04-09"
           }
         },
         "properties": {
@@ -386,6 +521,7 @@
             "location": "Sydney"
           }
         },
+        "description": "Data the user can input",
         "properties": {
           "startDate": {
             "type": "string",
@@ -401,13 +537,7 @@
           "location": {
             "type": "string"
           }
-        },
-        "required": [
-          "startDate",
-          "endDate",
-          "keyTerms",
-          "location"
-        ]
+        }
       },
       "Report": {
         "title": "Report",
@@ -419,7 +549,7 @@
               "Malaria"
             ],
             "syndromes": [],
-            "event_date": "2019-05-05T11:22:01",
+            "event_date": "2019-05-05 11:22:01",
             "locations": [
               "Sydney",
               "Melbourne",
@@ -452,7 +582,8 @@
         },
         "required": [
           "event_date"
-        ]
+        ],
+        "description": "One case of diseases"
       },
       "Dates": {
         "title": "Dates",
@@ -463,32 +594,67 @@
           {
             "$ref": "#/components/schemas/DateRange"
           }
-        ]
+        ],
+        "description": "Either in the form of a single date or a range",
+        "x-examples": {
+          "date range": "2018-11-01 17:xx:xx to 2018-12-xx xx:xx:xx",
+          "date exact": "2015-10-01 xx:xx:xx"
+        }
       },
       "DateRange": {
         "type": "string",
         "title": "DateRange",
-        "pattern": "^(\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx) to (\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx)$"
+        "pattern": "^(\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx) to (\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx)$",
+        "description": "Date range",
+        "x-examples": {
+          "Example of date range": "2015-10-01 08:45:10 to 2016-10-01 08:45:10",
+          "example-2": "2018-xx-xx xx:xx:xx to 2019-xx-xx xx:xx:xx",
+          "example-3": "2018-11-01 17:xx:xx to 2018-12-xx xx:xx:xx"
+        }
       },
       "DateExact": {
         "type": "string",
         "title": "DateExact",
         "x-examples": {
-          "example-1": "string"
+          "Example of single date": "2015-10-01 08:45:10"
         },
-        "pattern": "^(\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx)$"
+        "pattern": "^(\\d{4})-(\\d\\d|xx)-(\\d\\d|xx) (\\d\\d|xx):(\\d\\d|xx):(\\d\\d|xx)$",
+        "description": "Single date"
       },
       "Disease": {
         "title": "Disease",
-        "type": "string"
+        "type": "string",
+        "description": "Disease name",
+        "x-examples": {
+          "Coronavirus": "Coronavirus",
+          "Malaria": "Malaria",
+          "Measles": "Measles",
+          "Tuberculosis": "Tuberculosis"
+        }
       },
       "Syndrome": {
         "title": "Syndrome",
-        "type": "string"
+        "type": "string",
+        "description": "Syndrome name",
+        "x-examples": {
+          "Dry eye syndrome": "Dry eye syndrome",
+          "Holt–Oram syndrome": "Holt–Oram syndrome"
+        }
       },
       "Location": {
         "title": "Location",
         "type": "object",
+        "description": "Country and location name e.g. state/city",
+        "x-examples": {
+          "example-1": {
+            "country": "Australia",
+            "location": "Sydney"
+          },
+          "example-2": {
+            "country": "Australia",
+            "location": "New South Wales"
+          }
+        },
         "properties": {
           "country": {
             "type": "string"
@@ -500,27 +666,75 @@
       },
       "EventType": {
         "title": "EventType",
-        "type": "string"
+        "type": "string",
+        "description": "'presence', 'death', 'infected', 'hospitalised', 'recovered', ''",
+        "x-examples": {
+          "presence": "presence",
+          "death": "death",
+          "infected": "indected",
+          "hospitalised": "hospitalised",
+          "recovered": "recovered",
+          "empty": ""
+        }
       },
       "DebugInfo": {
         "title": "DebugInfo",
         "type": "object",
+        "description": "Additional information",
+        "x-examples": {
+          "example-1": {
+            "name": "KoolKats",
+            "accessTime": 0,
+            "serviceTime": 0,
+            "dataSource": "WHO"
+          }
+        },
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "default": "KoolKats",
+            "readOnly": true
           },
           "accessTime": {
             "type": "integer"
           },
           "serviceTime": {
             "type": "integer"
+          },
+          "dataSource": {
+            "type": "string",
+            "default": "WHO",
+            "readOnly": true
+          }
+        }
+      },
+      "Occurrences": {
+        "title": "Occurrences",
+        "type": "object",
+        "description": "Name of disease/location and occurence of disease",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "occurrences": {
+            "type": "integer"
+          }
+        },
+        "x-examples": {
+          "15 different diseases occur in Australia": {
+            "name": "Australia",
+            "occurrences": 15
+          },
+          "COVID-19 occurs in 30 countries": {
+            "name": "COVID-19",
+            "occurrences": 30
           }
         }
       }
     },
     "responses": {
       "ArticleList": {
-        "description": "Example response",
+        "description": "List of articles",
         "content": {
           "application/json": {
             "schema": {
@@ -554,7 +768,6 @@
       "location": {
         "name": "location",
         "in": "query",
-        "required": true,
         "schema": {
           "type": "string"
         },
@@ -563,9 +776,8 @@
       "keyTerms": {
         "name": "keyTerms",
         "in": "query",
-        "required": true,
         "schema": {
-          "type": "array"
+          "type": "string"
         },
         "description": "Words to filter the search"
       },
@@ -577,7 +789,17 @@
           "type": "string"
         },
         "description": "The desired end date to fetch articles for in the form 'YYYY-MM-DD HH:MM:SS'"
+      },
+      "numDiseases": {
+        "name": "numDiseases",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "default": "10"
+        },
+        "description": "Number of diseases required for popularity"
       }
-    }
+    },
+    "securitySchemes": {}
   }
 }
