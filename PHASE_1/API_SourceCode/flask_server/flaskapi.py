@@ -18,6 +18,9 @@ def get_articles():
     keyTerms = request.args.get('keyTerms')
     location = request.args.get('location')
 
+    startDate = startDate.replace("T", " ")
+    endDate = endDate.replace("T", " ")
+
     j = pychromeless.src.db_functions.handle_get_articles(startDate, endDate, location, keyTerms)
     timeOut = datetime.datetime.now()
 
@@ -34,6 +37,9 @@ def get_diseases():
     endDate = request.args.get('endDate')
     keyTerms = request.args.get('keyTerms')
     location = request.args.get('location')
+
+    startDate = startDate.replace("T", " ")
+    endDate = endDate.replace("T", " ")
 
     j = pychromeless.src.db_functions.handle_get_diseases(startDate, endDate, location, keyTerms)
 
@@ -52,6 +58,9 @@ def get_occurences():
     startDate = request.args.get('startDate')
     endDate = request.args.get('endDate')
 
+    startDate = startDate.replace("T", " ")
+    endDate = endDate.replace("T", " ")
+
     j = pychromeless.src.db_functions.handle_get_occurrences(keyTerms, startDate, endDate)
 
     timeOut = datetime.datetime.now()
@@ -68,6 +77,9 @@ def get_popular_diseases():
     endDate = request.args.get('endDate')
     numDiseases = request.args.get('numDiseases')
     location = request.args.get('location')
+
+    startDate = startDate.replace("T", " ")
+    endDate = endDate.replace("T", " ")
 
     if numDiseases == None:
         j = pychromeless.src.db_functions.handle_get_popular_diseases(startDate, endDate, location)
