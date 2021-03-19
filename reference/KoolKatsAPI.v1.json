@@ -63,7 +63,13 @@
                         },
                         "articlesFound": 3
                       },
-                      "totalArticles": 8
+                      "totalArticles": 8,
+                      "debugInfo": {
+                        "name": "KoolKats",
+                        "accessTime": "2021-03-19 04:44:22.416770",
+                        "serviceTime": "0:00:00.042005",
+                        "dataSource": "WHO"
+                      }
                     }
                   }
                 }
@@ -161,16 +167,19 @@
                   "type": "object",
                   "properties": {
                     "locations": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "$ref": "#/components/schemas/Location"
-                        },
-                        "disease": {
-                          "$ref": "#/components/schemas/Disease"
-                        },
-                        "occurrences": {
-                          "type": "integer"
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "disease": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "occurrences": {
+                            "type": "integer"
+                          }
                         }
                       }
                     },
@@ -184,26 +193,30 @@
                     "value": {
                       "locations": [
                         {
+                          "disease": "Yellow Fever",
                           "name": "Democratic Republic of Congo",
                           "occurrences": 2
                         },
                         {
+                          "disease": "Yellow Fever",
                           "name": "Islamic Republic of Pakistan",
                           "occurrences": 1
                         },
                         {
+                          "disease": "Yellow Fever",
                           "name": "Haiti",
                           "occurrences": 1
                         },
                         {
+                          "disease": "Yellow Fever",
                           "name": "Uganda",
                           "occurrences": 1
                         }
                       ],
                       "debugInfo": {
                         "name": "KoolKats",
-                        "accessTime": 0,
-                        "serviceTime": 0,
+                        "accessTime": "2021-03-19 04:44:22.416770",
+                        "serviceTime": "0:00:00.042005",
                         "dataSource": "WHO"
                       }
                     }
@@ -286,8 +299,8 @@
                       ],
                       "team": {
                         "name": "KoolKats",
-                        "accessTime": 133,
-                        "serviceTime": 150,
+                        "accessTime": "2021-03-19 04:44:22.416770",
+                        "serviceTime": "0:00:00.042005",
                         "dataSource": "WHO"
                       }
                     }
@@ -394,8 +407,8 @@
                       ],
                       "debugInfo": {
                         "name": "KoolKats",
-                        "accessTime": 0,
-                        "serviceTime": 0,
+                        "accessTime": "2021-03-19 04:44:22.416770",
+                        "serviceTime": "0:00:00.042005",
                         "dataSource": "WHO"
                       }
                     }
