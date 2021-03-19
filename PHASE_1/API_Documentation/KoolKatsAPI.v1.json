@@ -29,13 +29,19 @@
                   "type": "object",
                   "properties": {
                     "disease": {
-                      "type": "object",
-                      "properties": {
-                        "diseaseInfo": {
-                          "$ref": "#/components/schemas/Occurrences"
-                        },
-                        "articlesFound": {
-                          "type": "integer"
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "articlesFound": {
+                            "type": "integer"
+                          },
+                          "occurrences": {
+                            "type": "integer"
+                          }
                         }
                       }
                     },
@@ -696,10 +702,10 @@
             "readOnly": true
           },
           "accessTime": {
-            "type": "integer"
+            "type": "string"
           },
           "serviceTime": {
-            "type": "integer"
+            "type": "string"
           },
           "dataSource": {
             "type": "string",
