@@ -41,6 +41,9 @@
                     },
                     "totalArticles": {
                       "type": "integer"
+                    },
+                    "team": {
+                      "$ref": "#/components/schemas/DebugInfo"
                     }
                   }
                 },
@@ -162,7 +165,7 @@
                         }
                       }
                     },
-                    "debugInfo": {
+                    "team": {
                       "$ref": "#/components/schemas/DebugInfo"
                     }
                   }
@@ -350,7 +353,7 @@
                         "$ref": "#/components/schemas/Occurrences"
                       }
                     },
-                    "debugInfo": {
+                    "team": {
                       "$ref": "#/components/schemas/DebugInfo"
                     }
                   }
