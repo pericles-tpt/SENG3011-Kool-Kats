@@ -1,4 +1,3 @@
-README.md
 setup.py
 KoolKatsAPI.egg-info/PKG-INFO
 KoolKatsAPI.egg-info/SOURCES.txt

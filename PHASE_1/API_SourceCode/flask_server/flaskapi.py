@@ -68,9 +68,11 @@ def get_popular_diseases():
     endDate = request.args.get('endDate')
     numDiseases = request.args.get('numDiseases')
     location = request.args.get('location')
-    #return (startDate + " " + endDate + " " + keyTerms + " " + location) 
-    #return (startDate + " " + endDate + " " + numDiseases + " " + location)
-    j = pychromeless.src.db_functions.handle_get_popular_diseases(startDate, endDate, location, numDiseases)
+
+    if numDiseases == None:
+        j = pychromeless.src.db_functions.handle_get_popular_diseases(startDate, endDate, location)
+    else:
+        j = pychromeless.src.db_functions.handle_get_popular_diseases(startDate, endDate, location, numDiseases)
     timeOut = datetime.datetime.now()
 
     j["debugInfo"] = {"name": "KoolKats", "accessTime": str(timeIn), "serviceTime": str(timeOut - timeIn), "dataSource": "WHO"}
