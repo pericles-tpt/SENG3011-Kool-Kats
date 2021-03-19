@@ -81,6 +81,7 @@ def get_popular_diseases():
     startDate = startDate.replace("T", " ")
     endDate = endDate.replace("T", " ")
 
+    j = {"test": "1"}
     if numDiseases == None:
         j = pychromeless.src.db_functions.handle_get_popular_diseases(startDate, endDate, location)
     else:

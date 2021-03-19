@@ -92,7 +92,7 @@ def handle_get_occurrences(keyTerms, startDate = None, endDate = None):
 
     where_query = 'WHERE Disease IN (\'' + '\', \''.join([term.strip() for term in keyTerms]) + '\')'
     if (startDate != None and endDate != None):
-        where_query = " AND Date >= '{}' AND Date <= '{}'".format(startDate, endDate) 
+        where_query += " AND Date >= '{}' AND Date <= '{}'".format(startDate, endDate) 
 
     try:
       query = "SELECT Country, Disease, COUNT(DISTINCT Url) AS Count FROM Articles " + where_query + " GROUP BY Country, Disease ORDER BY Count DESC;".format(where_query)
