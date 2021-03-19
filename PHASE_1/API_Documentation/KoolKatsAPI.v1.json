@@ -48,7 +48,7 @@
                     "totalArticles": {
                       "type": "integer"
                     },
-                    "team": {
+                    "debugInfo": {
                       "$ref": "#/components/schemas/DebugInfo"
                     }
                   }
@@ -63,7 +63,13 @@
                         },
                         "articlesFound": 3
                       },
-                      "totalArticles": 8
+                      "totalArticles": 8,
+                      "debugInfo": {
+                        "name": "KoolKats",
+                        "accessTime": "2021-03-19 04:44:22.416770",
+                        "serviceTime": "0:00:00.042005",
+                        "dataSource": "WHO"
+                      }
                     }
                   }
                 }
@@ -77,7 +83,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "2019-01-10T00:00:00"
+              "example": "2019-01-01T00:00:00"
             },
             "in": "query",
             "name": "startDate",
@@ -87,7 +93,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "2020-01-10T00:00:00"
+              "example": "2020-01-01T00:00:00"
             },
             "in": "query",
             "name": "endDate",
@@ -97,7 +103,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "Anthrax,Zika"
+              "example": "Yellow Fever, Ravies"
             },
             "in": "query",
             "name": "keyTerms",
@@ -107,7 +113,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "Sydney"
+              "example": "France"
             },
             "in": "query",
             "name": "location",
@@ -126,7 +132,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "Anthrax,Zika"
+              "example": "Cholera, Yellow Fever"
             },
             "in": "query",
             "name": "keyTerms",
@@ -136,7 +142,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "2019-01-10T00:00:00"
+              "example": "2019-01-01T00:00:00"
             },
             "in": "query",
             "name": "startDate",
@@ -145,7 +151,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "2020-01-10T00:00:00"
+              "example": "2020-01-01T00:00:00"
             },
             "in": "query",
             "name": "endDate",
@@ -160,18 +166,24 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "diseases": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "$ref": "#/components/schemas/Disease"
-                        },
-                        "locations": {
-                          "$ref": "#/components/schemas/Occurrences"
+                    "locations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "disease": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "occurrences": {
+                            "type": "integer"
+                          }
                         }
                       }
                     },
-                    "team": {
+                    "debugInfo": {
                       "$ref": "#/components/schemas/DebugInfo"
                     }
                   }
@@ -181,26 +193,30 @@
                     "value": {
                       "locations": [
                         {
+                          "disease": "Yellow Fever",
                           "name": "Democratic Republic of Congo",
                           "occurrences": 2
                         },
                         {
+                          "disease": "Yellow Fever",
                           "name": "Islamic Republic of Pakistan",
                           "occurrences": 1
                         },
                         {
+                          "disease": "Yellow Fever",
                           "name": "Haiti",
                           "occurrences": 1
                         },
                         {
+                          "disease": "Yellow Fever",
                           "name": "Uganda",
                           "occurrences": 1
                         }
                       ],
                       "debugInfo": {
                         "name": "KoolKats",
-                        "accessTime": 0,
-                        "serviceTime": 0,
+                        "accessTime": "2021-03-19 04:44:22.416770",
+                        "serviceTime": "0:00:00.042005",
                         "dataSource": "WHO"
                       }
                     }
@@ -231,7 +247,7 @@
                         "$ref": "#/components/schemas/Article"
                       }
                     },
-                    "team": {
+                    "debugInfo": {
                       "$ref": "#/components/schemas/DebugInfo"
                     }
                   }
@@ -283,8 +299,8 @@
                       ],
                       "team": {
                         "name": "KoolKats",
-                        "accessTime": 133,
-                        "serviceTime": 150,
+                        "accessTime": "2021-03-19 04:44:22.416770",
+                        "serviceTime": "0:00:00.042005",
                         "dataSource": "WHO"
                       }
                     }
@@ -300,7 +316,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "Anthrax,Zika"
+              "example": "Yellow Fever, Ravies"
             },
             "in": "query",
             "name": "keyTerms",
@@ -310,7 +326,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "Sydney"
+              "example": "France"
             },
             "in": "query",
             "name": "location",
@@ -320,7 +336,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "2019-01-10T00:00:00"
+              "example": "2018-01-01T00:00:00"
             },
             "in": "query",
             "name": "startDate",
@@ -330,7 +346,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "2020-01-10T00:00:00"
+              "example": "2020-01-01T00:00:00"
             },
             "in": "query",
             "name": "endDate",
@@ -359,7 +375,7 @@
                         "$ref": "#/components/schemas/Occurrences"
                       }
                     },
-                    "team": {
+                    "debugInfo": {
                       "$ref": "#/components/schemas/DebugInfo"
                     }
                   }
@@ -391,8 +407,8 @@
                       ],
                       "debugInfo": {
                         "name": "KoolKats",
-                        "accessTime": 0,
-                        "serviceTime": 0,
+                        "accessTime": "2021-03-19 04:44:22.416770",
+                        "serviceTime": "0:00:00.042005",
                         "dataSource": "WHO"
                       }
                     }
@@ -411,7 +427,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "2019-01-10T00:00:00"
+              "example": "2019-01-01T00:00:00"
             },
             "in": "query",
             "name": "startDate",
@@ -431,7 +447,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "Sydney"
+              "example": "France"
             },
             "in": "query",
             "name": "location",
@@ -520,11 +536,11 @@
         "title": "UserInput",
         "type": "object",
         "x-examples": {
-          "SydneyRequest": {
+          "FranceRequest": {
             "startDate": "2019-01-11T09:02:00",
-            "endDate": "2019-01-16T11:02:10",
-            "keyTerms": "anthrax,zika",
-            "location": "Sydney"
+            "endDate": "2020-01-01T11:02:10",
+            "keyTerms": "yellow fever,ravies",
+            "location": "France"
           }
         },
         "description": "Data the user can input",
