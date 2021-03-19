@@ -118,37 +118,17 @@ def handle_get_popular_diseases(startDate, endDate, country = None, numDiseases 
     if country != None:
         where_query = 'WHERE Country=\'' + country + '\''
 
-    #try:
-    #  query = "SELECT DISEASE, COUNT(DISTINCT URL) AS COUNT FROM Articles {} GROUP BY DISEASE ORDER BY COUNT DESC LIMIT {}".format(where_query, numDiseases)
-    #  print(query)
-    #  cursor.execute(query)
-    #except:
-    #  print("Oops we had an error")
-    #  return
+    try:
+      query = "SELECT DISEASE, COUNT(DISTINCT URL) AS COUNT FROM Articles {} GROUP BY DISEASE ORDER BY COUNT DESC LIMIT {}".format(where_query, numDiseases)
+      print(query)
+      cursor.execute(query)
+    except:
+      print("Oops we had an error")
+      return
 
-    response = {"rankings": [{
-      "name": "Influenza A",
-      "occurrences": 3
-    },
-    {
-      "name": "Ebola virus disease",
-      "occurrences": 2
-    },
-    {
-      "name": "Cholera",
-      "occurrences": 1
-    },
-    {
-      "name": "Rift Valley fever",
-      "occurrences": 1
-    },
-    {
-      "name": "MERS-CoV",
-      "occurrences": 1
-    }
-    ]}
-    #for (Disease, Cases) in cursor:
-    #    response["rankings"].append({"name": Disease, "occurrences": Cases})
+    response = {"rankings": []}
+    for (Disease, Cases) in cursor:
+        response["rankings"].append({"name": Disease, "occurrences": Cases})
     
     return response
 
