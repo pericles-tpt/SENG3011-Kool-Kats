@@ -1,3 +1,0 @@
-selenium==2.53.6
-chromedriver-binary==2.37.0
-pymysql==1.0.2
