@@ -33,7 +33,11 @@ def handle_get_articles(date_start, date_end, country = None, keyTerms = None):
 
     response = {"articles":[]}
     for (Country, Disease, Date, Cases, Url, MainText, Headline) in cursor:
-        response["articles"].append({"headline": Headline, "url": Url, "location": Country, "reports": ["a", "b", "c"], "termsFound": Disease, "main_text": MainText, "date_of_publication": str(Date)})
+        if (Headline == None):
+            h = ""
+        else:
+            h = Headline
+        response["articles"].append({"headline": h, "url": Url, "location": Country, "reports": [], "termFound": Disease, "main_text": MainText, "date_of_publication": str(Date)})
 
     
     return response
@@ -69,7 +73,7 @@ def handle_get_diseases(date_start, date_end, country = None, keyTerms = None):
 
     tmpList = []
     for (Disease, Cases, af) in cursor:
-        tmpList.append({"diseaseInfo": {"name": Disease, "occurences": int(Cases), "articlesFound": int(af)}})
+        tmpList.append({"name": Disease, "cases": int(Cases), "occurrences": int(af)})
 
     query = "SELECT COUNT(*) AS TA FROM Articles;"
     cursor.execute(query)
@@ -77,7 +81,7 @@ def handle_get_diseases(date_start, date_end, country = None, keyTerms = None):
     for i in cursor:
         ta = i[0]
 
-    response = {"diseases":tmpList, "totalArticles": ta}
+    response = {"diseases":tmpList, "totalArticlesInDB": ta}
     
     return response
 
