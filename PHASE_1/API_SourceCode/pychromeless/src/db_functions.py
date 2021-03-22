@@ -123,7 +123,7 @@ def handle_get_popular_diseases(startDate, endDate, country = None, numDiseases 
         where_query = 'WHERE Country=\'' + country + '\''
 
     try:
-      query = "SELECT DISEASE, COUNT(DISTINCT URL) AS COUNT FROM Articles {} GROUP BY DISEASE ORDER BY COUNT DESC LIMIT {}".format(where_query, numDiseases)
+      query = "SELECT DISEASE, COUNT(DISTINCT URL) AS COUNT FROM Articles {} GROUP BY DISEASE ORDER BY COUNT DESC LIMIT {}".format(where_query, numDiseases+1)
       print(query)
       cursor.execute(query)
     except:
@@ -132,7 +132,8 @@ def handle_get_popular_diseases(startDate, endDate, country = None, numDiseases 
 
     response = {"rankings": []}
     for (Disease, Cases) in cursor:
-        response["rankings"].append({"name": Disease, "occurrences": Cases})
+        if (Disease != ""):
+            response["rankings"].append({"name": Disease, "occurrences": Cases})
     
     return response
 
