@@ -48,7 +48,7 @@ def handle_get_diseases(date_start, date_end, country = None, keyTerms = None):
     where_query = ''
     if country != None:
         filters.append('Country=\'' + country + '\'')
-    elif keyTerms != None:
+    if keyTerms != None:
         keyTerms = keyTerms.split(',')
         filters.append('Disease IN (\'' + '\', \''.join([term.strip() for term in keyTerms]) + '\')')
     if len(filters) > 0:
