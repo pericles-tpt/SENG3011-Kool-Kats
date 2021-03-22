@@ -118,12 +118,12 @@ def handle_get_popular_diseases(startDate, endDate, country = None, numDiseases 
     cursor = db.cursor()
 
     # Creates the WHERE part of the query
-    where_query = ''
+    where_query = "WHERE Date >= '{}' and Date <= '{}'".format(startDate, endDate)
     if country != None:
-        where_query = 'WHERE Country=\'' + country + '\''
+        where_query += " AND Country=\'" + country + "\'"
 
     try:
-      query = "SELECT DISEASE, COUNT(DISTINCT URL) AS COUNT FROM Articles {} GROUP BY DISEASE ORDER BY COUNT DESC LIMIT {}".format(where_query, numDiseases+1)
+      query = "SELECT DISEASE, COUNT(DISTINCT URL) AS COUNT FROM Articles {} GROUP BY DISEASE ORDER BY COUNT DESC LIMIT {}".format(where_query, str(numDiseases+1))
       print(query)
       cursor.execute(query)
     except:
