@@ -7,7 +7,7 @@
       "name": "Peri Telemachou",
       "email": "z5214738@ad.unsw.edu.au"
     },
-    "description": "Our data is scraped from the WHO website.\n\nThe data is updated everyday at 6am. Depending on when API requests are sent, it may not be the most updated version. "
+    "description": "Our data is scraped from the WHO website.\n\nWe plan to update the data everyday at 6am. Depending on when API requests are sent, it may not be the most updated version. "
   },
   "servers": [
     {
@@ -36,7 +36,7 @@
                           "name": {
                             "type": "string"
                           },
-                          "articlesFound": {
+                          "cases": {
                             "type": "integer"
                           },
                           "occurrences": {
@@ -56,20 +56,25 @@
                 "examples": {
                   "example": {
                     "value": {
-                      "diseases": {
-                        "diseaseInfo": {
-                          "name": "Influenza A",
-                          "occurrences": 3
-                        },
-                        "articlesFound": 3
-                      },
-                      "totalArticles": 8,
                       "debugInfo": {
                         "name": "KoolKats",
-                        "accessTime": "2021-03-19 04:44:22.416770",
+                        "accessTime": "2021-03-22 08:55:20.535835",
                         "serviceTime": "0:00:00.042005",
                         "dataSource": "WHO"
-                      }
+                      },
+                      "diseases": [
+                        {
+                          "name": "yellow fever",
+                          "cases": 136454,
+                          "occurrences": 19
+                        },
+                        {
+                          "name": "chikungunya",
+                          "cases": 5880,
+                          "occurrences": 11
+                        }
+                      ],
+                      "totalArticles": 324
                     }
                   }
                 }
@@ -78,12 +83,12 @@
           }
         },
         "operationId": "get-disease-info",
-        "description": "Get the number of cases of 1 or more diseases within a date range",
+        "description": "Gets the number of cases and number of articles mentioning 1 or more diseases within a date range.",
         "parameters": [
           {
             "schema": {
               "type": "string",
-              "example": "2019-01-01T00:00:00"
+              "example": "2005-01-01T00:00:00"
             },
             "in": "query",
             "name": "startDate",
@@ -93,7 +98,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "2020-01-01T00:00:00"
+              "example": "2021-01-01T00:00:00"
             },
             "in": "query",
             "name": "endDate",
@@ -103,7 +108,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "Yellow Fever, Ravies"
+              "example": "yellow fever, chikungunya"
             },
             "in": "query",
             "name": "keyTerms",
@@ -117,7 +122,7 @@
             },
             "in": "query",
             "name": "location",
-            "description": "The city or country of interest"
+            "description": "The country of interest"
           }
         ]
       }
@@ -127,12 +132,12 @@
       "get": {
         "summary": "Get Occurrences",
         "operationId": "get-occurrences-by-location",
-        "description": "Get the number of occurences of different diseases/key terms by location/country",
+        "description": "Gets the number of articles mentioning 1 or more diseases by location",
         "parameters": [
           {
             "schema": {
               "type": "string",
-              "example": "Cholera, Yellow Fever"
+              "example": "yellow fever, cholera"
             },
             "in": "query",
             "name": "keyTerms",
@@ -142,7 +147,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "2019-01-01T00:00:00"
+              "example": "2005-01-01T00:00:00"
             },
             "in": "query",
             "name": "startDate",
@@ -151,7 +156,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "2020-01-01T00:00:00"
+              "example": "2021-01-01T00:00:00"
             },
             "in": "query",
             "name": "endDate",
@@ -255,54 +260,59 @@
                 "examples": {
                   "Example": {
                     "value": {
-                      "articles": [
-                        {
-                          "headline": "Yellow fever -Senegal",
-                          "url": "https://www.who.int/csr/don/29-december-2020-yellow-fever-senegal/en/",
-                          "location": {
-                            "country": "Senegal",
-                            "location": "Kidira"
-                          },
-                          "reports": [
-                            {
-                              "diseases": [
-                                "Yellow fever"
-                              ],
-                              "syndromes": [],
-                              "event_date": "2020-10-18 xx:xx:xx",
-                              "locations": [
-                                {
-                                  "country": "Senegal",
-                                  "location": "Tambacounda"
-                                },
-                                {
-                                  "country": "Senegal",
-                                  "location": "Kedougou"
-                                },
-                                {
-                                  "country": "Senegal",
-                                  "location": "Saraya"
-                                },
-                                {
-                                  "country": "Senegal",
-                                  "location": "Thilogne"
-                                }
-                              ]
-                            }
-                          ],
-                          "termsFound": [
-                            "Yellow fever"
-                          ],
-                          "main_text": "From October to December 2020, a total of seven confirmed cases of yellow fever (YF) have been reported from four health districts in three regions in Senegal. The outbreak consists of a cluster of four confirmed cases from three health zones in Kidira health district, Tambacounda region; one case in the neighbouring Kedougou health district, Kedougou region; one case in Saraya health district, Kedougou region; and one case in Thilogne health district, Matam region. In Tambacounda region, on 18 October 2020, a sample was collected from a 40 year-old female living in Kidira district during an investigation for West Nile virus infection. On 29 October, Institut Pasteur de Dakar (IPD) confirmed the case as yellow fever. On 31 October, IPD reported results of a second confirmed case of YF to national health authorities, following a notification by Bakel health zone, Kidira health district. The case was an 8 year-old boy whose illness began in Kidira health district and died on 31 October. On 12 November, IPD notified national health authorities about a third confirmed case, a 23 year-old male, who was detected by routine surveillance and died on 5 November. On 16 November, a fourth confirmed case, a 15 year-old boy from Kidira health district, was reported to national health authorities. The two deaths among the four cases reported in Kidira health district occurred at two hospitals: one at the Matam regional hospital and the other at the Tambacounda regional hospital. In Kedougou and Matam regions, three confirmed cases were reported in December 2020, whose samples were collected during various investigations. In Kedougou region, laboratory tests conducted by IPD revealed that out of the 16 samples received from region, there were: one confirmed case [polymerase chain reaction (PCR) and IgM positive] living in Saraya district; one confirmed case [IgM positive and confirmed by plaque reduction neutralization test (PRNT)] living in Kedougou district; and two presumptive cases (IgM positive and PRNT in progress). In Matam region, one case was confirmed as YF by IgM and PRNT. The case is a 90-year-old male from Thilogne health district, who is hospitalized in a private clinic in Dakar. The Strategic Tool for Assessing Risks (STAR), which was used prior to notification of the third case in Kidira health district, classified YF as 'low', where small outbreaks can be observed but likely not a large outbreak. Public health response. The Ministry of Health is coordinating a rapid response. Recommended response activities include immunization of the local population, enhanced surveillance, risk communication, community engagement and vector control. Additional potential support for vaccines and operational costs may be requested by the country.WHO risk assessment. The detection of YF cases in the Tambacounda and Kedougou regions demonstrates the possibility of sylvatic spread of YF to unvaccinated people in a rural area and emphasizes the importance of maintaining high population immunity in all countries located in areas at high risk for YF. Recent epidemiological studies have reported that the villages are in a savanna area with non-human primates. Permanent or temporary pools of water are observed at the outskirts of residential areas. Although mass vaccination took place in Senegal in 2007, the eastern part of the country is considered to be at high risk of endemic YF transmission. Unvaccinated individuals remain vulnerable to infection with YF due to the persistence of the disease in primates (sylvatic cycle), especially in rural areas. The two affected regions are also difficult to reach, making vaccination efforts challenging. Intensive care units in the regions are far from the district (186 km) with poor road conditions. Affected districts are rural, largely consisted of forests, making it difficult to control the vector and mitigate the combined sylvatic-urban cycle. The COVID-19 pandemic poses a risk of disruption to routine immunization activities due to the burden on health systems and declining immunization uptake due to physical distancing or community reluctance. Disruption of immunization services, even for brief periods, will increase the number of susceptible individuals and increase the likelihood of outbreaks of vaccine-preventable diseases. As of 27 December 2020, there were 18 523 confirmed cases of COVID-19 and 387 deaths reported in Senegal. WHO advice. YF is an acute viral haemorrhagic disease transmitted by infected mosquitoes and has the potential to spread rapidly and have serious public health consequences. There is no specific treatment, although the disease can be prevented with a single dose of YF vaccine, which confers lifelong immunity. Supportive care to treat dehydration, respiratory failure and fever, and antibiotic treatment for associated bacterial infections are recommended. Senegal is considered a high priority country by the Eliminate Yellow Fever Epidemics (EYE) strategy. The introduction of YF vaccination into routine vaccination took place in January 2005. Vaccination is the primary means of preventing and controlling YF. In urban centres, targeted vector control measures are also useful to stop transmission. WHO and partners will continue to support local authorities in implementing these interventions to control the current epidemic. WHO recommends YF vaccination for all international travelers aged 9-months or older traveling to Senegal. Senegal also requires a YF vaccination certificate for travelers aged 9-months or older from countries at risk of YF transmission and travelers who have transited more than 12 hours at an airport of a country that is at risk of transmitting YF. YF vaccination is safe, highly effective and offers protection for life. In accordance with the International Health Regulaions (2005), third edition, the validity of the international YF vaccination certificate extends to the life of the person vaccinated. A booster dose of YF vaccine cannot be required from international travelers as a condition of entry. WHO has published guidelines for vaccination activities during the COVID-19 pandemic and is currently developing specific operational guidelines for conducting mass vaccination campaigns in the context of COVID-19. Where conditions permit, the EYE strategy will support the rapid resumption of YF prevention activities. WHO encourages Member States to take all necessary measures to keep travelers well informed of risks and preventive measures, including vaccination. Travelers should also be aware of the signs and symptoms of YF and should consult a physician promptly when showing signs. Returning viremic travelers may pose a risk to the establishment of local YF transmission cycles in areas where the competent vector is present. WHO does not recommend any restrictions on travel and trade to Senegal based on the information available on this outbreak.",
-                          "date_of_publication": "2020-12-29 10:10:10"
-                        }
-                      ],
-                      "team": {
+                      "debugInfo": {
                         "name": "KoolKats",
                         "accessTime": "2021-03-19 04:44:22.416770",
                         "serviceTime": "0:00:00.042005",
                         "dataSource": "WHO"
-                      }
+                      },
+                      "articles": [
+                        {
+                          "date_of_publication": "2009-04-24 00:00:00",
+                          "headline": "",
+                          "location": "Mexico",
+                          "main_text": "The United States Government has reported seven confirmed human cases of Swine Influenza A/H1N1 in the USA (five in California and two in Texas) and nine suspect cases. All seven confirmed cases had mild Influenza-Like Illness (ILI), with only one requiring brief hospitalization. No deaths have been reported.\nThe Government of Mexico has reported three separate events. In the Federal District of Mexico, surveillance began picking up cases of ILI starting 18 March. The number of cases has risen steadily through April and as of 23 April there are now more than 854 cases of pneumonia from the capital. Of those, 59 have died. In San Luis Potosi, in central Mexico, 24 cases of ILI, with three deaths, have been reported. And from Mexicali, near the border with the United States, four cases of ILI, with no deaths, have been reported.\nOf the Mexican cases, 18 have been laboratory confirmed in Canada as Swine Influenza A/H1N1, while 12 of those are genetically identical to the Swine Influenza A/H1N1 viruses from California.\nThe majority of these cases have occurred in otherwise healthy young adults. Influenza normally affects the very young and the very old, but these age groups have not been heavily affected in Mexico.\nBecause there are human cases associated with an animal influenza virus, and because of the geographical spread of multiple community outbreaks, plus the somewhat unusual age groups affected, these events are of high concern.\nThe Swine Influenza A/H1N1 viruses characterized in this outbreak have not been previously detected in pigs or humans. The viruses so far characterized have been sensitive to oseltamivir, but resistant to both amantadine and rimantadine.\nThe World Health Organization has been in constant contact with the health authorities in the United States, Mexico and Canada in order to better understand the risk which these ILI events pose. WHO (and PAHO) is sending missions of experts to Mexico to work with health authorities there. It is helping its Member States to increase field epidemiology activities, laboratory diagnosis and clinical management. Moreover, WHO's partners in the Global Alert and Response Network have been alerted and are ready to assist as requested by the Member States.\nWHO acknowledges the United States and Mexico for their proactive reporting and their collaboration with WHO and will continue to work with Member States to further characterize the outbreak.",
+                          "reports": [],
+                          "termFound": "influenza",
+                          "url": "https://www.who.int/csr/don/2009_04_24/en/"
+                        },
+                        {
+                          "date_of_publication": "2013-10-19 00:00:00",
+                          "headline": "",
+                          "location": "Mexico",
+                          "main_text": "Disease outbreak news\nThe Ministry of Health in Mexico has reported 171 confirmed cases, including one death, of infection with Vibrio cholerae O1 Ogawa toxigenic between 9 September to 18 October 2013.\nIn the second week of September 2013, Mexico was affected simultaneously by a hurricane and tropical storm which caused heavy rains, floods, landslides and internal displacement of populations, thus increasing the risk of diarrhoeal diseases.\nOf the 171 confirmed cases, two are from the Federal District, 157 cases from the state of Hidalgo, nine from the state of Mexico, one from the state of San Luis Potosi and two from the state of Veracruz.\nEighty-six of the total confirmed cases are women and 85 are men with ages ranging from three months to 88 years old. Of these, thirty-nine cases were hospitalised.\nThe health authorities of Mexico continue to strengthen the outbreak investigation and surveillance at the national level and ensure the availability and quality care in medical units. Health professionals at different levels of the health care system are being trained about prevention, treatment and control of the disease. Measures are implemented to ensure access to drinking water and basic sanitation at the community level. Awareness campaigns, particularly around safe water and food consumption is being carried out in Spanish and indigenous languages.\nThis is the first local transmission of cholera recorded since the 1991-2001 cholera epidemic in Mexico. The genetic profile of the bacterium obtained from patients in Mexico presents high similarity (95 percent) with the strain that is currently circulating in three Caribbean countries (Haiti, Dominican Republic and Cuba), and is different from the strain that had been circulating in Mexico during 1991-2001 epidemic.\nWHO does not recommend that any travel or trade restrictions be applied to Mexico with respect to this event.",
+                          "reports": [],
+                          "termFound": "cholera",
+                          "url": "https://www.who.int/csr/don/2013_10_19_cholera/en/"
+                        },
+                        {
+                          "date_of_publication": "2013-10-28 00:00:00",
+                          "headline": "",
+                          "location": "Mexico",
+                          "main_text": "Disease outbreak news\nThe Ministry of Health in Mexico has reported an additional five cases of infection with Vibrio cholerae O1 Ogawa toxigenic.\nThe five cases occurred in the geographic zone of la Huasteca, an area where urbanization, availability of drinking water and basic sanitation services are limited.\nFrom 9 September to date, a total of 176 confirmed cases, including one death, of infection with Vibrio cholerae O1 Ogawa toxigenic has been reported in the country. Of these, two are from the Federal District, 157 cases from the state of Hidalgo, nine from the state of Mexico, two from the state of San Luis Potosi and six from the state of Veracruz. Eighty-nine of the total confirmed cases are women and 87 are men. Fifty-seven cases have been hospitalized.\nAn antimicrobial susceptibility test for Vibrio cholerae O1 Ogawa toxigenic was conducted by the Institute of Epidemiological Diagnostics and Reference (InDRE) which demonstrated that the bacterium was susceptible to the medicines doxycycline and chloramphenicol, with reduced susceptibility to ciprofloxacin and resistance to trimethoprim/sulfamethoxazole.\nThe health authorities of Mexico continue to strengthen outbreak investigation and surveillance at the national level and continue to ensure the availability and quality of care in medical units. Health professionals at different levels of the health care system are being trained in prevention, treatment and control of the disease. Measures are being implemented to ensure access to drinking water and basic sanitation at the community level. Awareness campaigns, particularly around safe water and food consumption are being carried out in Spanish and indigenous languages.\nThis is the first local transmission of cholera recorded since the 1991-2001 cholera epidemic in Mexico. The genetic profile of the bacterium obtained from patients in Mexico presents high similarity (95%) with the strain that is currently circulating in three Caribbean countries (Haiti, Dominican Republic and Cuba), and is different from the strain that had been circulating in Mexico during 1991-2001 epidemic.\nWHO does not recommend that any travel or trade restrictions be applied to Mexico with respect to this event.",
+                          "reports": [],
+                          "termFound": "cholera",
+                          "url": "https://www.who.int/csr/don/2013_10_28/en/"
+                        },
+                        {
+                          "date_of_publication": "2013-11-13 00:00:00",
+                          "headline": "",
+                          "location": "Mexico",
+                          "main_text": "Disease outbreak news\nThe Ministry of Health in Mexico has reported an additional four cases of infection with Vibrio cholerae O1 Ogawa. Of these, two are from the state of Hidalgo and two from the state of Veracruz.\nSince the beginning of this outbreak in September 2013 to date, a total of 180 confirmed cases, including one death, of cholera due to Vibrio cholerae O1 Ogawa has been reported in the country. Of these, two are from the Federal District, 159 cases from the state of Hidalgo, nine from the state of Mexico, two from the state of San Luis Potosi and eight from the state of Veracruz. Ninety-two of the total confirmed cases are women and 88 are men, with the age ranging from three-months to 88 years old.\nThe health authorities of Mexico continue to strengthen outbreak investigation and surveillance at the national level and continue to ensure the availability and quality of care in medical units. Health professionals at different levels of the health care system are being trained in prevention and treatment of the disease. Measures are being implemented to ensure access to drinking water and basic sanitation at the community level. Awareness campaigns, particularly around safe water and food consumption are being carried out in Spanish and indigenous languages.\nAn antimicrobial susceptibility test for Vibrio cholerae O1 Ogawa was conducted by the Institute of Epidemiological Diagnostics and Reference (InDRE) which demonstrated that the bacterium was susceptible to doxycycline and chloramphenicol, with reduced susceptibility to ciprofloxacin and resistance to trimethoprim/sulfamethoxazole.\nThis is the first local transmission of cholera recorded since the 1991-2001 cholera epidemic in Mexico. The genetic profile of the bacterium obtained from patients in Mexico presents high similarity (95%) with the strain that is currently circulating in three Caribbean countries (Haiti, Dominican Republic and Cuba), and is different from the strain that had been circulating in Mexico during 1991-2001 epidemic.\nWHO does not recommend that any travel or trade restrictions be applied to Mexico with respect to this event.",
+                          "reports": [],
+                          "termFound": "cholera",
+                          "url": "https://www.who.int/csr/don/2013_11_13/en/"
+                        },
+                        {
+                          "date_of_publication": "2013-11-25 00:00:00",
+                          "headline": "",
+                          "location": "Mexico",
+                          "main_text": "Disease outbreak news\nThe Ministry of Health in Mexico has reported an additional four cases of infection with Vibrio cholerae O1 Ogawa. Of these, three are from the state of Veracruz and one from the state of Hidalgo.\nSince the beginning of this outbreak in September 2013 to date, a total of 184 confirmed cases, including one death, of cholera due to Vibrio cholerae O1 Ogawa has been reported in the country. Of these, 160 cases from the state of Hidalgo, 11 from the state of Veracruz, nine from the state of Mexico, two are from the Federal District, and two from the state of San Luis Potosi.\nThe health authorities of Mexico continue to strengthen surveillance and to ensure the availability and quality of care in medical units.\nMeasures are being implemented to ensure access to drinking water and basic sanitation at the community level. Awareness campaigns, particularly around safe water and food consumption are being carried out in Spanish and indigenous languages. Health professionals at different levels of the health care system are being trained in prevention and treatment of the disease.\nAn antimicrobial susceptibility test for Vibrio cholerae O1 Ogawa was conducted by the Institute of Epidemiological Diagnostics and Reference (InDRE) which demonstrated that the bacterium was susceptible to doxycycline and chloramphenicol, with reduced susceptibility to ciprofloxacin and resistance to trimethoprim/sulfamethoxazole.\nThis is the first local transmission of cholera recorded since 2001 in Mexico. The genetic profile of the bacterium obtained from patients in Mexico presents high similarity (95%) with the strain that is currently circulating in three Caribbean countries (Haiti, Dominican Republic and Cuba), and is different from the strain that had been circulating in Mexico during 1991-2001.\nWHO does not recommend that any travel or trade restrictions be applied to Mexico with respect to this event.",
+                          "reports": [],
+                          "termFound": "cholera",
+                          "url": "https://www.who.int/csr/don/2013_11_25/en/"
+                        }
+                      ]
                     }
                   }
                 }
@@ -316,7 +326,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "Yellow Fever, Ravies"
+              "example": "influenza, cholera"
             },
             "in": "query",
             "name": "keyTerms",
@@ -326,17 +336,17 @@
           {
             "schema": {
               "type": "string",
-              "example": "France"
+              "example": "Mexico"
             },
             "in": "query",
             "name": "location",
-            "description": "The city or country of interest",
+            "description": "The country of interest",
             "required": true
           },
           {
             "schema": {
               "type": "string",
-              "example": "2018-01-01T00:00:00"
+              "example": "2005-01-01T00:00:00"
             },
             "in": "query",
             "name": "startDate",
@@ -346,7 +356,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "2020-01-01T00:00:00"
+              "example": "2021-01-01T00:00:00"
             },
             "in": "query",
             "name": "endDate",
@@ -419,7 +429,7 @@
           }
         },
         "operationId": "get-popular-diseases",
-        "description": "Get a ranking of diseases mentioned based on popularity",
+        "description": "Gets the rankings of all diseases by the highest number of occurences in articles, can be filtered by location.",
         "parameters": [
           {
             "$ref": "#/components/parameters/numDiseases"
@@ -427,7 +437,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "2019-01-01T00:00:00"
+              "example": "2005-01-01T00:00:00"
             },
             "in": "query",
             "name": "startDate",
@@ -437,7 +447,7 @@
           {
             "schema": {
               "type": "string",
-              "example": "2020-01-10T00:00:00"
+              "example": "2021-01-10T00:00:00"
             },
             "in": "query",
             "name": "endDate",
@@ -446,12 +456,11 @@
           },
           {
             "schema": {
-              "type": "string",
-              "example": "France"
+              "type": "string"
             },
             "in": "query",
             "name": "location",
-            "description": "The city or country of interest"
+            "description": "The country of interest"
           }
         ]
       },
@@ -468,10 +477,7 @@
           "example": {
             "headline": "Listeriosis - Australia",
             "url": "https://www.who.int/csr/don/09-april-2018-listeriosis-australia/en/",
-            "location": {
-              "country": "Australia",
-              "location": "Australia"
-            },
+            "location": "Australia",
             "reports": [
               {
                 "diseases": [
@@ -480,16 +486,11 @@
                 "syndromes": [],
                 "event_date": "2018-04-06",
                 "locations": [
-                  {
-                    "country": "Australia",
-                    "location": "Australia"
-                  }
+                  "Australia"
                 ]
               }
             ],
-            "termsFound": [
-              "Listeriosis"
-            ],
+            "termFound": "Listeriosis",
             "main_text": "On 2 March 2018, the Australian National Focal Point (NFP) notified WHO of an outbreak of Listeria monocytogenes infection (listeriosis) associated with the consumption of rockmelons (cantaloupe) from a single grower. From 17 January 2018 through to 6 April 2018, 20 outbreak cases (19 confirmed and 1 probable) of listeriosis were reported. All of the cases were hospitalized and there have been seven deaths and one miscarriage associated with the outbreak. All of the outbreak cases have had illness onset since 17 January 2018. Public health response. Epidemiological investigations suggested that the source of the outbreak was rockmelon (cantaloupe melons) from a single grower in Australia. Epidemiological and environmental investigations were undertaken, which led to the recall of rockmelons produced by the single grower on 27 February 2018. On 1 March 2018, the Australian NFP was notified that international distribution of the affected product had occurred. Australian authorities received information from trace forward investigations on 2 March 2018 that the rockmelons from this grower were exported to eight countries; Hong Kong Special Administrative Region (China), Japan, Kuwait, Malaysia, Oman, Qatar, Singapore, and United Arab Emirates. The Australian NFP directly advised these countries on 3 March 2018 about the export of rockmelons from Australia to their country. In parallel, a notification via the International Food Safety Authorities Network (INFOSAN) was also sent on 3 March 2018.Further trace forward investigations on 7 March 2018 identified that Bahrain also received an export of the rockmelons from this grower and on 8 March 2018, investigations further identified that the affected rockmelons may have been included in a consignment to the Seychelles. The Australian NFP advised the Bahrain NFP directly on 8 March 2018 and the Seychelles NFP directly on 9 March 2018. As of 8 March, trace forward activities have been concluded.The INFOSAN emergency contact points in the importing countries were provided with specific distribution details of the rockmelons to their respective countries by the INFOSAN emergency contact point in Australia, as they became available. On 4 April 2018, it was reported that more than 30 samples of melons from the grower through the supply chain, including retail and on farm, tested positive to Listeria monocytogenes. Additional testing found L. monocytogenes in the packing area. All L. monocytogenes samples had the same genetic sequence as the human cases. It is believed that the cause of the outbreak was a combination of environmental conditions and weather contaminating the surface of the fruit, with low levels of the bacteria persisting after the washing process. The grower continues to work closely with the relevant authorities and has returned to supply rockmelons (during the week starting 2 April) after testing cleared the property. WHO risk assessment.The prompt epidemiological and environmental investigation carried out led to the identification of the outbreak source and enabled the issuing of a recall. Due to the potentially long incubation period of L. monocytogenes, further outbreak cases may be reported. Import details have been provided though INFOSAN to the affected countries to enable them to take appropriate management measures including local recalls and risk communication. Cases in the affected countries may still be identified.WHO advice. Pregnant women, the elderly and immunocompromised individuals should take precautions to avoid infection by Listeria by avoiding the consumption of high risk foods including dairy products made of unpasteurized milk, soft cheeses, deli meat products (ready-to eat meat cuts, pâté, etc.); ice creams, raw seafood, crustaceans, and shellfish. These are the most common foods associated with Listeria infection. In recent years, melon, and other fruits and vegetables have been implicated on rare occasions in outbreaks of listeriosis. To reduce the risk, it is important to thoroughly wash all fruits and vegetables. It is recommended that risk communication messages regarding listeriosis be targeted to at-risk groups, primarily pregnant women, older persons and people with weakened immune systems, for example people with cancer, HIV, diabetes, kidney or liver disease or those taking immunosuppressive medications. These messages should recommend avoiding the consumption of high-risk foods.",
             "date_of_publication": "2018-04-09"
           }
@@ -503,7 +504,7 @@
             "type": "string"
           },
           "location": {
-            "$ref": "#/components/schemas/Location"
+            "type": "string"
           },
           "reports": {
             "type": "array",
@@ -512,11 +513,8 @@
               "$ref": "#/components/schemas/Report"
             }
           },
-          "termsFound": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "termFound": {
+            "type": "string"
           },
           "main_text": {
             "type": "string"
@@ -785,7 +783,7 @@
           "type": "integer",
           "default": "10"
         },
-        "description": "Number of diseases required for popularity"
+        "description": "Limits the number of disease object you get in the response, default is 10."
       }
     },
     "securitySchemes": {}
