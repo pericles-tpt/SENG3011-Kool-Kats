@@ -2,7 +2,7 @@ import pymysql
 # import datetime
 
 # Open database connection
-db = pymysql.connect(host="database-1.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
+db = pymysql.connect(host="database-restore.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
 cursor = db.cursor()
 
 # Get all articles to go through

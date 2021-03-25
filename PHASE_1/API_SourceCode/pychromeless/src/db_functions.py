@@ -1,20 +1,25 @@
 import time
 import json # STEPHEN: I added this
 import datetime
+import pymysql
+db = pymysql.connect(host="database-restore.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
 
 def handle_get_articles(date_start, date_end, country = None, keyTerms = None):
-    import pymysql
-    db = pymysql.connect(host="database-1.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
+    global db
     cursor = db.cursor()
 
     # Creates the WHERE part of the query
     filters = []
     where_query = ''
     if country != None:
-        filters.append('Country=\'' + country + '\'')
+        filters.append('Country LIKE CONCAT(\'%\',\'' + country + '\',\'%\')')
     if keyTerms != None:
         keyTerms = keyTerms.split(',')
-        filters.append('Disease IN (\'' + '\', \''.join([term.strip() for term in keyTerms]) + '\')')
+        disList = ''
+        for i in keyTerms:
+            t = i.strip()
+            disList += ' DISEASE LIKE CONCAT(\'%\',\'' + t + '\',\'%\') OR'
+        filters.append(disList.rstrip('OR'))
     if len(filters) > 0:
         where_query = 'AND '
         for i in range(len(filters)):
@@ -43,18 +48,21 @@ def handle_get_articles(date_start, date_end, country = None, keyTerms = None):
     return response
 
 def handle_get_diseases(date_start, date_end, country = None, keyTerms = None):
-    import pymysql
-    db = pymysql.connect(host="database-1.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
+    global db
     cursor = db.cursor()
 
     # Creates the WHERE part of the query
     filters = []
     where_query = ''
     if country != None:
-        filters.append('Country=\'' + country + '\'')
+        filters.append('Country LIKE CONCAT(\'%\',\'' + country + '\',\'%\')')
     if keyTerms != None:
         keyTerms = keyTerms.split(',')
-        filters.append('Disease IN (\'' + '\', \''.join([term.strip() for term in keyTerms]) + '\')')
+        disList = ''
+        for i in keyTerms:
+            t = i.strip()
+            disList += ' DISEASE LIKE CONCAT(\'%\',\'' + t + '\',\'%\') OR'
+        filters.append(disList.rstrip('OR'))
     if len(filters) > 0:
         where_query = 'AND '
         for i in range(len(filters)):
@@ -86,15 +94,18 @@ def handle_get_diseases(date_start, date_end, country = None, keyTerms = None):
     return response
 
 def handle_get_occurrences(keyTerms, startDate = None, endDate = None):
-    import pymysql
-    db = pymysql.connect(host="database-1.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
+    global db
     cursor = db.cursor()
-    keyTerms = keyTerms.split(',')    
+
+    keyTerms = keyTerms.split(',')
+    disList = ''
     for i in keyTerms:
-        print(i)
+        t = i.strip()
+        disList += ' DISEASE LIKE CONCAT(\'%\',\'' + t + '\',\'%\') OR'
+    da = disList.rstrip('OR')
 
 
-    where_query = 'WHERE Disease IN (\'' + '\', \''.join([term.strip() for term in keyTerms]) + '\')'
+    where_query = 'WHERE ' + da
     if (startDate != None and endDate != None):
         where_query += " AND Date >= '{}' AND Date <= '{}'".format(startDate, endDate) 
 
@@ -113,15 +124,14 @@ def handle_get_occurrences(keyTerms, startDate = None, endDate = None):
     return response
 
 def handle_get_popular_diseases(startDate, endDate, country = None, numDiseases = 10):
-    import pymysql
-    db = pymysql.connect(host="database-1.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
+    global db
     cursor = db.cursor()
 
     # Creates the WHERE part of the query
     where_query = "WHERE Date >= '{}' and Date <= '{}'".format(startDate, endDate)
     if country != None:
-        where_query += " AND Country=\'" + country + "\'"
-
+        where_query += ' AND Country LIKE CONCAT(\'%\',\'' + country + '\',\'%\')'
+ 
     try:
       query = "SELECT DISEASE, COUNT(DISTINCT URL) AS COUNT FROM Articles {} GROUP BY DISEASE ORDER BY COUNT DESC LIMIT {}".format(where_query, str(numDiseases+1))
       print(query)
@@ -139,11 +149,10 @@ def handle_get_popular_diseases(startDate, endDate, country = None, numDiseases 
 
 
 def send_to_sql(articles):
-    import pymysql
+    global db
    # import datetime
 
     # Open database connection
-    db = pymysql.connect(host="database-1.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
 
     
     # prepare a cursor object using cursor() method

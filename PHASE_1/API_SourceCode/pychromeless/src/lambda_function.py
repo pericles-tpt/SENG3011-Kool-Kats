@@ -321,7 +321,7 @@ def get_occurance_disease():
 
 def handle_get_articles(date_start, date_end, country = None, disease = None):
     import pymysql
-    db = pymysql.connect(host="database-1.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
+    db = pymysql.connect(host="database-restore.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
     cursor = db.cursor()
 
     # Creates the WHERE part of the query
