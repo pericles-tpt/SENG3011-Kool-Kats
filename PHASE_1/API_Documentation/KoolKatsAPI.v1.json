@@ -112,7 +112,7 @@
             },
             "in": "query",
             "name": "keyTerms",
-            "description": "Words to filter the search",
+            "description": "Words to filter the search e.g. \"listeriosis\", \"yellow fever\", \"cholera\", \"haemorrhagic fever syndrome\", \"acute watery diarrhoeal syndrome\", \"leishmaniasis\", \"dengue fever\", \"influenza\", \"acute respiratory syndrome\", \"measles\", \"staphylococcal food intoxication\", \"lassa fever\", \"meningococcal disease\", \"leptospirosis\", \"rift valley fever\",  \"middle east respiratory syndrome coronavirus (mers-cov)\", \"monkeypox\", \"ebola virus disease\", \"chikungunya\", \"gonococcal infection\", \"hantavirus pulmonary syndrome\", \"poliomyelitis\", \"hepatitis\", \"oropouche virus disease\", \"novel coronavirus\", \"typhoid fever\", \"nipah virus\", \"plague\", \"myocarditis\", \"anthrax\", \"rabies\", \"legionellosis\",  \"enterovirus\",  \"malaria\", \"crimean-congo haemorrhagic fever\", \"dengue haemorrhagic fever\", \"legionnaires\",  \"west nile fever\",  \"relapsing fever\", \"coccidioidomycosis\", \"acute neurological syndrome\", \"shigellosis\",  \"marburg haemorrhagic fever\", \"japanese encephalitis\",  \"botulism\"",
             "required": true
           },
           {
@@ -142,7 +142,7 @@
             "in": "query",
             "name": "keyTerms",
             "required": true,
-            "description": "Words to filter the search"
+            "description": "Words to filter the search e.g. \"listeriosis\", \"yellow fever\", \"cholera\", \"haemorrhagic fever syndrome\", \"acute watery diarrhoeal syndrome\", \"leishmaniasis\", \"dengue fever\", \"influenza\", \"acute respiratory syndrome\", \"measles\", \"staphylococcal food intoxication\", \"lassa fever\", \"meningococcal disease\", \"leptospirosis\", \"rift valley fever\",  \"middle east respiratory syndrome coronavirus (mers-cov)\", \"monkeypox\", \"ebola virus disease\", \"chikungunya\", \"gonococcal infection\", \"hantavirus pulmonary syndrome\", \"poliomyelitis\", \"hepatitis\", \"oropouche virus disease\", \"novel coronavirus\", \"typhoid fever\", \"nipah virus\", \"plague\", \"myocarditis\", \"anthrax\", \"rabies\", \"legionellosis\",  \"enterovirus\",  \"malaria\", \"crimean-congo haemorrhagic fever\", \"dengue haemorrhagic fever\", \"legionnaires\",  \"west nile fever\",  \"relapsing fever\", \"coccidioidomycosis\", \"acute neurological syndrome\", \"shigellosis\",  \"marburg haemorrhagic fever\", \"japanese encephalitis\",  \"botulism\""
           },
           {
             "schema": {
@@ -326,11 +326,12 @@
           {
             "schema": {
               "type": "string",
-              "example": "influenza, cholera"
+              "example": "influenza, cholera",
+              "format": "Disease"
             },
             "in": "query",
             "name": "keyTerms",
-            "description": "Words to filter the search",
+            "description": "Words to filter the search e.g. \"listeriosis\", \"yellow fever\", \"cholera\", \"haemorrhagic fever syndrome\", \"acute watery diarrhoeal syndrome\", \"leishmaniasis\", \"dengue fever\", \"influenza\", \"acute respiratory syndrome\", \"measles\", \"staphylococcal food intoxication\", \"lassa fever\", \"meningococcal disease\", \"leptospirosis\", \"rift valley fever\",  \"middle east respiratory syndrome coronavirus (mers-cov)\", \"monkeypox\", \"ebola virus disease\", \"chikungunya\", \"gonococcal infection\", \"hantavirus pulmonary syndrome\", \"poliomyelitis\", \"hepatitis\", \"oropouche virus disease\", \"novel coronavirus\", \"typhoid fever\", \"nipah virus\", \"plague\", \"myocarditis\", \"anthrax\", \"rabies\", \"legionellosis\",  \"enterovirus\",  \"malaria\", \"crimean-congo haemorrhagic fever\", \"dengue haemorrhagic fever\", \"legionnaires\",  \"west nile fever\",  \"relapsing fever\", \"coccidioidomycosis\", \"acute neurological syndrome\", \"shigellosis\",  \"marburg haemorrhagic fever\", \"japanese encephalitis\",  \"botulism\"",
             "required": true
           },
           {
@@ -642,15 +643,62 @@
         "description": "Single date"
       },
       "Disease": {
-        "title": "Disease",
         "type": "string",
+        "title": "Disease",
         "description": "Disease name",
         "x-examples": {
           "Coronavirus": "Coronavirus",
           "Malaria": "Malaria",
           "Measles": "Measles",
           "Tuberculosis": "Tuberculosis"
-        }
+        },
+        "enum": [
+          "listeriosis",
+          "yellow fever",
+          "cholera",
+          "haemorrhagic fever syndrome",
+          "acute watery diarrhoeal syndrome",
+          "leishmaniasis",
+          "dengue fever",
+          "influenza",
+          "acute respiratory syndrome",
+          "measles",
+          "staphylococcal food intoxication",
+          "lassa fever",
+          "meningococcal disease",
+          "leptospirosis",
+          "rift valley fever",
+          "middle east respiratory syndrome coronavirus (mers-cov)",
+          "monkeypox",
+          "ebola virus disease",
+          "chikungunya",
+          "gonococcal infection",
+          "hantavirus pulmonary syndrome",
+          "poliomyelitis",
+          "hepatitis",
+          "oropouche virus disease",
+          "novel coronavirus",
+          "typhoid fever",
+          "nipah virus",
+          "plague",
+          "myocarditis",
+          "anthrax",
+          "rabies",
+          "legionellosis",
+          "enterovirus",
+          "malaria",
+          "crimean-congo haemorrhagic fever",
+          "dengue haemorrhagic fever",
+          "legionnaires",
+          "west nile fever",
+          "relapsing fever",
+          "coccidioidomycosis",
+          "acute neurological syndrome",
+          "shigellosis",
+          "marburg haemorrhagic fever",
+          "japanese encephalitis",
+          "botulism"
+        ]
       },
       "Syndrome": {
         "title": "Syndrome",
