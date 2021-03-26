@@ -5,7 +5,11 @@
 
 
 ## Deliverable 2
-* Design Details - Updated (19/03/21)
-* Management Information - Updated (19/03/21)
+* Design Details - Added final API architecture (19/03/21)
+* Management Information - Updated roles and responsibilities (19/03/21)
 
 API URL (Swagger): https://app.swaggerhub.com/apis/KoolKats/KoolKats/1.0
+
+* Design Details - Updated final API architecture (26/03/21)
+* Management Information - Updated roles and responsibilities (26/03/21)
+* Testing Documentation - Added (26/03/21)
