@@ -15,11 +15,11 @@ def handle_get_articles(date_start, date_end, country = None, keyTerms = None):
         filters.append('Country LIKE CONCAT(\'%\',\'' + country + '\',\'%\')')
     if keyTerms != None:
         keyTerms = keyTerms.split(',')
-        disList = ''
+        disList = '('
         for i in keyTerms:
             t = i.strip()
             disList += ' DISEASE LIKE CONCAT(\'%\',\'' + t + '\',\'%\') OR'
-        filters.append(disList.rstrip('OR'))
+        filters.append(disList.rstrip('OR') + ')')
     if len(filters) > 0:
         where_query = 'AND '
         for i in range(len(filters)):
@@ -42,7 +42,7 @@ def handle_get_articles(date_start, date_end, country = None, keyTerms = None):
             h = ""
         else:
             h = Headline
-        response["articles"].append({"headline": h, "url": Url, "location": Country, "reports": [], "termFound": Disease, "main_text": MainText, "date_of_publication": str(Date)})
+        response["articles"].append({"headline": h, "url": Url, "location": Country, "termFound": Disease, "main_text": MainText, "date_of_publication": str(Date)})
 
     
     return response
@@ -58,11 +58,11 @@ def handle_get_diseases(date_start, date_end, country = None, keyTerms = None):
         filters.append('Country LIKE CONCAT(\'%\',\'' + country + '\',\'%\')')
     if keyTerms != None:
         keyTerms = keyTerms.split(',')
-        disList = ''
+        disList = '('
         for i in keyTerms:
             t = i.strip()
             disList += ' DISEASE LIKE CONCAT(\'%\',\'' + t + '\',\'%\') OR'
-        filters.append(disList.rstrip('OR'))
+        filters.append(disList.rstrip('OR') + ')')
     if len(filters) > 0:
         where_query = 'AND '
         for i in range(len(filters)):
@@ -98,11 +98,12 @@ def handle_get_occurrences(keyTerms, startDate = None, endDate = None):
     cursor = db.cursor()
 
     keyTerms = keyTerms.split(',')
-    disList = ''
+    disList = '('
     for i in keyTerms:
         t = i.strip()
         disList += ' DISEASE LIKE CONCAT(\'%\',\'' + t + '\',\'%\') OR'
     da = disList.rstrip('OR')
+    da += ')'
 
 
     where_query = 'WHERE ' + da
