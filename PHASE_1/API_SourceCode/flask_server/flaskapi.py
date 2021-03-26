@@ -58,8 +58,9 @@ def get_occurences():
     startDate = request.args.get('startDate')
     endDate = request.args.get('endDate')
 
-    startDate = startDate.replace("T", " ")
-    endDate = endDate.replace("T", " ")
+    if (startDate != None and endDate != None):
+        startDate = startDate.replace("T", " ")
+        endDate = endDate.replace("T", " ")
 
     j = pychromeless.src.db_functions.handle_get_occurrences(keyTerms, startDate, endDate)
 
