@@ -1,53 +1,67 @@
-import React, { useState, useEffect } from "react";
-import { ComposableMap, Geographies, Geography } from "react-simple-maps";
-import { scaleQuantize } from "d3-scale";
+import React, { useEffect, useState } from "react";
 import { csv } from "d3-fetch";
+import { scaleLinear } from "d3-scale";
+import axios from 'axios'
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  Sphere,
+  Graticule
+} from "react-simple-maps";
 
-const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json";
+const geoUrl =
+  "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
 
-const colorScale = scaleQuantize()
-  .domain([1, 10])
-  .range([
-    "#ffedea",
-    "#ffcec5",
-    "#ffad9f",
-    "#ff8a75",
-    "#ff5533",
-    "#e2492d",
-    "#be3d26",
-    "#9a311f",
-    "#782618"
-  ]);
+const colorScale = scaleLinear()
+  .domain([1, 25])
+  .range(["#ffedea", "#ff5233"]);
 
 const MapChart = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // https://www.bls.gov/lau/
-    csv("/unemployment-by-county-2017.csv").then(counties => {
-      setData(counties);
-    });
+
+    //var mydata = [{'name': 'Ukraine', 'heat' : 25}, {'name' : 'Australia', 'heat' : 100}, {'name' : 'united', 'heat' : 100}, {'name' : 'Africa', 'heat' : 100}];
+    
+    axios.get(`http://52.87.94.130:5000/occurrences?keyTerms=flu`)
+      .then(res => {
+          console.log(res)
+        // Set Max
+        const mydata = res.data;
+        setData(mydata.locations);
+      })
+    //csv(`/vulnerability.csv`).then((data) => {
+    //});
   }, []);
 
   return (
-    <>
-      <ComposableMap projection="geoAlbersUsa">
+    <ComposableMap
+      projectionConfig={{
+        rotate: [-10, 0, 0],
+        scale: 147
+      }}
+    >
+      <Sphere stroke="#E4E5E6" strokeWidth={0.5} />
+      <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
+      {data.length > 0 && (
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
-            geographies.map(geo => {
-              const cur = data.find(s => s.id === geo.id);
+            geographies.map((geo) => {
+              const d = data.find((s) => s['name'].toLowerCase().includes(geo.properties.NAME.toLowerCase()) || geo.properties.NAME.toLowerCase().includes(s['name'].toLowerCase()) );
+              console.log(geo.properties.NAME);
               return (
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  fill={colorScale(cur ? cur.unemployment_rate : "#EEE")}
+                  fill={d ? colorScale(d['occurrences']) : "#F5F4F6"}
                 />
               );
             })
           }
         </Geographies>
-      </ComposableMap>
-    </>
+      )}
+    </ComposableMap>
   );
 };
 
