@@ -34,7 +34,6 @@ const ArticlesModal = ({show, handleClose, country, disease, timeRange}) => {
                 <Spinner animation="border" role="status" style={{display: showSpinner}}>
                     <span className="sr-only">Getting Articles...</span>
                 </Spinner>
-                <Article article={articles}/>
                 {articles.map((article) => (<Article article={article}/>))}
             </Modal.Body>
             <Modal.Footer>
