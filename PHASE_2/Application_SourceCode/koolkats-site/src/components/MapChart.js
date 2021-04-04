@@ -13,15 +13,13 @@ import {
 const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
 
-const colorScale = scaleLinear()
-  .domain([1, 25])
-  .range(["#ffedea", "#ff5233"]);
 
 const MapChart = ({
   selectedDiseases,
   startDate,
   endDate } ) => {
   const [data, setData] = useState([]);
+  const [max, setMax] = useState(0);
 
   useEffect(() => {
     var diseases = selectedDiseases.join(', ');
@@ -42,8 +40,19 @@ const MapChart = ({
       .then(res => {
         // Set Max
         const mydata = res.data;
+        
         setData(mydata.locations);
-      })
+      }).then((r) => {
+        var length = data.length;
+        setMax(1);
+        for (var i = 0; i < length; i++) {
+          if (data[i]['occurrences'] > max) {
+            setMax(data[i]['occurrences'])
+            console.log('max ' + max)
+          }
+        }
+      }
+      )
     //csv(`/vulnerability.csv`).then((data) => {
     //});
     } else if (startDate != null && endDate == null) {
@@ -52,16 +61,56 @@ const MapChart = ({
         // Set Max
         const mydata = res.data;
         setData(mydata.locations);
-      })
+      }).then((r) => {
+        var length = data.length;
+        setMax(1);
+        for (var i = 0; i < length; i++) {
+          if (data[i]['occurrences'] > max) {
+            setMax(data[i]['occurrences'])
+            console.log('max ' + max)
+          }
+        }
+      }
+      )
     } else if (startDate == null && endDate != null) {
 
-      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&startDate=1997-01-01T00:00:00' +'&endDate=' +end)
+      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&startDate=2000-01-01T00:00:00' +'&endDate=' +end)
       .then(res => {
         const mydata = res.data;
         setData(mydata.locations);
-      })
+      }).then((r) => {
+        var length = data.length;
+        setMax(1);
+        for (var i = 0; i < length; i++) {
+          if (data[i]['occurrences'] > max) {
+            setMax(data[i]['occurrences']);
+          }
+        }
+      }
+      )
+    } else if (startDate == null && endDate == null) {
+
+      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases)
+      .then(res => {
+        const mydata = res.data;
+      }).then((r) => {
+        var length = data.length;
+        setMax(1);
+        for (var i = 0; i < length; i++) {
+          if (data[i]['occurrences'] > max) {
+            setMax(data[i]['occurrences']);
+          }
+        }
+      }
+      )
     }
+    
   }, [selectedDiseases, startDate, endDate]);
+
+
+  const color =  scaleLinear()
+  .domain([1, max])
+  .range(["#ffedea", "#ff5233"]);
 
   return (
     <ComposableMap
@@ -82,7 +131,7 @@ const MapChart = ({
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  fill={d ? colorScale(d['occurrences']) : "#F5F4F6"}
+                  fill={d ? color(d['occurrences']) : "#F5F4F6"}
                 />
               );
             })
