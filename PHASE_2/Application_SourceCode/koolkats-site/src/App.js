@@ -1,8 +1,12 @@
+
 import logo from "./logo.svg";
 import React from "react";
 import FilterInputs from "./components/FilterInputs";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+
+import MapChart from './components/MapChart.js'
+
 
 function App() {
   const [selectedDiseases, setSelectedDiseases] = React.useState([]);
@@ -13,7 +17,6 @@ function App() {
   return (
     <div className="App">
       <header></header>
-      <body>
         <FilterInputs
           selectedDiseases={selectedDiseases}
           setSelectedDiseases={setSelectedDiseases}
@@ -22,7 +25,11 @@ function App() {
           endDate={endDate}
           endEndDate={setEndDate}
         />
-      </body>
+      <MapChart 
+        selectedDiseases={selectedDiseases}
+        startDate={startDate}
+        endDate={endDate}
+      />
     </div>
   );
 }
