@@ -20,11 +20,16 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
     useEffect(() => {
         async function fetchData () {
             const articlesFound = await getArticles(startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0], disease, location)
-            if (Array.isArray(articlesFound.articles)) {
-                setArticles(articlesFound.articles)
-            } else {
+            try {
+                if (Array.isArray(articlesFound.articles)) {
+                    setArticles(articlesFound.articles)
+                } else {
+                    setArticles([{'headline': "article title", 'url': 'this is the article link', 'date_of_publication': '3/04/2021'},{'headline': "article title 2", 'url': 'this is another article link', 'date_of_publication': '4/04/2021'}])
+                }
+            } catch {
                 setArticles([{'headline': "article title", 'url': 'this is the article link', 'date_of_publication': '3/04/2021'},{'headline': "article title 2", 'url': 'this is another article link', 'date_of_publication': '4/04/2021'}])
             }
+
             setShowSpinner('none')
         }
         fetchData()
