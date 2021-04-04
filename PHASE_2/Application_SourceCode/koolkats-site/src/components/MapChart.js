@@ -29,15 +29,16 @@ const MapChart = ({
     var end = '';
     if  (startDate != null) {
       start = startDate.toISOString().split("T")[0] + "T00:00:00";
+      console.log(start)
     }
     if (endDate != null) {
       end = endDate.toISOString().split("T")[0] + "T00:00:00";
     }
-    console.log(startDate)
+    //console.log(start)
 
     //var mydata = [{'name': 'Ukraine', 'heat' : 25}, {'name' : 'Australia', 'heat' : 100}, {'name' : 'united', 'heat' : 100}, {'name' : 'Africa', 'heat' : 100}];
     if (startDate != null && endDate != null) {
-    axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&' +start +'&' +end)
+    axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&startDate=' +start +'&endDate=' +end)
       .then(res => {
         // Set Max
         const mydata = res.data;
@@ -46,7 +47,7 @@ const MapChart = ({
     //csv(`/vulnerability.csv`).then((data) => {
     //});
     } else if (startDate != null && endDate == null) {
-      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&' +start)
+      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&startDate=' +start)
       .then(res => {
         // Set Max
         const mydata = res.data;
@@ -54,7 +55,7 @@ const MapChart = ({
       })
     } else if (startDate == null && endDate != null) {
 
-      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&1997-01-01T00:00:00' +'&' +end)
+      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&startDate=1997-01-01T00:00:00' +'&endDate=' +end)
       .then(res => {
         const mydata = res.data;
         setData(mydata.locations);

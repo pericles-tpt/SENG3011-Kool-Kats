@@ -27,7 +27,7 @@ function App() {
           startDate={startDate}
           setStartDate={setStartDate}
           endDate={endDate}
-          endEndDate={setEndDate}
+          setEndDate={setEndDate}
         />
       <MapChart 
         selectedDiseases={selectedDiseases}
