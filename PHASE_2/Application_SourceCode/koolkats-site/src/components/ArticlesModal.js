@@ -8,6 +8,11 @@ import Spinner from 'react-bootstrap/Spinner'
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const ArticlesModal = ({show, handleClose, country, disease, timeRange}) => {
+    // article modal parent object
+    /*
+    const [show, setShow] = useState(true);
+    const handleClose = () => setShow(false);
+    */
     const [articles, setArticles] = useState([])
     const [showSpinner, setShowSpinner] = useState('block')
     useEffect(() => {
