@@ -13,7 +13,7 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
     /*
     const [show, setShow] = useState(true);
     const handleClose = () => setShow(false);
-    <ArticlesModal handleClose={handleClose} show={show} location="Australia" disease={selectedDiseases} startDate={startDate} endDate={endDate}/>
+    <ArticlesModal handleClose={handleClose} show={show} location="France" disease={selectedDiseases} startDate={startDate} endDate={endDate}/>
     */
     const [articles, setArticles] = useState([])
     const [showSpinner, setShowSpinner] = useState('block')
@@ -80,6 +80,10 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
   };
 
 const Article = ({article}) => {
+    let headline = article.headline
+    if (article.headline === '') {
+        headline = 'Untitled'
+    }
     return (
         <Container 
             fluid={true} 
@@ -91,11 +95,11 @@ const Article = ({article}) => {
             }}
         >
             <Row>
-                <Col md="auto">{article.headline}</Col>
-                <Col>{article.date_of_publication}</Col>
+                <Col md="auto">{article.date_of_publication.split(' ')[0].replace(/-/g, '/')}</Col>
+                <Col md="auto"><b>{headline}</b></Col>
             </Row>
             <Row>
-                <Col>{article.url}</Col>
+                <Col><a href={article.url}>{article.url}</a></Col>
             </Row>
         </Container>
     );
