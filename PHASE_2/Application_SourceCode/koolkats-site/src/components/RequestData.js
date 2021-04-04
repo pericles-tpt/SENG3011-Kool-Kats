@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 
-export default async function getDisease(startDate, endDate, keyTerms, location = null) {
+export async function getDisease(startDate, endDate, keyTerms, location = null) {
     
     var qParams=''
     qParams+='startDate='+startDate+'&';
