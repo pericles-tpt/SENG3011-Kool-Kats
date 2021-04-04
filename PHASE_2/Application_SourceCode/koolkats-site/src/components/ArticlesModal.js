@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
 import "bootstrap/dist/css/bootstrap.min.css";
-import getArticles from './RequestData'
+import {getArticles} from './RequestData'
 
 const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate}) => {
     // article modal parent object
@@ -18,11 +18,21 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
     const [articles, setArticles] = useState([])
     const [showSpinner, setShowSpinner] = useState('block')
     useEffect(() => {
-        //const articlesFound = getArticles(startDate, endDate, disease, location)
-        //console.log('articles found: ' + articlesFound)
-        //setArticles(articlesFound)
-        setArticles([{'headline': "article title", 'url': 'this is the article link', 'date_of_publication': '3/04/2021'},{'headline': "article title 2", 'url': 'this is another article link', 'date_of_publication': '4/04/2021'}])
-        setShowSpinner('none')
+        async function fetchData () {
+            const articlesFound = await getArticles(startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0], disease, location)
+            try {
+                if (Array.isArray(articlesFound.articles)) {
+                    setArticles(articlesFound.articles)
+                } else {
+                    setArticles([{'headline': "article title", 'url': 'this is the article link', 'date_of_publication': '3/04/2021'},{'headline': "article title 2", 'url': 'this is another article link', 'date_of_publication': '4/04/2021'}])
+                }
+            } catch {
+                setArticles([{'headline': "article title", 'url': 'this is the article link', 'date_of_publication': '3/04/2021'},{'headline': "article title 2", 'url': 'this is another article link', 'date_of_publication': '4/04/2021'}])
+            }
+
+            setShowSpinner('none')
+        }
+        fetchData()
     }, [])
     return (
         <Modal 
@@ -46,7 +56,7 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
                     <Row>
                         <Col>Location: {location}</Col>
                         <Col>Disease: {disease.join(', ')}</Col>
-                        <Col>Time Period: {startDate.toISOString().split('T')[0]} - {endDate.toISOString().split('T')[0]}</Col>
+                        <Col>Time Period: {startDate.toISOString().split('T')[0].replace(/-/g, '/')} - {endDate.toISOString().split('T')[0].replace(/-/g, '/')}</Col>
                     </Row>
                 </Container>
             </Modal.Header>
