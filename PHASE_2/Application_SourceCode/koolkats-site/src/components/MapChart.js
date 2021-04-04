@@ -47,7 +47,7 @@ const MapChart = ({
     //csv(`/vulnerability.csv`).then((data) => {
     //});
     } else if (startDate != null && endDate == null) {
-      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&' +start)
+      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&startDate=' +start)
       .then(res => {
         // Set Max
         const mydata = res.data;
@@ -55,7 +55,7 @@ const MapChart = ({
       })
     } else if (startDate == null && endDate != null) {
 
-      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&1997-01-01T00:00:00' +'&' +end)
+      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&startDate=1997-01-01T00:00:00' +'&endDate=' +end)
       .then(res => {
         const mydata = res.data;
         setData(mydata.locations);
