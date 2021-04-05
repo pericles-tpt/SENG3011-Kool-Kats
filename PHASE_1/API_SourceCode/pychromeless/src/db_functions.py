@@ -109,7 +109,9 @@ def handle_get_occurrences(keyTerms=None, startDate = None, endDate = None):
 
     where_query = 'WHERE ' + da
     if (startDate != None and endDate != None):
-        where_query += " AND Date >= '{}' AND Date <= '{}'".format(startDate, endDate) 
+        if da != '':
+            where_query += " AND "
+        where_query += "Date >= '{}' AND Date <= '{}'".format(startDate, endDate) 
 
     if where_query == 'WHERE ':
         where_query = ''
