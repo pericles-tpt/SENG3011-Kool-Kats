@@ -7,6 +7,23 @@ import Highcharts from 'highcharts'
 class PieChart extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            data: []
+        }
+    }
+
+    componentDidMount() {
+        setInterval(() => {
+            this.setState({ data: this.props.data })
+        }, 1000);
+    }
+
+    shouldComponentUpdate() {
+        if (this.state.data != this.props.data) {
+            return true
+        } else {
+            return false
+        }
     }
 
     render() {
@@ -42,11 +59,7 @@ class PieChart extends React.Component {
             series: [{
                 type: 'pie',
                 name: 'persentage',
-                data: [
-                    ['x1', 70.0],
-                    ['x2', 5.0],
-                    ['x3', 25.0]
-                ]
+                data: this.state.data
             }]
         };
 

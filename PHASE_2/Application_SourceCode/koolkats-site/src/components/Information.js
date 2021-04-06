@@ -9,15 +9,28 @@ class Information extends Component {
         this.state = {
             country: "world",
             data: [
-                //['x1', 70.0],
-                //['x2', 5.0],
-                //['x3', 25.0]
+                ['x1', 70.0],
+                ['x2', 30.0],
             ]
         }
     }
 
     handleClick = () => {
-        this.setState({ country: this.props.country})
+        this.setState({ country: this.props.country })
+    }
+
+    componentDidMount() {
+        setInterval(() => {
+            this.setState({ country: this.props.country })
+        }, 1000);
+    }
+
+    shouldComponentUpdate() {
+        if (this.state.country != this.props.country) {
+            return true
+        } else {
+            return false
+        }
     }
 
     render() {
@@ -27,7 +40,7 @@ class Information extends Component {
                 <h1>Information</h1>
                 <text>Country: {this.state.country}</text>
 
-                <div><PieChart /></div>
+                <div><PieChart data={this.state.data}/></div>
 
                 <button onClick={this.handleClick}>Refresh</button>
 
