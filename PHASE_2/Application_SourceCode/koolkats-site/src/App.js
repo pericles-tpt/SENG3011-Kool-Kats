@@ -37,7 +37,9 @@ function App() {
           endDate={endDate}
         />
         <Router>
-            <Information/>
+          <Information
+            country="test country"
+          />
         </Router>
       </div>
     </div>

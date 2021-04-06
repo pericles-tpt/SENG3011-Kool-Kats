@@ -1,18 +1,23 @@
-import React, { Component } from 'react';
+import React, { Component, setState } from 'react';
 import { Link } from "react-router-dom";
 import PieChart from "./PieChart";
 import "./Information.css"
 
 class Information extends Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
-            Country: "World",
-            loading: false,
-            searchedResults: [],
-            searchedYet: false,
-            foundResult: false
+            country: "world",
+            data: [
+                //['x1', 70.0],
+                //['x2', 5.0],
+                //['x3', 25.0]
+            ]
         }
+    }
+
+    handleClick = () => {
+        this.setState({ country: this.props.country})
     }
 
     render() {
@@ -20,10 +25,11 @@ class Information extends Component {
         return (
             <div className="divOutline">
                 <h1>Information</h1>
-                <text>Country: </text>
-                <text>World</text>
+                <text>Country: {this.state.country}</text>
 
                 <div><PieChart /></div>
+
+                <button onClick={this.handleClick}>Refresh</button>
 
                 <div>
                     <Link to="/Watch" className="info-links">
