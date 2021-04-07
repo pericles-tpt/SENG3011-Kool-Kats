@@ -18,7 +18,7 @@ function App() {
   Promise.resolve(getArticles('2000-01-01', '2020-01-01', ['listeriosis', 'yellow fever'], 'France').then(function(v) {
     console.log(v.articles[0])
   }))
-  
+
   return (
     <div className="App">
       <header></header>
@@ -30,7 +30,7 @@ function App() {
           endDate={endDate}
           setEndDate={setEndDate}
           />
-      <div>
+      <div class="align-items-center d-flex">
         <MapChart 
           selectedDiseases={selectedDiseases}
           startDate={startDate}
@@ -42,6 +42,7 @@ function App() {
             diseases={selectedDiseases}
             startDate={startDate}
             endDate={endDate}
+            
           />
         </Router>
       </div>

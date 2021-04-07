@@ -1,6 +1,8 @@
 .divOutline {
-    width: 100%; 
+    width: 50%; 
     text-align: center; 
     border: 3px solid #000;
     border-radius: 20px;
+    height: 80%;
+    
 }

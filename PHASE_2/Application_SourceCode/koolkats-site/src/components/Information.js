@@ -58,23 +58,26 @@ class Information extends Component {
                     this.setState({ fetchData: res.data })
                 })
         } else if (startDate != null) {
-            axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + this.state.selectedDiseases + '&startDate=' + this.state.startDate)
+            this.setState({ endDate: "2022-01-01T00:00:00"})
+            axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + this.state.selectedDiseases + '&startDate=' + this.state.startDate + '&endDate=2022-01-01T00:00:00')
                 .then(res => {
                     this.setState({ fetchData: res.data })
                 })
         } else if (endDate != null) {
-            axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + this.state.selectedDiseases + '&endDate=' + this.state.endDate)
+            this.setState({ startDate: "1997-01-01T00:00:00"})
+            axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + this.state.selectedDiseases + '&startDate=1997-01-01T00:00:00' + '&endDate=' + this.state.endDate)
                 .then(res => {
                     this.setState({ fetchData: res.data })
                 })
         } else {
-            axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + this.state.selectedDiseases)
+            this.setState({ startDate: "1997-01-01T00:00:00", endDate: "2022-01-01T00:00:00"})
+            axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + this.state.selectedDiseases + '&startDate=1997-01-01T00:00:00' + '&endDate=2022-01-01T00:00:00')
                 .then(res => {
                     this.setState({ fetchData: res.data })
                 })
         }
 
-
+        
         console.log(this.state.fetchData)
         if (this.state.fetchData == null) {
             return null
@@ -87,16 +90,15 @@ class Information extends Component {
         }
         return data
     }
-
     render() {
 
         return (
-            <div className="divOutline">
+            <div className="divOutline" >
                 <h1>Information</h1>
                 <p>Country: {this.state.country}</p>
-                <p>selectedDiseases: {this.state.selectedDiseases}</p>
-                <p>startDate: {this.state.startDate}</p>
-                <p>endDate: {this.state.endDate}</p>
+                <p>Selected Diseases: {this.state.selectedDiseases}</p>
+                <p>Start Date: {this.state.startDate ? this.state.startDate.replace("T", " ") : "1997-01-01 00:00:00"}</p>
+                <p>End Date: {this.state.endDate ? this.state.endDate.replace("T", " ") : "2022-01-01 00:00:00"}</p>
 
                 <div><PieChart data={this.state.data}/></div>
 
