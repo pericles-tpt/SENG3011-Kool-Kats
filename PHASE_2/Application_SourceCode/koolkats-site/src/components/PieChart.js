@@ -52,7 +52,7 @@ class PieChart extends React.Component {
                     }
                 }
             },
-            colors: ['#0DD9D4', '#D62222', '#95D94C'],
+            colors: ['#996600', '#FFCC33', '#FFFFCC', '#009966', '#99CC33', '#FF6600', '#99CCFF','#3366CC'],
             credits: {
                 enabled: false
             },
