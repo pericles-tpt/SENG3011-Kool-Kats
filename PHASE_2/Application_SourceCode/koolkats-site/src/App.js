@@ -14,7 +14,6 @@ function App() {
   const [selectedDiseases, setSelectedDiseases] = React.useState([]);
   const [startDate, setStartDate] = React.useState(new Date(2021, 0, 1));
   const [endDate, setEndDate] = React.useState(new Date());
-  const [selectedCountry, setSelectedCountry] = React.useState([])
 
   Promise.resolve(getArticles('2000-01-01', '2020-01-01', ['listeriosis', 'yellow fever'], 'France').then(function(v) {
     console.log(v.articles[0])

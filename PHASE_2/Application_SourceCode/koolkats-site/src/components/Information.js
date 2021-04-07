@@ -4,16 +4,21 @@ import PieChart from "./PieChart";
 import "./Information.css"
 import axios from 'axios'
 
+
+//bug 1: In the pie chart, different diseases for the same country will show separately
+//bug 2: cannot select country(only showing the whole world)
+//bug 3: It may keep fetching data when the website is running
 class Information extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            country: "initial country",
+            country: "world",
             selectedDiseases: [],
             startDate: null,
             endDate: null,
             fetchData: null,
-            data: []
+            data: [],
+            oldData: []
         }
 
         axios.get('http://52.87.94.130:5000/occurrences?keyTerms=')
@@ -36,10 +41,12 @@ class Information extends Component {
     }
 
     shouldComponentUpdate() {
-        if (this.state.country != this.props.country || this.state.selectedDiseases != this.props.selectedDiseases || this.state.startDate != this.props.startDate || this. state.endDate != this.props.endDate) {
+        if (this.state.oldData != this.state.data) {
+            this.setState({
+                oldData: this.state.data
+            })
             return true
         } else {
-            console.log("not equal")
             return false
         }
     }
