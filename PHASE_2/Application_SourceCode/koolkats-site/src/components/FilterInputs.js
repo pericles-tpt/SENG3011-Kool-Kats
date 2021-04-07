@@ -100,7 +100,7 @@ export default function FilterInputs({
             </Col>
             <Col>
               <h5>Time Period:</h5>
-              <Row className="align-items-center">
+              <Row className="align-items-center justify-content-center">
                 <Col xs="auto">
                   <DatePicker onChange={setStartDate} value={startDate} />
                 </Col>
