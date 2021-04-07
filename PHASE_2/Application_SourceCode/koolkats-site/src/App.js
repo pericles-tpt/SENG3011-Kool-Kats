@@ -7,7 +7,8 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import MapChart from './components/MapChart.js'
-
+import Information from './components/Information.js'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
   const [selectedDiseases, setSelectedDiseases] = React.useState([]);
@@ -28,12 +29,22 @@ function App() {
           setStartDate={setStartDate}
           endDate={endDate}
           setEndDate={setEndDate}
+          />
+      <div>
+        <MapChart 
+          selectedDiseases={selectedDiseases}
+          startDate={startDate}
+          endDate={endDate}
         />
-      <MapChart 
-        selectedDiseases={selectedDiseases}
-        startDate={startDate}
-        endDate={endDate}
-      />
+        <Router>
+          <Information
+            country="world"
+            diseases={selectedDiseases}
+            startDate={startDate}
+            endDate={endDate}
+          />
+        </Router>
+      </div>
     </div>
   );
 }

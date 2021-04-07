@@ -10,6 +10,8 @@
     "bootstrap": "^4.6.0",
     "d3-fetch": "^2.0.0",
     "d3-scale": "^3.2.4",
+    "highcharts": "^9.0.1",
+    "highcharts-react-official": "^3.0.0",
     "mdbreact": "^5.0.1",
     "multiselect-react-dropdown": "^1.6.11",
     "react": "^17.0.2",
