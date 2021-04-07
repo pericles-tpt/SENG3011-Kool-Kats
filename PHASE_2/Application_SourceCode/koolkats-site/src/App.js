@@ -30,7 +30,7 @@ function App() {
           endDate={endDate}
           setEndDate={setEndDate}
           />
-      <div class="align-items-center d-flex">
+      <div class="align-items-start d-flex results">
         <MapChart 
           selectedDiseases={selectedDiseases}
           startDate={startDate}

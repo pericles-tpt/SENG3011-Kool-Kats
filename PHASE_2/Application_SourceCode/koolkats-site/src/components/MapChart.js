@@ -83,6 +83,10 @@ const MapChart = ({
         rotate: [-10, 0, 0],
         scale: 147
       }}
+      // following three lines align item to start
+      width={800}
+      height={400}
+      style={{ width: "100%", height: "auto" }} 
     >
       <Sphere stroke="#E4E5E6" strokeWidth={0.5} />
       <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
