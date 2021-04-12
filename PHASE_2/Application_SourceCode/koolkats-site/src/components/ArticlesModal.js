@@ -34,6 +34,10 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
         }
         fetchData()
     }, [])
+    const reverseList = () => {
+        const reversed = articles.reverse()
+        setArticles(reversed)
+    }
     return (
         <Modal 
             size="lg" 
@@ -55,8 +59,11 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
                     </Row>
                     <Row>
                         <Col>Location: {location}</Col>
-                        <Col>Disease: {disease.join(', ')}</Col>
+                        <Col>Diseases: {disease.join(', ')}</Col>
                         <Col>Time Period: {startDate.toISOString().split('T')[0].replace(/-/g, '/')} - {endDate.toISOString().split('T')[0].replace(/-/g, '/')}</Col>
+                    </Row>
+                    <Row>
+                        Articles from WHO may be from the old website and may not work
                     </Row>
                 </Container>
             </Modal.Header>
@@ -84,6 +91,15 @@ const Article = ({article}) => {
     if (article.headline === '') {
         headline = 'Untitled'
     }
+    const [show, setShow] = useState('none')
+    function handleShow() {
+        console.log("handleshow clicked")
+        if (show === 'none') {
+            setShow("block")
+        } else {
+            setShow('none')
+        }
+    }
     return (
         <Container 
             fluid={true} 
@@ -93,6 +109,7 @@ const Article = ({article}) => {
                 margin: 'auto',
                 padding: '10px'
             }}
+            onClick={() => handleShow()}
         >
             <Row>
                 <Col md="auto">{article.date_of_publication.split(' ')[0].replace(/-/g, '/')}</Col>
@@ -100,6 +117,12 @@ const Article = ({article}) => {
             </Row>
             <Row>
                 <Col><a href={article.url}>{article.url}</a></Col>
+            </Row>
+            <Row>
+                <Col>View Article Text</Col>
+            </Row>
+            <Row style={{display: show}}>
+                <Col>{article.main_text}</Col>
             </Row>
         </Container>
     );
