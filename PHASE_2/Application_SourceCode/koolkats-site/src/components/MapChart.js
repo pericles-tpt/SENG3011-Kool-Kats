@@ -16,6 +16,7 @@ const geoUrl =
 
 const MapChart = ({
   selectedDiseases,
+  setSelectedCountry,
   startDate,
   endDate } ) => {
   const [data, setData] = useState([]);
@@ -73,10 +74,15 @@ const MapChart = ({
   const color =  scaleLinear()
   .domain([1, max])
   .range(["#ffedea", "#ff5233"]);
-  function doThis (country) {
-    if (!(country == undefined))
-    console.log(country['name']);
+
+  const selectCountry = (country) => {
+    if (!(country == undefined)) {
+          console.log(`country selected: ${country}`);
+          setSelectedCountry(country);
+    }
+
   }
+
   return (
     <ComposableMap
       projectionConfig={{
@@ -101,7 +107,7 @@ const MapChart = ({
                   key={geo.rsmKey}
                   geography={geo}
                   fill={d ? color(d['occurrences']) : "#F5F4F6"}
-                  onClick={() => { doThis(d)}}
+                  onClick={() => { selectCountry(geo.properties.NAME)}}
                 />
               );
             })

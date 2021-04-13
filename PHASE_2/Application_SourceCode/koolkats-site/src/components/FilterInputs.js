@@ -14,6 +14,8 @@ export default function FilterInputs({
   setStartDate,
   endDate,
   setEndDate,
+  showInformation,
+  setShowInformation,
 }) {
   const diseaseList = [
     "listeriosis",
@@ -76,13 +78,13 @@ export default function FilterInputs({
 
   //   to convert input date to format for API request - dateObject.toISOString().split('T')[0] + "T00:00:00"
 
-//   React.useEffect(() => {
-//     console.log(endDate.toISOString().split("T")[0] + "T00:00:00");
-//   }, [endDate]);
+  //   React.useEffect(() => {
+  //     console.log(endDate.toISOString().split("T")[0] + "T00:00:00");
+  //   }, [endDate]);
 
-//   React.useEffect(() => {
-//     console.log(selectedDiseases);
-//   }, [selectedDiseases]);
+  //   React.useEffect(() => {
+  //     console.log(selectedDiseases);
+  //   }, [selectedDiseases]);
 
   return (
     <>
@@ -112,6 +114,16 @@ export default function FilterInputs({
                 </Col>
               </Row>
             </Col>
+          </Row>
+          <Row className="justify-content-center">
+            <Button
+              onClick={() => {
+                setShowInformation(!showInformation);
+              }}
+              className="mt-3"
+            >
+              {showInformation ? "Hide info" : "View Info"}
+            </Button>
           </Row>
         </Container>
       </Form>
