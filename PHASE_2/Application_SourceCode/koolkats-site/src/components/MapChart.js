@@ -95,7 +95,8 @@ const MapChart = ({
     >
       <Sphere stroke="#E4E5E6" strokeWidth={0.5} />
       <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
-      {data.length > 0 && (
+      {/* changed from >0 to >=0 so that map still loads when there is no data */}
+      {data.length >= 0 && (
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
             geographies.map((geo) => {
