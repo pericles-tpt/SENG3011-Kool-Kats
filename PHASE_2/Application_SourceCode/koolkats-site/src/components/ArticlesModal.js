@@ -15,13 +15,11 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
     const handleClose = () => setShow(false);
     <ArticlesModal handleClose={handleClose} show={show} location="France" disease={selectedDiseases} startDate={startDate} endDate={endDate}/>
     */
-    console.log(location, disease, startDate, endDate)
     const [articles, setArticles] = useState([])
     const [showSpinner, setShowSpinner] = useState('block')
     useEffect(() => {
         async function fetchData () {
             const articlesFound = await getArticles(startDate, endDate, disease, location)
-            console.log(articlesFound)
             try {
                 if (Array.isArray(articlesFound.articles)) {
                     setArticles(articlesFound.articles)
