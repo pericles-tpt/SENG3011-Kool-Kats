@@ -131,9 +131,10 @@ function Information({ diseases, startDate, endDate, country }) {
         )}
       </div>
       <Container style={{margin: '5px'}}>
-        <Row className="justify-content-md-center">
-        {(country.toLowerCase() !== 'world') ? 'COVID-19 Vaccination Percentage: ' + vaccinationPercentage + '%': ''}
+        <Row className="justify-content-md-center" >
+            {(country.toLowerCase() !== 'world') ? 'COVID-19 Vaccination Percentage: ' + vaccinationPercentage + '%': ''}
         </Row>
+        <br></br>
         <Row className="justify-content-md-center">
             <RestrictionsOverlay show={showRestrictions}/>
         </Row>

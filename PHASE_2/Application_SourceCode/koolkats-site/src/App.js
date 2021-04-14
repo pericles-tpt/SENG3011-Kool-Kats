@@ -1,4 +1,4 @@
-import logo from "./logo.svg";
+import logo from "./logo.png";
 import React from "react";
 import FilterInputs from "./components/FilterInputs";
 import getDisease, { getArticles, getVaccinationPercentage, getStateRestrictionAus } from "./components/RequestData";
@@ -9,6 +9,7 @@ import Button from "react-bootstrap/Button";
 import MapChart from "./components/MapChart.js";
 import Information from "./components/Information.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Image from 'react-bootstrap/Image'
 
 function App() {
   const [selectedDiseases, setSelectedDiseases] = React.useState([]);
@@ -40,7 +41,10 @@ function App() {
 
   return (
     <div className="App">
-      <header></header>
+      <header>
+        <Image src={logo} alt="Logo" roundedCircle style={{width: '10%'}}/>
+      </header>
+      <br></br>
       <FilterInputs
         selectedDiseases={selectedDiseases}
         setSelectedDiseases={setSelectedDiseases}
