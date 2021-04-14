@@ -62,7 +62,7 @@ function Information({ diseases, startDate, endDate, country }) {
         .catch((err) => {
           console.log(err);
         });
-    } else if (diseases.length > 0) {
+    } else if (country !== "World") {
       // country selected so get top diseases in that country
       setGraphTitle(`Top Diseases in ${country}`);
       console.log("calling getPopularDisases");
@@ -105,7 +105,7 @@ function Information({ diseases, startDate, endDate, country }) {
       <p>End Date: {endDateString.replace("T", " ")}</p>
 
       <div>
-        {diseases.length > 0 ? (
+        {diseases.length > 0 || country !== "World" ? (
           <PieChart data={data} graphTitle={graphTitle} />
         ) : (
           <p>Please select a disease or a country for further information</p>

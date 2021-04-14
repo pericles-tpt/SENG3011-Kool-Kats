@@ -1,7 +1,7 @@
 import logo from "./logo.svg";
 import React from "react";
 import FilterInputs from "./components/FilterInputs";
-import getDisease, { getArticles } from "./components/RequestData";
+import getDisease, { getArticles, getVaccinationPercentage, getStateRestrictionAus } from "./components/RequestData";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
@@ -28,6 +28,14 @@ function App() {
   //     console.log(v.articles[0]);
   //   })
   // );
+
+  /*Promise.resolve(getStateRestrictionAus().then(function(v) {
+    console.log(v.data[0].rules[0])
+  }))*/
+
+  /*Promise.resolve(getVaccinationPercentage('Australia').then(function(v) {
+    console.log(v.data)
+  }))*/
 
   return (
     <div className="App">

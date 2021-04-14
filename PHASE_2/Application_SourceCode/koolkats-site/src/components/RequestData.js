@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Koolkats Functions
 export async function getDisease(
   startDate,
   endDate,
@@ -78,6 +79,31 @@ export async function getPopularDiseases(
 
   let response = await axios.get(
     "http://52.87.94.130:5000/popularDiseases?" + qParams
+  );
+
+  return response.data;
+  // do something with myJson
+}
+
+// SourDough API - Vaccination Percentage
+export async function getVaccinationPercentage(location) {
+  let response = await axios.get(
+    "http://52.15.58.197:8000/v1/vaccination_percentage?country=" +
+      location /* {
+        headers: {
+            'Access-Control-Allow-Origin': 'http://52.15.58.197:8000'
+        }
+    }*/
+  );
+
+  return response.data;
+  // do something with myJson
+}
+
+// Brick Walls API - Australian State Restrictions
+export async function getStateRestrictionAus() {
+  let response = await axios.get(
+    "https://diseasereportapi.azurewebsites.net/restrictions"
   );
 
   return response.data;
