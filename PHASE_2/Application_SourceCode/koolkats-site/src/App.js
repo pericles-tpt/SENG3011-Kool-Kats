@@ -42,9 +42,9 @@ function App() {
   return (
     <div className="App">
       <header>
-        <Image src={logo} alt="Logo" roundedCircle style={{width: '10%'}}/>
       </header>
       <br></br>
+      <Image src={logo} alt="Logo" roundedCircle style={{width: '10%'}}/>
       <FilterInputs
         selectedDiseases={selectedDiseases}
         setSelectedDiseases={setSelectedDiseases}

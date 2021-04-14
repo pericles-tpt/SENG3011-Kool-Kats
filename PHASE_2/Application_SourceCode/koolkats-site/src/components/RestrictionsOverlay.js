@@ -48,7 +48,7 @@ const RestrictionsOverlay = ({show}) => {
 }
 
 const RestrictionsForState = ({state, restriction}) => {
-    if (state == '') {
+    if (state === '') {
         return null
     }
     return (

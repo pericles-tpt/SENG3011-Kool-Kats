@@ -18,6 +18,8 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
     const [articles, setArticles] = useState([])
     const [showSpinner, setShowSpinner] = useState('block')
     const [reverseArticles, setReverseArticles] = useState(false)
+    const [showReverse, setShowReverse] = useState('none')
+    const [showError, setShowError] = useState('none')
     useEffect(() => {
         async function fetchData () {
             const articlesFound = await getArticles(startDate, endDate, disease, location)
@@ -26,10 +28,10 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
                     setArticles(articlesFound.articles)
                     setReverseArticles(!reverseArticles)
                 } else {
-                    setArticles([{'headline': "article title", 'url': 'this is the article link', 'date_of_publication': '3/04/2021'},{'headline': "article title 2", 'url': 'this is another article link', 'date_of_publication': '4/04/2021'}])
+                    setArticles([])
                 }
             } catch {
-                setArticles([{'headline': "article title", 'url': 'this is the article link', 'date_of_publication': '3/04/2021'},{'headline': "article title 2", 'url': 'this is another article link', 'date_of_publication': '4/04/2021'}])
+                setArticles([])
             }
 
             setShowSpinner('none')
@@ -39,6 +41,15 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
     useEffect(() => {
         setArticles(articles.reverse())
     }, [reverseArticles])
+    useEffect(() => {
+        if (articles.length > 1) {
+            setShowReverse('block')
+            setShowError('none')
+        } else{
+            setShowReverse('none')
+            setShowError('block')
+        }
+    }, [articles])
     return (
         <Modal 
             size="lg" 
@@ -64,8 +75,12 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
                         <Col>Time Period: {startDate} - {endDate}</Col>
                     </Row>
                     <Row>
-                        <Button variant="secondary" onClick={() => setReverseArticles(!reverseArticles)}>
-                        {reverseArticles ? 'Recent articles first' : 'Oldest articles first'}
+                        <Button 
+                            variant="secondary" 
+                            onClick={() => setReverseArticles(!reverseArticles)}
+                            style={{display: showReverse}}
+                        >
+                            {reverseArticles ? 'Recent articles first' : 'Oldest articles first'}
                     </Button>
                     </Row>
                 </Container>
@@ -78,6 +93,7 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
                 >
                     <span className="sr-only">Getting Articles...</span>
                 </Spinner>
+                <p style={{display: showError}}>No Articles Found</p>
                 {articles.map((article) => (<Article article={article}/>))}
             </Modal.Body>
             <Modal.Footer>

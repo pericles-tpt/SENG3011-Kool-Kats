@@ -116,7 +116,7 @@ function Information({ diseases, startDate, endDate, country }) {
   }
 
   return (
-    <div className="divOutline">
+    <div className="divOutline" style={{overflow: 'scroll'}}>
       <h1>Information</h1>
       <p>Country: {country}</p>
       <p>Selected Diseases: {diseases.join(", ")}</p>
