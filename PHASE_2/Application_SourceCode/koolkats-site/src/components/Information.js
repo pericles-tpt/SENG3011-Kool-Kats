@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PieChart from "./PieChart";
+import Button from "react-bootstrap/Button";
 import "./Information.css";
 import axios from "axios";
 import { getPopularDiseases, getOccurrences } from "./RequestData";
+import ArticlesModal from './ArticlesModal'
 
 //bug 1: In the pie chart, different diseases for the same country will show separately
 //bug 2: cannot select country(only showing the whole world)
@@ -18,7 +20,8 @@ function Information({ diseases, startDate, endDate, country }) {
   const [endDateString, setEndDateString] = useState("");
   const [data, setData] = useState([]);
   const [graphTitle, setGraphTitle] = useState("");
-
+  const [showArticlesModal, setShowArticlesModal] = useState(false);
+  const handleClose = () => setShowArticlesModal(false);
   useEffect(() => {
     startDate
       ? setStartDateString(startDate.toISOString().split("T")[0] + "T00:00:00")
@@ -112,9 +115,21 @@ function Information({ diseases, startDate, endDate, country }) {
         )}
       </div>
       <div>
-        <Link to="/Watch" className="info-links">
+        <Button 
+            className="info-links"
+            onClick={() => {
+                setShowArticlesModal(!showArticlesModal)
+            }}
+        >
           View related articles
-        </Link>
+        </Button>
+        <ArticlesModal 
+            handleClose={handleClose} 
+            show={showArticlesModal} 
+            location={country} 
+            disease={diseases} 
+            startDate={startDateString} 
+            endDate={endDateString}/>
       </div>
     </div>
   );
