@@ -2,10 +2,9 @@ import time
 import json # STEPHEN: I added this
 import datetime
 import pymysql
-db = pymysql.connect(host="database-restore.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
 
 def handle_get_articles(date_start, date_end, country = None, keyTerms = None):
-    global db
+    db = pymysql.connect(host="database-restore.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
     cursor = db.cursor()
 
     # Creates the WHERE part of the query
@@ -44,11 +43,11 @@ def handle_get_articles(date_start, date_end, country = None, keyTerms = None):
             h = Headline
         response["articles"].append({"headline": h, "url": Url, "location": Country, "termFound": Disease, "main_text": MainText, "date_of_publication": str(Date)})
 
-    
+    db.close()
     return response
 
 def handle_get_diseases(date_start, date_end, country = None, keyTerms = None):
-    global db
+    db = pymysql.connect(host="database-restore.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
     cursor = db.cursor()
 
     # Creates the WHERE part of the query
@@ -90,25 +89,32 @@ def handle_get_diseases(date_start, date_end, country = None, keyTerms = None):
         ta = i[0]
 
     response = {"diseases":tmpList, "totalArticlesInDB": ta}
-    
+    db.close()
     return response
 
-def handle_get_occurrences(keyTerms, startDate = None, endDate = None):
-    global db
+def handle_get_occurrences(keyTerms=None, startDate = None, endDate = None):
+    db = pymysql.connect(host="database-restore.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
     cursor = db.cursor()
 
-    keyTerms = keyTerms.split(',')
-    disList = '('
-    for i in keyTerms:
-        t = i.strip()
-        disList += ' DISEASE LIKE CONCAT(\'%\',\'' + t + '\',\'%\') OR'
-    da = disList.rstrip('OR')
-    da += ')'
+    da = ''
+    if (keyTerms != None):
+        keyTerms = keyTerms.split(',')
+        disList = '('
+        for i in keyTerms:
+            t = i.strip()
+            disList += ' DISEASE LIKE CONCAT(\'%\',\'' + t + '\',\'%\') OR'
+        da = disList.rstrip('OR')
+        da += ')'
 
 
     where_query = 'WHERE ' + da
     if (startDate != None and endDate != None):
-        where_query += " AND Date >= '{}' AND Date <= '{}'".format(startDate, endDate) 
+        if da != '':
+            where_query += " AND "
+        where_query += "Date >= '{}' AND Date <= '{}'".format(startDate, endDate) 
+
+    if where_query == 'WHERE ':
+        where_query = ''
 
     try:
       query = "SELECT Country, Disease, COUNT(DISTINCT Url) AS Count FROM Articles " + where_query + " GROUP BY Country, Disease ORDER BY Count DESC;".format(where_query)
@@ -121,11 +127,11 @@ def handle_get_occurrences(keyTerms, startDate = None, endDate = None):
     response = {"locations":[]}
     for (Country, Disease, Count) in cursor:
         response["locations"].append({"name": Country, "disease": Disease, "occurrences": Count})
-    
+    db.close()
     return response
 
 def handle_get_popular_diseases(startDate, endDate, country = None, numDiseases = 10):
-    global db
+    db = pymysql.connect(host="database-restore.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
     cursor = db.cursor()
 
     # Creates the WHERE part of the query
@@ -145,12 +151,13 @@ def handle_get_popular_diseases(startDate, endDate, country = None, numDiseases 
     for (Disease, Cases) in cursor:
         if (Disease != ""):
             response["rankings"].append({"name": Disease, "occurrences": Cases})
+    db.close()
     
     return response
 
 
 def send_to_sql(articles):
-    global db
+    db = pymysql.connect(host="database-restore.cmae6p4l3uws.us-east-1.rds.amazonaws.com",user="admin",db="scrape_db" , password="koolkats", port=3306)
    # import datetime
 
     # Open database connection

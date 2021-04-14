@@ -32,11 +32,25 @@ const MapChart = ({
     if (endDate != null) {
       end = endDate.toISOString().split("T")[0] + "T00:00:00";
     }
-    //console.log(start)
 
-    //var mydata = [{'name': 'Ukraine', 'heat' : 25}, {'name' : 'Australia', 'heat' : 100}, {'name' : 'united', 'heat' : 100}, {'name' : 'Africa', 'heat' : 100}];
+    var qParams = "?"
+    if (diseases != "") {
+      qParams += "keyTerms=" + diseases
+    } else {
+      qParams += "keyTerms=yellow fever"
+    }
     if (startDate != null && endDate != null) {
-    axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&startDate=' +start +'&endDate=' +end)
+      qParams += "&startDate=" + start + "&endDate=" + end
+    } else if (startDate == null && endDate != null) {
+      qParams += "&startDate=1997-01-01T00:00:00" + "&endDate=" + end
+    } else if (startDate != null && endDate == null) {
+      qParams += "&startDate=" + start + "&endDate=2020-01-01T00:00:00"
+    } else if (startDate == null && endDate == null) {
+      qParams += "&startDate=1997-01-01T00:00:00" + "&endDate=2020-01-01T00:00:00"
+    }
+    //console.log(start)
+    console.log(qParams)
+      axios.get('http://52.87.94.130:5000/occurrences' + qParams)
       .then(res => {
         // Set Max
         const mydata = res.data;
@@ -51,59 +65,7 @@ const MapChart = ({
             console.log('max ' + max)
           }
         }
-      }
-      )
-    //csv(`/vulnerability.csv`).then((data) => {
-    //});
-    } else if (startDate != null && endDate == null) {
-      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&startDate=' +start)
-      .then(res => {
-        // Set Max
-        const mydata = res.data;
-        setData(mydata.locations);
-      }).then((r) => {
-        var length = data.length;
-        setMax(1);
-        for (var i = 0; i < length; i++) {
-          if (data[i]['occurrences'] > max) {
-            setMax(data[i]['occurrences'])
-            console.log('max ' + max)
-          }
-        }
-      }
-      )
-    } else if (startDate == null && endDate != null) {
-
-      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases +'&startDate=2000-01-01T00:00:00' +'&endDate=' +end)
-      .then(res => {
-        const mydata = res.data;
-        setData(mydata.locations);
-      }).then((r) => {
-        var length = data.length;
-        setMax(1);
-        for (var i = 0; i < length; i++) {
-          if (data[i]['occurrences'] > max) {
-            setMax(data[i]['occurrences']);
-          }
-        }
-      }
-      )
-    } else if (startDate == null && endDate == null) {
-
-      axios.get('http://52.87.94.130:5000/occurrences?keyTerms=' + diseases)
-      .then(res => {
-        const mydata = res.data;
-      }).then((r) => {
-        var length = data.length;
-        setMax(1);
-        for (var i = 0; i < length; i++) {
-          if (data[i]['occurrences'] > max) {
-            setMax(data[i]['occurrences']);
-          }
-        }
-      }
-      )
-    }
+      })
     
   }, [selectedDiseases, startDate, endDate]);
 
@@ -111,13 +73,20 @@ const MapChart = ({
   const color =  scaleLinear()
   .domain([1, max])
   .range(["#ffedea", "#ff5233"]);
-
+  function doThis (country) {
+    if (!(country == undefined))
+    console.log(country['name']);
+  }
   return (
     <ComposableMap
       projectionConfig={{
         rotate: [-10, 0, 0],
         scale: 147
       }}
+      // following three lines align item to start
+      width={800}
+      height={400}
+      style={{ width: "100%", height: "auto" }} 
     >
       <Sphere stroke="#E4E5E6" strokeWidth={0.5} />
       <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
@@ -132,6 +101,7 @@ const MapChart = ({
                   key={geo.rsmKey}
                   geography={geo}
                   fill={d ? color(d['occurrences']) : "#F5F4F6"}
+                  onClick={() => { doThis(d)}}
                 />
               );
             })

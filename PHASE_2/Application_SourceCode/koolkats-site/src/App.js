@@ -7,7 +7,8 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import MapChart from './components/MapChart.js'
-
+import Information from './components/Information.js'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
   const [selectedDiseases, setSelectedDiseases] = React.useState([]);
@@ -17,7 +18,7 @@ function App() {
   Promise.resolve(getArticles('2000-01-01', '2020-01-01', ['listeriosis', 'yellow fever'], 'France').then(function(v) {
     console.log(v.articles[0])
   }))
-  
+
   return (
     <div className="App">
       <header></header>
@@ -28,12 +29,23 @@ function App() {
           setStartDate={setStartDate}
           endDate={endDate}
           setEndDate={setEndDate}
+          />
+      <div class="align-items-start d-flex results">
+        <MapChart 
+          selectedDiseases={selectedDiseases}
+          startDate={startDate}
+          endDate={endDate}
         />
-      <MapChart 
-        selectedDiseases={selectedDiseases}
-        startDate={startDate}
-        endDate={endDate}
-      />
+        <Router>
+          <Information
+            country="world"
+            diseases={selectedDiseases}
+            startDate={startDate}
+            endDate={endDate}
+            
+          />
+        </Router>
+      </div>
     </div>
   );
 }

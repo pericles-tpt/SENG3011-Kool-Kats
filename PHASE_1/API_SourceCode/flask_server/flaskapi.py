@@ -4,9 +4,14 @@ import datetime
 import pychromeless.src.db_functions
 from flask_cors import CORS, cross_origin
 
+class Config(object):
+    DEBUG = False
+    TESTING = False
+
 api = Flask(__name__)
 cors = CORS(api)
 api.config['CORS_HEADERS'] = 'Content-Type application/json'
+api.config.from_object(Config())
 
 @api.route('/articles', methods=['GET'])
 @cross_origin()
@@ -95,5 +100,5 @@ def get_popular_diseases():
 
 
 if __name__ == '__main__':
-    api.run(host= '0.0.0.0')
+    api.run(host= '0.0.0.0',debug=False)
     # Changed from app.run()
