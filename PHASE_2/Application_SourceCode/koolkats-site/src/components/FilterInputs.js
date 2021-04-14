@@ -121,7 +121,7 @@ export default function FilterInputs({
               onClick={() => {
                 setShowInformation(!showInformation);
               }}
-              className="mt-3"
+              className="mt-3 mx-1"
             >
               {showInformation ? "Hide info" : "View Info"}
             </Button>
@@ -129,7 +129,7 @@ export default function FilterInputs({
               onClick={() => {
                 setSelectedCountry("World");
               }}
-              className="mt-3"
+              className="mt-3 mx-1"
             >
               Clear Country
             </Button>

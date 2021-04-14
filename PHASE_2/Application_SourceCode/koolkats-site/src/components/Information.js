@@ -37,7 +37,7 @@ function Information({ diseases, startDate, endDate, country }) {
 
   function fetchData() {
     let request = "";
-    if (country === "World") {
+    if (country === "World" && diseases.length > 0) {
       //   request =
       //     "http://52.87.94.130:5000/occurrences?keyTerms=" +
       //     diseases +
@@ -62,7 +62,7 @@ function Information({ diseases, startDate, endDate, country }) {
         .catch((err) => {
           console.log(err);
         });
-    } else {
+    } else if (diseases.length > 0) {
       // country selected so get top diseases in that country
       setGraphTitle(`Top Diseases in ${country}`);
       console.log("calling getPopularDisases");
@@ -105,7 +105,11 @@ function Information({ diseases, startDate, endDate, country }) {
       <p>End Date: {endDateString.replace("T", " ")}</p>
 
       <div>
-        <PieChart data={data} graphTitle={graphTitle} />
+        {diseases.length > 0 ? (
+          <PieChart data={data} graphTitle={graphTitle} />
+        ) : (
+          <p>Please select a disease or a country for further information</p>
+        )}
       </div>
       <div>
         <Link to="/Watch" className="info-links">
