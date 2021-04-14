@@ -12,7 +12,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
   const [selectedDiseases, setSelectedDiseases] = React.useState([]);
-  const [selectedCountry, setSelectedCountry] = React.useState("world");
+  const [selectedCountry, setSelectedCountry] = React.useState("World");
   const [startDate, setStartDate] = React.useState(new Date(2021, 0, 1));
   const [endDate, setEndDate] = React.useState(new Date());
 
@@ -28,7 +28,6 @@ function App() {
   //     console.log(v.articles[0]);
   //   })
   // );
-  
 
   return (
     <div className="App">
@@ -42,6 +41,7 @@ function App() {
         setEndDate={setEndDate}
         showInformation={showInformation}
         setShowInformation={setShowInformation}
+        setSelectedCountry={setSelectedCountry}
       />
       <div class="align-items-start d-flex results">
         <MapChart

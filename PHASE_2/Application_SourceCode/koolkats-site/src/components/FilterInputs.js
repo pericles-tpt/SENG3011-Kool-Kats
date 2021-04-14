@@ -16,6 +16,7 @@ export default function FilterInputs({
   setEndDate,
   showInformation,
   setShowInformation,
+  setSelectedCountry,
 }) {
   const diseaseList = [
     "listeriosis",
@@ -123,6 +124,14 @@ export default function FilterInputs({
               className="mt-3"
             >
               {showInformation ? "Hide info" : "View Info"}
+            </Button>
+            <Button
+              onClick={() => {
+                setSelectedCountry("World");
+              }}
+              className="mt-3"
+            >
+              Clear Country
             </Button>
           </Row>
         </Container>

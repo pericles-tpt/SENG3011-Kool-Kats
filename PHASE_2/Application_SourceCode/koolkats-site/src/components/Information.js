@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PieChart from "./PieChart";
 import "./Information.css";
 import axios from "axios";
+import { getPopularDiseases, getOccurrences } from "./RequestData";
 
 //bug 1: In the pie chart, different diseases for the same country will show separately
 //bug 2: cannot select country(only showing the whole world)
@@ -16,6 +17,7 @@ function Information({ diseases, startDate, endDate, country }) {
   const [startDateString, setStartDateString] = useState("");
   const [endDateString, setEndDateString] = useState("");
   const [data, setData] = useState([]);
+  const [graphTitle, setGraphTitle] = useState("");
 
   useEffect(() => {
     startDate
@@ -24,37 +26,74 @@ function Information({ diseases, startDate, endDate, country }) {
   }, [startDate]);
 
   useEffect(() => {
-    console.log(startDate);
     endDate
       ? setEndDateString(endDate.toISOString().split("T")[0] + "T00:00:00")
       : setEndDateString("2022-01-01T00:00:00");
   }, [endDate]);
 
   useEffect(() => {
-    // fetchData();
+    fetchData();
   }, [startDateString, endDateString, diseases, country]);
 
   function fetchData() {
-    console.log("fetching data for graph");
-    const request =
-      "http://52.87.94.130:5000/occurrences?keyTerms=" +
-      diseases +
-      "&startDate=" +
-      startDateString +
-      "&endDate=" +
-      endDateString;
-    console.log(request);
-    {
-      axios
-        .get(request)
-        .then((res) => {
-          console.log(res);
-          // setData(res.data);
+    let request = "";
+    if (country === "World") {
+      //   request =
+      //     "http://52.87.94.130:5000/occurrences?keyTerms=" +
+      //     diseases +
+      //     "&startDate=" +
+      //     startDateString +
+      //     "&endDate=" +
+      //     endDateString;
+      setGraphTitle(`Top Countries with Occurences of Selected Disease(s)`);
+      console.log("calling getOccurences");
+      getOccurrences(diseases, startDateString, endDateString)
+        .then((r) => {
+          //   console.log(r);
+          setData(
+            r.locations.map((item) => {
+              return {
+                name: item.name,
+                y: item.occurrences,
+              };
+            })
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      // country selected so get top diseases in that country
+      setGraphTitle(`Top Diseases in ${country}`);
+      console.log("calling getPopularDisases");
+      getPopularDiseases(startDateString, endDateString, country)
+        .then((r) => {
+          // console.log(r);
+          setData(
+            r.rankings.map((item) => {
+              return {
+                name: item.name,
+                y: item.occurrences,
+              };
+            })
+          );
         })
         .catch((err) => {
           console.log(err);
         });
     }
+    // console.log(`Information card request for graph: ${request}`);
+    // {
+    //   axios
+    //     .get(request)
+    //     .then((res) => {
+    //       console.log(res.data.locations);
+    //       setData(res.data.locations);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // }
   }
 
   return (
@@ -66,9 +105,8 @@ function Information({ diseases, startDate, endDate, country }) {
       <p>End Date: {endDateString.replace("T", " ")}</p>
 
       <div>
-        <PieChart data={data} />
+        <PieChart data={data} graphTitle={graphTitle} />
       </div>
-      {data}
       <div>
         <Link to="/Watch" className="info-links">
           View related articles
