@@ -27,11 +27,11 @@ function Information({ diseases, startDate, endDate, country }) {
     console.log(startDate);
     endDate
       ? setEndDateString(endDate.toISOString().split("T")[0] + "T00:00:00")
-      : setEndDateString("1997-01-01T00:00:00");
+      : setEndDateString("2022-01-01T00:00:00");
   }, [endDate]);
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
   }, [startDateString, endDateString, diseases, country]);
 
   function fetchData() {
