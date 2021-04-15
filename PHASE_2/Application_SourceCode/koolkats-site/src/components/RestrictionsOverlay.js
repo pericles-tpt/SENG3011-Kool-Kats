@@ -10,7 +10,6 @@ const RestrictionsOverlay = ({show}) => {
     const [state, setState] = useState('')
     useEffect(() => {
         async function getInfo() {
-
             const res = await getStateRestrictionAus()
             setRestrictions(res)
         }

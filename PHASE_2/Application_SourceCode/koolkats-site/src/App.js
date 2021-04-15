@@ -1,15 +1,22 @@
 import logo from "./logo.png";
 import React from "react";
 import FilterInputs from "./components/FilterInputs";
-import getDisease, { getArticles, getVaccinationPercentage, getStateRestrictionAus } from "./components/RequestData";
+import getDisease, {
+  getArticles,
+  getVaccinationPercentage,
+  getStateRestrictionAus,
+} from "./components/RequestData";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
 
 import MapChart from "./components/MapChart.js";
 import Information from "./components/Information.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Image from 'react-bootstrap/Image'
+import Image from "react-bootstrap/Image";
 
 function App() {
   const [selectedDiseases, setSelectedDiseases] = React.useState([]);
@@ -41,21 +48,33 @@ function App() {
 
   return (
     <div className="App">
-      <header>
-      </header>
-      <br></br>
-      <Image src={logo} alt="Logo" roundedCircle style={{width: '10%'}}/>
-      <FilterInputs
-        selectedDiseases={selectedDiseases}
-        setSelectedDiseases={setSelectedDiseases}
-        startDate={startDate}
-        setStartDate={setStartDate}
-        endDate={endDate}
-        setEndDate={setEndDate}
-        showInformation={showInformation}
-        setShowInformation={setShowInformation}
-        setSelectedCountry={setSelectedCountry}
-      />
+      <header></header>
+      <Container>
+        <Row className="align-items-center justify-content-center">
+          <Col>
+            <Image
+              src={logo}
+              alt="Logo"
+              roundedCircle
+              style={{ width: "160px" }}
+            />
+          </Col>
+          <Col xs={10}>
+            <FilterInputs
+              selectedDiseases={selectedDiseases}
+              setSelectedDiseases={setSelectedDiseases}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+              showInformation={showInformation}
+              setShowInformation={setShowInformation}
+              setSelectedCountry={setSelectedCountry}
+            />
+          </Col>
+        </Row>
+      </Container>
+
       <div class="align-items-start d-flex results">
         <MapChart
           selectedDiseases={selectedDiseases}

@@ -5,11 +5,9 @@ import Button from "react-bootstrap/Button";
 import "./Information.css";
 import axios from "axios";
 import { getPopularDiseases, getOccurrences, getVaccinationPercentage, getStateRestrictionAus } from "./RequestData";
-import ArticlesModal from './ArticlesModal'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
-import RestrictionsOverlay from './RestrictionsOverlay'
-
+import InfoNavBar from './InfoNavBar'
 //bug 1: In the pie chart, different diseases for the same country will show separately
 //bug 2: cannot select country(only showing the whole world)
 //bug 3: It may keep fetching data when the website is running
@@ -23,10 +21,8 @@ function Information({ diseases, startDate, endDate, country }) {
   const [endDateString, setEndDateString] = useState("");
   const [data, setData] = useState([]);
   const [graphTitle, setGraphTitle] = useState("");
-  const [showArticlesModal, setShowArticlesModal] = useState(false);
-  const handleClose = () => setShowArticlesModal(false);
-  const [vaccinationPercentage, setVaccinationPercentage] = useState("...")
-  const [showRestrictions, setShowRestrictions] = useState(false)
+  const [showTopDiseases, setShowTopDiseases] = useState('block')
+
   useEffect(() => {
     startDate
       ? setStartDateString(startDate.toISOString().split("T")[0] + "T00:00:00")
@@ -42,18 +38,7 @@ function Information({ diseases, startDate, endDate, country }) {
   useEffect(() => {
     fetchData();
   }, [startDateString, endDateString, diseases, country]);
-  useEffect(() => {
-    async function getVaccinationInfo() {
-        const percentage = await getVaccinationPercentage(country)
-        setVaccinationPercentage(percentage)
-    }
-    getVaccinationInfo()
-    if (country.toLowerCase() === 'australia') {
-        setShowRestrictions('block')
-    } else {
-        setShowRestrictions('none')
-    }
-  }, [country])
+
   function fetchData() {
     let request = "";
     if (country === "World" && diseases.length > 0) {
@@ -68,12 +53,12 @@ function Information({ diseases, startDate, endDate, country }) {
       console.log("calling getOccurences");
       getOccurrences(diseases, startDateString, endDateString)
         .then((r) => {
-          //   console.log(r);
+            console.log(r);
           setData(
             r.locations.map((item) => {
               return {
                 name: item.name,
-                y: item.occurrences,
+                y: item.cases,
               };
             })
           );
@@ -87,12 +72,12 @@ function Information({ diseases, startDate, endDate, country }) {
       console.log("calling getPopularDisases");
       getPopularDiseases(startDateString, endDateString, country)
         .then((r) => {
-          // console.log(r);
+        //   console.log(r);
           setData(
             r.rankings.map((item) => {
               return {
                 name: item.name,
-                y: item.occurrences,
+                y: item.cases,
               };
             })
           );
@@ -117,44 +102,25 @@ function Information({ diseases, startDate, endDate, country }) {
 
   return (
     <div className="divOutline" style={{overflow: 'scroll'}}>
-      <h1>Information</h1>
-      <p>Country: {country}</p>
-      <p>Selected Diseases: {diseases.join(", ")}</p>
-      <p>Start Date: {startDateString.replace("T", " ")}</p>
-      <p>End Date: {endDateString.replace("T", " ")}</p>
-
-      <div>
-        {diseases.length > 0 || country !== "World" ? (
-          <PieChart data={data} graphTitle={graphTitle} />
-        ) : (
-          <p>Please select a disease or a country for further information</p>
-        )}
-      </div>
-      <Container style={{margin: '5px'}}>
-        <Row className="justify-content-md-center" >
-            {(country.toLowerCase() !== 'world') ? 'COVID-19 Vaccination Percentage: ' + vaccinationPercentage + '%': ''}
+      <Container>
+        <h1>Information</h1>
+        <p>Country: {country}</p>
+        <Row>
+            <InfoNavBar 
+                diseases={diseases} 
+                startDate={startDateString} 
+                endDate={endDateString}
+                country={country}
+                setShowTopDiseases={setShowTopDiseases}
+            />
         </Row>
-        <br></br>
-        <Row className="justify-content-md-center">
-            <RestrictionsOverlay show={showRestrictions}/>
-        </Row>
-        <Row className="justify-content-md-center">
-            <Button 
-                className="info-links"
-                onClick={() => {
-                    setShowArticlesModal(!showArticlesModal)
-                }}
-            >
-            View related articles
-            </Button>
-            <ArticlesModal 
-            handleClose={handleClose} 
-            show={showArticlesModal} 
-            location={country} 
-            disease={diseases} 
-            startDate={startDateString} 
-            endDate={endDateString}/>
-        </Row>
+        <div style={{display: showTopDiseases}}>
+            {diseases.length > 0 || country !== "World" ? (
+            <PieChart data={data} graphTitle={graphTitle} />
+            ) : (
+            <p>Please select a disease or a country for further information</p>
+            )}
+        </div>
       </Container>
     </div>
   );
