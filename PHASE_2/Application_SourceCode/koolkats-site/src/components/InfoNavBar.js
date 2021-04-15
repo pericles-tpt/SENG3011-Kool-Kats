@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 import "bootstrap/dist/css/bootstrap.min.css";
 import Nav from 'react-bootstrap/Nav'
-import Navbar from 'react-bootstrap/Navbar'
 import { Multiselect } from "multiselect-react-dropdown";
 import InputInfo from './InputInfo'
 import RestrictionsOverlay from './RestrictionsOverlay'
@@ -21,7 +19,7 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
     const [showArticlesModal, setShowArticlesModal] = useState(false);
     const handleClose = () => setShowArticlesModal(false);
     const [vaccinationPercentage, setVaccinationPercentage] = useState("...")
-    const [showChange, setShowChange] = useState(true)
+    const [showChange, setShowChange] = useState(false)
     const [showVaccinationPercentage, setShowVaccinationPercentage] = useState('none')
     const onSelect = (selectedList, selectedItem) => {
         setSelectedDiseases([...diseaseList, selectedItem]);
@@ -39,53 +37,13 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
             setVaccinationPercentage(percentage)
         }
         getVaccinationInfo()
-        //if (country.toLowerCase() === 'australia') {
-        //    setShowRestrictions('block')
-        //} else {
-        //    setShowRestrictions('none')
-        //}
       }, [country])
     useEffect(() => {
 
     }, [showInputInfo, showArticlesModal, showRestrictions, showVaccinationPercentage, showViewArticles])
     return (
         <Container>
-            <Nav variant="tabs" defaultActiveKey="/topdisease" onSelect={(selectedKey) => {
-                console.log(selectedKey)
-                if (selectedKey === 'input') {
-                    console.log("inputs...")
-                    setShowInputInfo('block')
-                    setShowTopDiseases('none')
-                    setShowViewArticles('none')
-                    setShowChange(false)
-                    setShowVaccinationPercentage('none')
-                    console.log("showing inputs")
-                } else if (selectedKey === 'topdisease') {
-                    console.log("toop diseases")
-                    setShowInputInfo('none')
-                    setShowTopDiseases('block')
-                    setShowViewArticles('none')
-                    setShowChange(false)
-                    setShowVaccinationPercentage('none')
-                    console.log("showing top diseases")
-                } else if (selectedKey === 'vaccination') {
-                    console.log("vacconation info")
-                    setShowInputInfo('none')
-                    setShowTopDiseases('none')
-                    setShowViewArticles('none')
-                    setShowChange(false)
-                    setShowVaccinationPercentage('block')
-                    console.log("showing vacc")
-                } else if (selectedKey === 'moreInfo') {
-                    console.log("more info")
-                    setShowInputInfo('none')
-                    setShowTopDiseases('none')
-                    setShowViewArticles('block')
-                    setShowChange(true)
-                    setShowVaccinationPercentage('none')
-                    console.log("sowing more info")
-                }
-            }}>
+            <Nav variant="tabs" defaultActiveKey="/topdisease" >
                 <Nav.Item eventkey="/input" >
                     <Button variant="light" onClick={() => {
                         setShowInputInfo('block')
@@ -159,9 +117,9 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
             <Row className="justify-content-md-center">
                 <RestrictionsOverlay show={showRestrictions}/>
             </Row>
-            <Row style={{display: showViewArticles}}>          
+            <Row className="justify-content-md-center" style={{display: showViewArticles}}>          
                 <Multiselect
-                    options={diseaseList}
+                    options={diseases}
                     isObject={false}
                     onSelect={onSelect}
                     onRemove={onRemove}
@@ -178,7 +136,7 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
             <Row className="justify-content-md-center" >
                 <ChangeInCasesOverTime 
                     show={showChange} 
-                    disease={diseases}
+                    disease={diseaseList}
                     startDate={startDate}
                     endDate={endDate}
                     location={country}
