@@ -42,9 +42,9 @@ function App() {
     console.log(v.data[0].rules[0])
   }))*/
 
-  /*Promise.resolve(getVaccinationPercentage('Australia').then(function(v) {
-    console.log(v.data)
-  }))*/
+  Promise.resolve(getVaccinationPercentage('Australia').then(function(v) {
+    console.log(v)
+  }))
 
   return (
     <div className="App">
