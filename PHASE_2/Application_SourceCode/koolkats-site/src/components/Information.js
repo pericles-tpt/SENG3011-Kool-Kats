@@ -53,12 +53,12 @@ function Information({ diseases, startDate, endDate, country }) {
       console.log("calling getOccurences");
       getOccurrences(diseases, startDateString, endDateString)
         .then((r) => {
-          //   console.log(r);
+            console.log(r);
           setData(
             r.locations.map((item) => {
               return {
                 name: item.name,
-                y: item.occurrences,
+                y: item.cases,
               };
             })
           );
@@ -72,12 +72,12 @@ function Information({ diseases, startDate, endDate, country }) {
       console.log("calling getPopularDisases");
       getPopularDiseases(startDateString, endDateString, country)
         .then((r) => {
-          // console.log(r);
+        //   console.log(r);
           setData(
             r.rankings.map((item) => {
               return {
                 name: item.name,
-                y: item.occurrences,
+                y: item.cases,
               };
             })
           );
