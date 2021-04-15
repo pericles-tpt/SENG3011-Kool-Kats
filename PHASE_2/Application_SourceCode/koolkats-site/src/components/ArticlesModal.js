@@ -17,23 +17,39 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
     */
     const [articles, setArticles] = useState([])
     const [showSpinner, setShowSpinner] = useState('block')
+    const [reverseArticles, setReverseArticles] = useState(false)
+    const [showReverse, setShowReverse] = useState('none')
+    const [showError, setShowError] = useState('none')
     useEffect(() => {
         async function fetchData () {
-            const articlesFound = await getArticles(startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0], disease, location)
+            const articlesFound = await getArticles(startDate, endDate, disease, location)
             try {
                 if (Array.isArray(articlesFound.articles)) {
                     setArticles(articlesFound.articles)
+                    setReverseArticles(!reverseArticles)
                 } else {
-                    setArticles([{'headline': "article title", 'url': 'this is the article link', 'date_of_publication': '3/04/2021'},{'headline': "article title 2", 'url': 'this is another article link', 'date_of_publication': '4/04/2021'}])
+                    setArticles([])
                 }
             } catch {
-                setArticles([{'headline': "article title", 'url': 'this is the article link', 'date_of_publication': '3/04/2021'},{'headline': "article title 2", 'url': 'this is another article link', 'date_of_publication': '4/04/2021'}])
+                setArticles([])
             }
 
             setShowSpinner('none')
         }
         fetchData()
-    }, [])
+    }, [location, disease, startDate, endDate])
+    useEffect(() => {
+        setArticles(articles.reverse())
+    }, [reverseArticles])
+    useEffect(() => {
+        if (articles.length > 1) {
+            setShowReverse('block')
+            setShowError('none')
+        } else{
+            setShowReverse('none')
+            setShowError('block')
+        }
+    }, [articles])
     return (
         <Modal 
             size="lg" 
@@ -56,7 +72,16 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
                     <Row>
                         <Col>Location: {location}</Col>
                         <Col>Disease: {disease.join(', ')}</Col>
-                        <Col>Time Period: {startDate.toISOString().split('T')[0].replace(/-/g, '/')} - {endDate.toISOString().split('T')[0].replace(/-/g, '/')}</Col>
+                        <Col>Time Period: {startDate} - {endDate}</Col>
+                    </Row>
+                    <Row>
+                        <Button 
+                            variant="secondary" 
+                            onClick={() => setReverseArticles(!reverseArticles)}
+                            style={{display: showReverse}}
+                        >
+                            {reverseArticles ? 'Recent articles first' : 'Oldest articles first'}
+                    </Button>
                     </Row>
                 </Container>
             </Modal.Header>
@@ -68,6 +93,7 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
                 >
                     <span className="sr-only">Getting Articles...</span>
                 </Spinner>
+                <p style={{display: showError}}>No Articles Found</p>
                 {articles.map((article) => (<Article article={article}/>))}
             </Modal.Body>
             <Modal.Footer>
@@ -84,6 +110,15 @@ const Article = ({article}) => {
     if (article.headline === '') {
         headline = 'Untitled'
     }
+    const [showText, setShowText] = useState('none')
+    function handleShow() {
+        console.log("container clicked")
+        if (showText === 'none'){
+            setShowText('block')
+        } else {
+            setShowText('none')
+        }
+    }
     return (
         <Container 
             fluid={true} 
@@ -95,12 +130,43 @@ const Article = ({article}) => {
             }}
         >
             <Row>
-                <Col md="auto">{article.date_of_publication.split(' ')[0].replace(/-/g, '/')}</Col>
+                <Col md="auto">{article.date_of_publication.split(' ')[0]}</Col>
                 <Col md="auto"><b>{headline}</b></Col>
             </Row>
             <Row>
                 <Col><a href={article.url}>{article.url}</a></Col>
             </Row>
+            <Row>
+                <Col onClick={() => handleShow()}>
+                    <Button variant="info" size="sm">
+                        {(showText === 'none') ? 'View article content' : 'Hide article content'}
+                    </Button>
+                </Col>
+            </Row>
+            <Container 
+                fluid={true} 
+                style={{
+                    boxShadow:'1px 1px 1px grey', 
+                    border: '1px solid grey',
+                    margin: 'auto',
+                    padding: '10px', 
+                    display: showText
+                }}
+            >
+                <Row>
+                    <Col>Article contents:</Col>
+                </Row>
+                <Row style={{display: showText}}>
+                    <Col>{article.main_text}</Col>
+                </Row>
+                <Row>
+                    <Col onClick={() => handleShow()}>
+                        <Button variant="info" size="sm">
+                            Hide article content
+                        </Button>
+                    </Col>
+                </Row>
+            </Container>
         </Container>
     );
 }
