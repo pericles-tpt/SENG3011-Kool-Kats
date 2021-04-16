@@ -27,6 +27,7 @@ const MapChart = ({
     var diseases = selectedDiseases.join(", ");
     var start = "";
     var end = "";
+    console.log(diseases);
     if (startDate != null) {
       start = startDate.toISOString().split("T")[0] + "T00:00:00";
       console.log(start);
@@ -35,12 +36,6 @@ const MapChart = ({
       end = endDate.toISOString().split("T")[0] + "T00:00:00";
     }
 
-    /*var qParams = "?";
-    if (diseases != "") {
-      qParams += "keyTerms=" + diseases;
-    } else {
-      qParams += "keyTerms=yellow fever";
-    }*/
     if (startDate == null && endDate != null) {
       start = "1997-01-01T00:00:00";
     } else if (startDate != null && endDate == null) {
@@ -49,7 +44,7 @@ const MapChart = ({
       start = "1997-01-01T00:00:00";
         end = "2022-01-01T00:00:00";
     }
-    //console.log(start)
+
     console.log("fetching data for map");
     getOccurrences(diseases, start, end)
       .then((res) => {
@@ -97,13 +92,13 @@ const MapChart = ({
           {({ geographies }) =>
             geographies.map((geo) => {
               const d = data.find(
-                (s) =>
+                (s) => 
                   s["name"]
                     .toLowerCase()
                     .includes(geo.properties.NAME.toLowerCase()) ||
                   geo.properties.NAME.toLowerCase().includes(
                     s["name"].toLowerCase()
-                  )
+                  ) || geo.properties.NAME.toLowerCase().includes("congo") && s["name"].toLowerCase().includes("congo")
               );
 
               return (
