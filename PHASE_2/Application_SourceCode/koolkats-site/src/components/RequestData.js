@@ -132,3 +132,16 @@ export async function getCOVIDCases(location, lastndays='all') {
     return response.data;
     // do something with myJson
   }
+
+export async function getCOVIDCasesCountries(commaSeparatedLocationsString, lastndays='all') {
+let response = await axios.get(
+    "https://disease.sh/v3/covid-19/historical/" + commaSeparatedLocationsString + "?lastdays=" + lastndays/*, {
+        headers: {
+            'Access-Control-Allow-Origin': '*'
+        }
+    }*/
+);
+
+return response.data;
+// do something with myJson
+}
