@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import "bootstrap/dist/css/bootstrap.min.css";
 import Nav from 'react-bootstrap/Nav'
 import { Multiselect } from "multiselect-react-dropdown";
@@ -86,6 +87,16 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
                         }
                     }}>More Info</Button>
                 </Nav.Item>
+                <Nav.Item>
+                    <Button 
+                        variant="light"
+                        onClick={() => {
+                            setShowArticlesModal(!showArticlesModal)
+                        }}
+                    >
+                        View related articles
+                    </Button>
+                </Nav.Item>
             </Nav>
             <Row style={{display: showInputInfo}}>
                 <InputInfo 
@@ -96,16 +107,7 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
             </Row>
             <Row 
                 className="justify-content-md-center"
-                style={{display: showViewArticles}}
             >
-                <Button 
-                    className="info-links"
-                    onClick={() => {
-                        setShowArticlesModal(!showArticlesModal)
-                    }}
-                >
-                View related articles
-                </Button>
                 <ArticlesModal 
                 handleClose={handleClose} 
                 show={showArticlesModal} 
@@ -117,14 +119,19 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
             <Row className="justify-content-md-center">
                 <RestrictionsOverlay show={showRestrictions}/>
             </Row>
-            <Row className="justify-content-md-center" style={{display: showViewArticles}}>          
-                <Multiselect
-                    options={diseases}
-                    isObject={false}
-                    onSelect={onSelect}
-                    onRemove={onRemove}
-                />
-            </Row>  
+            <Container fluid>
+                <Row className="justify-content-md-center" style={{display: showViewArticles}}>
+                    <Col>Choose diseases: </Col>
+                    <Col> 
+                        <Multiselect
+                        options={diseases}
+                        isObject={false}
+                        onSelect={onSelect}
+                        onRemove={onRemove}
+                        />
+                    </Col>
+                </Row>
+            </Container>
             <Row 
                 className="justify-content-md-center" 
                 style={{display: showVaccinationPercentage}}

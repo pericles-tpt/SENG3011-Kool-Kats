@@ -42,6 +42,9 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
                 chart: {
                     type: 'spline'
                 },
+                credits: {
+                    enabled: false,
+                },
                 title: {
                     text: 'Change in cases of ' + disease + ' over time'
                 },
@@ -55,7 +58,7 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
                     title: {
                         text: 'Year'
                     },
-                    categories: [endYear-5, endYear-4, endYear-3, endYear-2, endYear-1, endYear, 2021]
+                    categories: [endYear-5, endYear-4, endYear-3, endYear-2, endYear-1, endYear]
                 },
                 yAxis: {
                     title: {
@@ -63,6 +66,9 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
                     }
                 },
                 series: []
+            }
+            if (endYear != 2021) {
+                opts.xAxis.categories.push(2021)
             }
             var dict = {}
             console.log(stats)
@@ -79,7 +85,22 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
             }
             console.log(dict)
             for (var key in dict) {
+                while (dict[key].length < 6) {
+                    dict[key].push(dict[key[0]])
+                }
+                if (endYear != 2021) {
+                    dict[key].push(dict[key[0]])
+                }
                 opts.series.push({name: key, data: dict[key]})
+            }
+            for (var dis in disease) {
+                if (!(disease[dis] in dict)) {
+                    if (endYear != 2021) {
+                        opts.series.push({name: disease[dis], data: dict[0,0,0,0,0,0,0]})
+                    } else {
+                        opts.series.push({name: disease[dis], data: dict[0,0,0,0,0,0]})
+                    }
+                }
             }
             //setCases(currCases)
             setOptions(opts)

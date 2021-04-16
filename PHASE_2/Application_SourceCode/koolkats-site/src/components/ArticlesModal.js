@@ -27,6 +27,9 @@ const ArticlesModal = ({show, handleClose, location, disease, startDate, endDate
                 if (Array.isArray(articlesFound.articles)) {
                     setArticles(articlesFound.articles)
                     setReverseArticles(!reverseArticles)
+                    if (articles.length > 1) {
+                        setShowError('none')
+                    }
                 } else {
                     setArticles([])
                 }

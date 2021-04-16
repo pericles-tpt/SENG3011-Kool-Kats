@@ -10,7 +10,7 @@ export async function getDisease(
   var qParams = "";
   qParams += "startDate=" + startDate + "&";
   qParams += "endDate=" + endDate + "&";
-  qParams += "keyTerms=" + keyTerms.toString();
+  qParams += "keyTerms=" + keyTerms.join('%2C');
   if (location != null) {
     qParams += "&location=" + location;
   }
@@ -20,7 +20,11 @@ export async function getDisease(
   if (response.data.diseases) {
       return response.data.diseases
   }
-  return [];
+  var sample = []
+  for (var keyTerm in keyTerms) {
+    sample.append({name: keyTerm, cases: 0, occurrences: 0})
+  }
+  return sample;
   // do something with myJson
 }
 
