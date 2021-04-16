@@ -17,8 +17,10 @@ export async function getDisease(
 
   console.log("http://52.87.94.130:5000/disease?" + qParams);
   let response = await axios.get("http://52.87.94.130:5000/disease?" + qParams);
-
-  return await response.data;
+  if (response.data.diseases) {
+      return response.data.diseases
+  }
+  return [];
   // do something with myJson
 }
 

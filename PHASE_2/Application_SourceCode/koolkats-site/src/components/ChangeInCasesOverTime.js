@@ -5,47 +5,89 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import {getDisease} from './RequestData'
 const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) => {
-    const [change, setChange] = useState('')
-    const [showChart, setShowChart] = useState('none')
+    const [showChart, setShowChart] = useState('block')
+    const [cases, setCases] = useState([])
     useEffect(() => {
-        console.log(show)
         if (showChart === 'block') {
             setShowChart('none')
         } else {
             setShowChart('block')
         }
-        console.log(showChart)
     }, [show])
     useEffect(() => {
         async function getInfo() {
-            // get cases in 5 year
-            const yr1 = await getDisease(startDate, endDate, disease, location)
-            const yr2 = await getDisease(startDate, endDate, disease, location)
-            const yr3 = await getDisease(startDate, endDate, disease, location)
-            const yr4 = await getDisease(startDate, endDate, disease, location)
-            const yr5 = await getDisease(startDate, endDate, disease, location)
+            console.log(startDate, endDate)
+            var endYear = new Date().getFullYear()
+            var endMonth = new Date().getMonth()
+            var endDay = new Date().getDate()
+            if (endDate) {
+                endYear = parseInt(endDate.split('-')[0])
+                endMonth = parseInt(endDate.split('-')[1])
+                endDay = parseInt(endDate.split('-')[2].split('T')[0])
+            }
+            console.log(endYear, endMonth, endDay)
+            var country = location
+            if (location.toLowerCase() === 'world') {
+                country = null
+            } 
+            const yr1 = await getDisease(startDate, new Date(endYear-5, endMonth, endDay).toISOString(), disease, country)
+            const yr2 = await getDisease(startDate, new Date(endYear-4, endMonth, endDay).toISOString(), disease, country)
+            const yr3 = await getDisease(startDate, new Date(endYear-3, endMonth, endDay).toISOString(), disease, country)
+            const yr4 = await getDisease(startDate, new Date(endYear-2, endMonth, endDay).toISOString(), disease, country)
+            const yr5 = await getDisease(startDate, new Date(endYear-1, endMonth, endDay).toISOString(), disease, country)
             const yr6 = await getDisease(startDate, endDate, disease, location)
-            // 
-            console.log(yr5)
-            setChange('')
-            setOptions({
+            const currCases = await getDisease(startDate, new Date().toISOString(), disease, country)
+            const stats = [yr1, yr2, yr3, yr4, yr5, yr6, currCases]
+            var opts = {
                 chart: {
-                  type: 'spline'
+                    type: 'spline'
                 },
                 title: {
-                  text: 'Change in cases of ' + disease + 'over time'
+                    text: 'Change in cases of ' + disease + ' over time'
                 },
-                series: [
-                  {
-                    data: [yr1, yr2, yr3, yr5, yr6]
-                  }
-                ]
-            })
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: endYear-5
+                },
+                xAxis: {
+                    title: {
+                        text: 'Year'
+                    },
+                    categories: [endYear-5, endYear-4, endYear-3, endYear-2, endYear-1, endYear, 2021]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Number of Cases'
+                    }
+                },
+                series: []
+            }
+            var dict = {}
+            console.log(stats)
+            for (var stat in stats) {
+                for (var indx in stats[stat]) {
+                    const diseaseName = stats[stat][indx].name
+                    if (diseaseName in dict) {
+                        dict[diseaseName].push(stats[stat][indx].cases)
+                    } else {
+                        dict[diseaseName] = [stats[stat][indx].cases]
+                    }
+                    
+                }
+            }
+            console.log(dict)
+            for (var key in dict) {
+                opts.series.push({name: key, data: dict[key]})
+            }
+            //setCases(currCases)
+            setOptions(opts)
         }
         try {
             getInfo()
         } catch {
-            setChange('Not enough information found')
+            setCases('Not enough information found')
         }
     }, [disease, startDate, endDate, location])
     const [options, setOptions] = useState({
@@ -57,7 +99,8 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
         },
         series: [
           {
-            data: [1, 2, 1, 4, 3, 6]
+            data: [1, 2, 1, 4, 3, 6],
+            name: 'series-1'
           }
         ]
       })
@@ -68,6 +111,9 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
                 margin: '5px', 
                 display: showChart
             }}>
+            <Row className="justify-content-md-center">
+                Cases: {cases}
+            </Row>
             <Row className="justify-content-md-center">
             <div
                 style={{
