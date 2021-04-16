@@ -86,6 +86,16 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
                         }
                     }}>More Info</Button>
                 </Nav.Item>
+                <Nav.Item>
+                    <Button 
+                        variant="light"
+                        onClick={() => {
+                            setShowArticlesModal(!showArticlesModal)
+                        }}
+                    >
+                        View related articles
+                    </Button>
+                </Nav.Item>
             </Nav>
             <Row style={{display: showInputInfo}}>
                 <InputInfo 
@@ -96,16 +106,7 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
             </Row>
             <Row 
                 className="justify-content-md-center"
-                style={{display: showViewArticles}}
             >
-                <Button 
-                    className="info-links"
-                    onClick={() => {
-                        setShowArticlesModal(!showArticlesModal)
-                    }}
-                >
-                View related articles
-                </Button>
                 <ArticlesModal 
                 handleClose={handleClose} 
                 show={showArticlesModal} 
@@ -116,6 +117,9 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
             </Row>
             <Row className="justify-content-md-center">
                 <RestrictionsOverlay show={showRestrictions}/>
+            </Row>
+            <Row className="justify-content-md-center" style={{display: showViewArticles}}>
+                Choose diseases to view change of cases over time: 
             </Row>
             <Row className="justify-content-md-center" style={{display: showViewArticles}}>          
                 <Multiselect
