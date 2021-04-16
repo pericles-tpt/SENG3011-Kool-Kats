@@ -9,6 +9,7 @@ import {
   Sphere,
   Graticule,
 } from "react-simple-maps";
+import { getOccurrences } from "./RequestData";
 
 const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
@@ -34,39 +35,34 @@ const MapChart = ({
       end = endDate.toISOString().split("T")[0] + "T00:00:00";
     }
 
-    var qParams = "?";
+    /*var qParams = "?";
     if (diseases != "") {
       qParams += "keyTerms=" + diseases;
     } else {
       qParams += "keyTerms=yellow fever";
-    }
-    if (startDate != null && endDate != null) {
-      qParams += "&startDate=" + start + "&endDate=" + end;
-    } else if (startDate == null && endDate != null) {
-      qParams += "&startDate=1997-01-01T00:00:00" + "&endDate=" + end;
+    }*/
+    if (startDate == null && endDate != null) {
+      start = "1997-01-01T00:00:00";
     } else if (startDate != null && endDate == null) {
-      qParams += "&startDate=" + start + "&endDate=2020-01-01T00:00:00";
+      end = "2022-01-01T00:00:00";
     } else if (startDate == null && endDate == null) {
-      qParams +=
-        "&startDate=1997-01-01T00:00:00" + "&endDate=2020-01-01T00:00:00";
+      start = "1997-01-01T00:00:00";
+        end = "2022-01-01T00:00:00";
     }
     //console.log(start)
     console.log("fetching data for map");
-    console.log(qParams);
-    axios
-      .get("http://52.87.94.130:5000/occurrences" + qParams)
+    getOccurrences(diseases, start, end)
       .then((res) => {
         // Set Max
-        const mydata = res.data;
-
-        setData(mydata.locations);
+        console.log(res.locations)
+        setData(res.locations);
       })
       .then((r) => {
         var length = data.length;
         setMax(1);
         for (var i = 0; i < length; i++) {
-          if (data[i]["occurrences"] > max) {
-            setMax(data[i]["occurrences"]);
+          if (data[i]["cases"] > max) {
+            setMax(data[i]["cases"]);
             console.log("max " + max);
           }
         }
