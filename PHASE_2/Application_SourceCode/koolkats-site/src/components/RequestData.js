@@ -145,3 +145,68 @@ let response = await axios.get(
 return response.data;
 // do something with myJson
 }
+
+// Utility Functions
+export function crdInRange(json, country, startDate, endDate, casesRecoveredDeaths=0) {
+    let entry = {}
+    for (var i = 0; i < json.length; i++) {
+        if (json[i].country == country) {
+            entry = json[i]
+            break
+        }
+    }
+    let cases = {}
+    if (casesRecoveredDeaths == 0) {
+        cases = json[i].timeline.cases
+    } else if (casesRecoveredDeaths == 1) {
+        cases = json[i].timeline.recovered
+    } else if (casesRecoveredDeaths == 2) {
+        cases = json[i].timeline.deaths
+    } else {
+        return
+    }
+    
+
+    var startDateSplit = startDate.split("-");
+    var endDateSplit = endDate.split("-");
+
+    var sd = startDateSplit[1] + "/" + startDateSplit[2] + "/" + startDateSplit[0][2] + startDateSplit[0][3]
+    var ed = endDateSplit[1] + "/" + endDateSplit[2] + "/" + endDateSplit[0][2] + endDateSplit[0][3]
+    
+    if (sd[0] == '0') {
+        sd = sd.substring(1)
+    }
+
+    if (ed[0] == '0') {
+        ed = ed.substring(1)
+    }
+
+    var s = 0
+    var e = 0
+ 
+    var sdInCases = false
+    for (const [date, cs] of Object.entries(cases)) {
+        if (date === sd) {
+          s = cs
+          sdInCases = true
+        }
+    }
+
+    var edInCases = false
+    for (const [date, cs] of Object.entries(cases)) {
+        if (date === ed) {
+          e = cs
+          edInCases = true
+        }
+    }
+
+    if (sdInCases == false) {
+        s = Object.values(cases)[0]
+    }
+
+    if (sdInCases == false) {
+        e = Object.values(cases)[Object.values(cases).length - 1]
+    }
+
+    return (e - s)
+}
