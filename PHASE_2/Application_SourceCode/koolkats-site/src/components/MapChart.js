@@ -35,36 +35,43 @@ const MapChart = ({
     if (endDate != null) {
       end = endDate.toISOString().split("T")[0] + "T00:00:00";
     }
-
+    var cur_date = new Date().toISOString().split(".")[0];
+    console.log(cur_date)
     if (startDate == null && endDate != null) {
       start = "1997-01-01T00:00:00";
     } else if (startDate != null && endDate == null) {
-      end = "2022-01-01T00:00:00";
+      end = cur_date;
     } else if (startDate == null && endDate == null) {
       start = "1997-01-01T00:00:00";
-        end = "2022-01-01T00:00:00";
+        end = cur_date;
     }
 
     console.log("fetching data for map");
-    getOccurrences(diseases, start, end)
-      .then((res) => {
-        // Set Max
-        console.log(res.locations)
-        setData(res.locations);
-      })
-      .then((r) => {
-        var length = data.length;
-        setMax(1);
-        for (var i = 0; i < length; i++) {
-          if (data[i]["cases"] > max) {
-            setMax(data[i]["cases"]);
-            console.log("max " + max);
-          }
-        }
-      });
+    fetchData(diseases, start, end);
   }, [selectedDiseases, startDate, endDate]);
 
-  const color = scaleLinear().domain([1, max]).range(["#ffedea", "#ff5233"]);
+  async function fetchData(diseases, start, end) {
+    await getOccurrences(diseases, start, end)
+      .then((res) => {
+        // Set Max
+        console.log(res.locations);
+        var tempLocation = res.locations;
+        var length = tempLocation.length;
+        var tempMax = 1;
+        //setMax(1);
+        console.log(length);
+        for (var i = 0; i < length; i++) {
+          if (tempLocation[i]["cases"] > tempMax) {
+            tempMax = tempLocation[i]["cases"];
+            console.log("max " + tempMax);
+          }
+        }
+        setMax(tempMax);
+        setData(res.locations);
+      })
+  }
+
+  const color = scaleLinear().domain([0, 5]).range(["#ffedea", "#ff5233"]);
 
   const selectCountry = (country) => {
     if (!(country == undefined)) {
@@ -105,7 +112,7 @@ const MapChart = ({
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  fill={d ? color(d["occurrences"]) : "#F5F4F6"}
+                  fill={d ? color(d["cases"]) : "#F5F4F6"}
                   onClick={() => {
                     selectCountry(geo.properties.NAME);
                   }}
