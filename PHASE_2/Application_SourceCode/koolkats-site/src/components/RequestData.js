@@ -146,7 +146,7 @@ return response.data;
 // do something with myJson
 }
 
-// Utility Functions
+// Utility Functions - For handling return json from above requests
 export function crdInRange(json, country, startDate, endDate, casesRecoveredDeaths=0) {
     let entry = {}
     for (var i = 0; i < json.length; i++) {
