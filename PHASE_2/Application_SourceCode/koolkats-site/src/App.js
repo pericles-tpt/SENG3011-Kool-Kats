@@ -5,6 +5,7 @@ import getDisease, {
   getArticles,
   getVaccinationPercentage,
   getStateRestrictionAus,
+  getCOVIDCases
 } from "./components/RequestData";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -43,6 +44,10 @@ function App() {
   }))*/
 
   Promise.resolve(getVaccinationPercentage('Australia').then(function(v) {
+    console.log(v)
+  }))
+
+  Promise.resolve(getCOVIDCases('Australia').then(function(v) {
     console.log(v)
   }))
 

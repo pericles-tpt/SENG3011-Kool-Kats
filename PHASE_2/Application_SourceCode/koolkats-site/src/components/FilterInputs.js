@@ -43,7 +43,7 @@ export default function FilterInputs({
     "poliomyelitis",
     "hepatitis",
     "oropouche virus disease",
-    "novel coronavirus",
+    "COVID-19",
     "typhoid fever",
     "nipah virus",
     "plague",
