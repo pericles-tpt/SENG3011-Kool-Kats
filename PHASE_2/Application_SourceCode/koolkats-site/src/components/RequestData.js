@@ -118,3 +118,17 @@ export async function getStateRestrictionAus() {
   return response.data;
   // do something with myJson
 }
+
+// https://corona.lmao.ninja/ API
+export async function getCOVIDCases(location, lastndays='all') {
+    let response = await axios.get(
+      "https://disease.sh/v3/covid-19/historical/" + location + "?lastdays=" + lastndays/*, {
+          headers: {
+              'Access-Control-Allow-Origin': '*'
+          }
+      }*/
+    );
+  
+    return response.data;
+    // do something with myJson
+  }
