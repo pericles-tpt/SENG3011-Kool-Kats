@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -43,7 +43,7 @@ export default function FilterInputs({
     "poliomyelitis",
     "hepatitis",
     "oropouche virus disease",
-    "novel coronavirus",
+    "COVID-19",
     "typhoid fever",
     "nipah virus",
     "plague",
@@ -105,13 +105,31 @@ export default function FilterInputs({
               <h5>Time Period:</h5>
               <Row className="align-items-center justify-content-center">
                 <Col xs="auto">
-                  <DatePicker onChange={setStartDate} value={startDate} />
+                  <DatePicker
+                    onChange={(newDate) => {
+                      if (newDate !== null) {
+                        setStartDate(newDate);
+                      } else {
+                        setStartDate(new Date(1997, 0, 1));
+                      }
+                    }}
+                    value={startDate}
+                  />
                 </Col>
                 <Col xs="auto">
                   <h5 className="text-center"> - </h5>
                 </Col>
                 <Col xs="auto">
-                  <DatePicker onChange={setEndDate} value={endDate} />
+                  <DatePicker
+                    onChange={(newDate) => {
+                      if (newDate !== null) {
+                        setEndDate(newDate);
+                      } else {
+                        setEndDate(new Date());
+                      }
+                    }}
+                    value={endDate}
+                  />
                 </Col>
               </Row>
             </Col>
