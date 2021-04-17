@@ -52,6 +52,24 @@ export async function getOccurrences(
 export async function getArticles(startDate, endDate, keyTerms, location) {
   var qParams = "";
   var mydata = {};
+
+  // Putting some default values in here in case empty strings are passed in
+  if (startDate == '') {
+    startDate = "1997-01-01T00:00:00"
+  }
+
+  if (endDate == '') {
+    endDate = "2022-01-01T00:00:00"
+  }
+
+  if (keyTerms == '') {
+    keyTerms = "measles"
+  }
+
+  if (location == '') {
+    location = "Australia"
+  }
+
   qParams += "startDate=" + startDate + "&";
   qParams += "endDate=" + endDate + "&";
   qParams += "keyTerms=" + keyTerms.toString() + "&";
@@ -93,13 +111,17 @@ export async function getPopularDiseases(
 
 // SourDough API - Vaccination Percentage
 export async function getVaccinationPercentage(location) {
-  let response = await axios.get(
-    "http://52.15.58.197:8000/v1/vaccination_percentage?country=" + location, {
-        headers: {
-            'Access-Control-Allow-Origin': '*'
-        }
+    let response = {}
+    try {
+        response = await axios.get(
+        "http://52.15.58.197:8000/v1/vaccination_percentage?country=" + location, {
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
+    } catch {
+        return 'n/a'
     }
-  );
 
   return response.data;
   // do something with myJson
