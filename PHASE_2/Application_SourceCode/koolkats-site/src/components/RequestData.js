@@ -1,12 +1,20 @@
 import axios from "axios";
 
 // Koolkats Functions
-export async function getDisease(
-  startDate,
-  endDate,
-  keyTerms,
-  location = null
-) {
+export async function getDisease(startDate, endDate, keyTerms, location = null) {
+
+    if (startDate == '') {
+        startDate = "1997-01-01T00:00:00"
+    }
+
+    if (endDate == '') {
+        endDate = "2022-01-01T00:00:00"
+    }
+
+    if (keyTerms == '') {
+        keyTerms = "measles"
+    }
+
   var qParams = "";
   qParams += "startDate=" + startDate + "&";
   qParams += "endDate=" + endDate + "&";
