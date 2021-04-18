@@ -3,15 +3,15 @@ import axios from "axios";
 // Koolkats Functions
 export async function getDisease(startDate, endDate, keyTerms, location = null) {
 
-    if (startDate == '') {
+    if (startDate === '') {
         startDate = "1997-01-01T00:00:00"
     }
 
-    if (endDate == '') {
+    if (endDate === '') {
         endDate = "2022-01-01T00:00:00"
     }
 
-    if (keyTerms == '') {
+    if (keyTerms === '') {
         keyTerms = "measles"
     }
 
@@ -19,7 +19,7 @@ export async function getDisease(startDate, endDate, keyTerms, location = null) 
   qParams += "startDate=" + startDate + "&";
   qParams += "endDate=" + endDate + "&";
   qParams += "keyTerms=" + keyTerms.join('%2C');
-  if (location != null) {
+  if (location !== null) {
     qParams += "&location=" + location;
   }
 
@@ -44,7 +44,7 @@ export async function getOccurrences(
   var qParams = "";
   var mydata = {};
   qParams += "keyTerms=" + keyTerms.toString();
-  if (startDate != null && endDate != null) {
+  if (startDate !== null && endDate !== null) {
     qParams += "&startDate=" + startDate;
     qParams += "&endDate=" + endDate;
   }
@@ -62,19 +62,19 @@ export async function getArticles(startDate, endDate, keyTerms, location) {
   var mydata = {};
 
   // Putting some default values in here in case empty strings are passed in
-  if (startDate == '') {
+  if (startDate === '') {
     startDate = "1997-01-01T00:00:00"
   }
 
-  if (endDate == '') {
+  if (endDate === '') {
     endDate = "2022-01-01T00:00:00"
   }
 
-  if (keyTerms == '') {
+  if (keyTerms === '') {
     keyTerms = "measles"
   }
 
-  if (location == '') {
+  if (location === '') {
     location = "Australia"
   }
 
@@ -102,10 +102,10 @@ export async function getPopularDiseases(
   qParams += "startDate=" + startDate + "&";
   qParams += "endDate=" + endDate;
 
-  if (location != null) {
+  if (location !== null) {
     qParams += "&location=" + location;
   }
-  if (numDiseases != null) {
+  if (numDiseases !== null) {
     qParams += "&numDiseases=" + numDiseases;
   }
 
@@ -186,11 +186,11 @@ export function crdInRange(json, country, startDate, endDate, casesRecoveredDeat
         }
     }
     let cases = {}
-    if (casesRecoveredDeaths == 0) {
+    if (casesRecoveredDeaths === 0) {
         cases = json[i].timeline.cases
-    } else if (casesRecoveredDeaths == 1) {
+    } else if (casesRecoveredDeaths === 1) {
         cases = json[i].timeline.recovered
-    } else if (casesRecoveredDeaths == 2) {
+    } else if (casesRecoveredDeaths === 2) {
         cases = json[i].timeline.deaths
     } else {
         return
@@ -203,11 +203,11 @@ export function crdInRange(json, country, startDate, endDate, casesRecoveredDeat
     var sd = startDateSplit[1] + "/" + startDateSplit[2] + "/" + startDateSplit[0][2] + startDateSplit[0][3]
     var ed = endDateSplit[1] + "/" + endDateSplit[2] + "/" + endDateSplit[0][2] + endDateSplit[0][3]
     
-    if (sd[0] == '0') {
+    if (sd[0] === '0') {
         sd = sd.substring(1)
     }
 
-    if (ed[0] == '0') {
+    if (ed[0] === '0') {
         ed = ed.substring(1)
     }
 
@@ -230,11 +230,11 @@ export function crdInRange(json, country, startDate, endDate, casesRecoveredDeat
         }
     }
 
-    if (sdInCases == false) {
+    if (sdInCases === false) {
         s = Object.values(cases)[0]
     }
 
-    if (sdInCases == false) {
+    if (sdInCases === false) {
         e = Object.values(cases)[Object.values(cases).length - 1]
     }
 
