@@ -30,14 +30,15 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
             if (location.toLowerCase() === 'world') {
                 country = null
             } 
-            const yr1 = await getDisease(startDate, new Date(endYear-5, endMonth, endDay).toISOString(), disease, country)
+            /*const yr1 = await getDisease(startDate, new Date(endYear-5, endMonth, endDay).toISOString(), disease, country)
             const yr2 = await getDisease(startDate, new Date(endYear-4, endMonth, endDay).toISOString(), disease, country)
             const yr3 = await getDisease(startDate, new Date(endYear-3, endMonth, endDay).toISOString(), disease, country)
             const yr4 = await getDisease(startDate, new Date(endYear-2, endMonth, endDay).toISOString(), disease, country)
             const yr5 = await getDisease(startDate, new Date(endYear-1, endMonth, endDay).toISOString(), disease, country)
             const yr6 = await getDisease(startDate, endDate, disease, location)
             const currCases = await getDisease(startDate, new Date().toISOString(), disease, country)
-            const stats = [yr1, yr2, yr3, yr4, yr5, yr6, currCases]
+            const stats = [yr1, yr2, yr3, yr4, yr5, yr6, currCases]*/
+            const stats = [0,0,0,0,0,0,0]
             var opts = {
                 chart: {
                     type: 'spline'

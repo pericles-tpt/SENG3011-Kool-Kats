@@ -11,6 +11,7 @@ import RestrictionsOverlay from './RestrictionsOverlay'
 import ChangeInCasesOverTime from './ChangeInCasesOverTime'
 import ArticlesModal from './ArticlesModal'
 import { getVaccinationPercentage } from "./RequestData";
+import CovidGraph from './CovidGraph'
 
 const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate}) => {
     const [showInputInfo, setShowInputInfo] = useState('block')
@@ -73,7 +74,7 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
                         setShowChange(false)
                         setShowVaccinationPercentage('block')
                         setShowRestrictions('none')
-                    }}>COVID Vaccination</Button>
+                    }}>COVID Info</Button>
                 </Nav.Item>
                 <Nav.Item eventkey="/moreInfo">
                     <Button variant="light" onClick={() => {
@@ -85,7 +86,7 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
                         if (country.toLowerCase() === 'australia') {
                             setShowRestrictions('block')
                         }
-                    }}>More Info</Button>
+                    }}>Disease Info</Button>
                 </Nav.Item>
                 <Nav.Item>
                     <Button 
@@ -139,6 +140,13 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
                 <br></br>
                 {(country.toLowerCase() !== 'world') ? 'COVID-19 Vaccination Percentage: ' + vaccinationPercentage + '%': 'Could not get vaccination information'}
                 <br></br>
+                <CovidGraph 
+                    show={showVaccinationPercentage} 
+                    disease={diseaseList}
+                    startDate={startDate}
+                    endDate={endDate}
+                    location={country}
+                />
             </Row>
             <Row className="justify-content-md-center" >
                 <ChangeInCasesOverTime 
