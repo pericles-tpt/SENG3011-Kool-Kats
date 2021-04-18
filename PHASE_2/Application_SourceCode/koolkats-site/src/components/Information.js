@@ -23,14 +23,14 @@ function Information({ diseases, startDate, endDate, country }) {
 
   useEffect(() => {
     startDate
-      ? setStartDateString(startDate.toISOString().split("T")[0] + "T00:00:00")
-      : setStartDateString("1997-01-01T00:00:00");
+      ? setStartDateString(startDate.toISOString().split("T")[0])
+      : setStartDateString("1997-01-01");
   }, [startDate]);
 
   useEffect(() => {
     endDate
-      ? setEndDateString(endDate.toISOString().split("T")[0] + "T00:00:00")
-      : setEndDateString("2022-01-01T00:00:00");
+      ? setEndDateString(endDate.toISOString().split("T")[0])
+      : setEndDateString("2022-01-01");
   }, [endDate]);
 
   useEffect(() => {
@@ -79,7 +79,7 @@ function Information({ diseases, startDate, endDate, country }) {
 
   return (
     <div className="divOutline" style={{ overflow: "scroll" }}>
-      <Container scrollable>
+      <Container>
         <h4>Information</h4>
         <p>Country: {country}</p>
         <Row>

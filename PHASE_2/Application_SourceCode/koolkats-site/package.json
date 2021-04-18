@@ -13,6 +13,7 @@
     "highcharts": "^9.0.1",
     "highcharts-react-official": "^3.0.0",
     "mdbreact": "^5.0.1",
+    "moment": "^2.29.1",
     "multiselect-react-dropdown": "^1.6.11",
     "react": "^17.0.2",
     "react-bootstrap": "^1.5.2",

@@ -45,7 +45,7 @@ function PieChart({ data, graphTitle }) {
     series: [
       {
         type: "pie",
-        name: "persentage",
+        name: "percentage",
         // data: data,
         data: data,
       },

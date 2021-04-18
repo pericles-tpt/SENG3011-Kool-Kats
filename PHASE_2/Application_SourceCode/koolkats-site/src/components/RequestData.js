@@ -185,23 +185,33 @@ export function crdInRange(json, country, startDate, endDate, casesRecoveredDeat
         }
     }
     let cases = {}
-    if (casesRecoveredDeaths === 0) {
-        cases = json[i].timeline.cases
-    } else if (casesRecoveredDeaths === 1) {
-        cases = json[i].timeline.recovered
-    } else if (casesRecoveredDeaths === 2) {
-        cases = json[i].timeline.deaths
-    } else {
-        return
+    if (country.toLowerCase() === 'all' || country.toLowerCase() === 'world') {
+        if (casesRecoveredDeaths === 0) {
+            cases = json.cases
+        } else if (casesRecoveredDeaths === 1) {
+            cases = json.recovered
+        } else if (casesRecoveredDeaths === 2) {
+            cases = json.deaths
+        } else {
+            return
+        }
     }
-    
+    else {
+        if (casesRecoveredDeaths === 0) {
+            cases = json[i].timeline.cases
+        } else if (casesRecoveredDeaths === 1) {
+            cases = json[i].timeline.recovered
+        } else if (casesRecoveredDeaths === 2) {
+            cases = json[i].timeline.deaths
+        } else {
+            return
+        }
+    }
 
     var startDateSplit = startDate.split("-");
     var endDateSplit = endDate.split("-");
-
     var sd = startDateSplit[1] + "/" + startDateSplit[2] + "/" + startDateSplit[0][2] + startDateSplit[0][3]
     var ed = endDateSplit[1] + "/" + endDateSplit[2] + "/" + endDateSplit[0][2] + endDateSplit[0][3]
-    
     if (sd[0] === '0') {
         sd = sd.substring(1)
     }
