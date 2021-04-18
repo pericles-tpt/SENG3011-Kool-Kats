@@ -5,7 +5,8 @@ import getDisease, {
   getArticles,
   getVaccinationPercentage,
   getStateRestrictionAus,
-  getCOVIDCases
+  getCOVIDCasesCountries,
+  crdInRange
 } from "./components/RequestData";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -47,8 +48,9 @@ function App() {
     console.log(v)
   }))
 
-  Promise.resolve(getCOVIDCases('Australia').then(function(v) {
+  Promise.resolve(getCOVIDCasesCountries('Australia,UK,US').then(function(v) {
     console.log(v)
+    console.log('cases ' + crdInRange(v, 'Australia', '2005-01-01', '2025-01-01', 2))
   }))
 
   return (
