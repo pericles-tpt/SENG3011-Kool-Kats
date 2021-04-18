@@ -135,12 +135,22 @@ const MapChart = ({
             for (var d in timeline) {
               var length = new_data.length;
               if (!(d == undefined)) {
+                var Found = false;
               for (var i = 0; i < length; i++) {
-                console.log(new_data[i]["name"])
-                if (new_data[i]["name"] === d || String(new_data[i]["name"]),includes(d)) {
-                  console.log(timeline[d]['total']);
+                //console.log(new_data[i]["name"])
+                if (new_data[i]["name"].toLowerCase() === d.toLowerCase() || new_data[i]["name"].toLowerCase().includes(d.toLowerCase()) || d.toLowerCase().includes(new_data[i]["name"].toLowerCase())) {
+                  console.log('Country ' + d + timeline[d]['total']);
                   new_data[i]["cases"] += timeline[d]['total'];
+                  Found = true;
                 }
+              }
+              // Handle the case the country wasn't found
+              if (!Found) {
+                console.log('Country ' + d + timeline[d]['total']);
+                var list_item = {};
+                list_item["name"] = d;
+                list_item["cases"] = timeline[d]["total"];
+                new_data.push(list_item);
               }
             }
             // Get data
@@ -148,11 +158,9 @@ const MapChart = ({
           }
         });
       }
-
-        //setState([...oldList, newItem]) Append a State
   }
 
-  const color = scaleLinear().domain([0, 5]).range(["#ffedea", "#ff5233"]);
+  const color = scaleLinear().domain([0, 3]).range(["#ffedea", "#ff5233"]);
 
   const selectCountry = (country) => {
     if (!(country == undefined)) {
