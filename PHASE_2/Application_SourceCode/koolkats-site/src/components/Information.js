@@ -15,7 +15,6 @@ import Row from "react-bootstrap/Row";
 import InfoNavBar from "./InfoNavBar";
 
 function Information({ diseases, startDate, endDate, country }) {
-
   const [startDateString, setStartDateString] = useState("");
   const [endDateString, setEndDateString] = useState("");
   const [data, setData] = useState([]);
@@ -48,7 +47,7 @@ function Information({ diseases, startDate, endDate, country }) {
             r.locations.map((item) => {
               return {
                 name: item.name,
-                y: item.occurences,
+                y: item.occurrences,
               };
             })
           );
@@ -62,11 +61,12 @@ function Information({ diseases, startDate, endDate, country }) {
       console.log("calling getPopularDisases");
       getPopularDiseases(startDateString, endDateString, country)
         .then((r) => {
+          console.log(r);
           setData(
             r.rankings.map((item) => {
               return {
                 name: item.name,
-                y: item.occurences,
+                y: item.occurrences,
               };
             })
           );

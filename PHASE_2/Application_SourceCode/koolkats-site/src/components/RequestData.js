@@ -23,7 +23,7 @@ export async function getDisease(startDate, endDate, keyTerms, location = null) 
     qParams += "&location=" + location;
   }
 
-  console.log("http://52.87.94.130:5000/disease?" + qParams);
+  // console.log("http://52.87.94.130:5000/disease?" + qParams);
   let response = await axios.get("http://52.87.94.130:5000/disease?" + qParams);
   if (response.data.diseases) {
       return response.data.diseases
@@ -112,7 +112,6 @@ export async function getPopularDiseases(
   let response = await axios.get(
     "http://52.87.94.130:5000/popularDiseases?" + qParams
   );
-
   return response.data;
   // do something with myJson
 }
