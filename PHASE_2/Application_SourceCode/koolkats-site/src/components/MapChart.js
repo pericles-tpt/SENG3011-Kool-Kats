@@ -131,6 +131,7 @@ const MapChart = ({
           
           var new_data = data;
           console.log(new_data);
+          var tempMax = 0;
 
             for (var d in timeline) {
               var length = new_data.length;
@@ -141,6 +142,8 @@ const MapChart = ({
                 if (new_data[i]["name"].toLowerCase() === d.toLowerCase() || new_data[i]["name"].toLowerCase().includes(d.toLowerCase()) || d.toLowerCase().includes(new_data[i]["name"].toLowerCase())) {
                   console.log('Country ' + d + timeline[d]['total']);
                   new_data[i]["cases"] += timeline[d]['total'];
+                  if (timeline[d]['total'] > tempMax)
+                    tempMax = timeline[d]['total'];
                   Found = true;
                 }
               }
@@ -150,17 +153,20 @@ const MapChart = ({
                 var list_item = {};
                 list_item["name"] = d;
                 list_item["cases"] = timeline[d]["total"];
+                if (timeline[d]['total'] > tempMax)
+                    tempMax = timeline[d]['total'];
                 new_data.push(list_item);
               }
             }
             // Get data
+            setMax(tempMax);
             setData(new_data);
           }
         });
       }
   }
 
-  const color = scaleLinear().domain([0, 3]).range(["#ffedea", "#ff5233"]);
+  const color = scaleLinear().domain([1, max]).range(["#ffedea", "#ff5233"]);
 
   const selectCountry = (country) => {
     if (!(country == undefined)) {
