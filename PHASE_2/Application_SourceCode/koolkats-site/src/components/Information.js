@@ -1,14 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import PieChart from "./PieChart";
-import Button from "react-bootstrap/Button";
 import "./Information.css";
-import axios from "axios";
 import {
   getPopularDiseases,
   getOccurrences,
-  getVaccinationPercentage,
-  getStateRestrictionAus,
 } from "./RequestData";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";

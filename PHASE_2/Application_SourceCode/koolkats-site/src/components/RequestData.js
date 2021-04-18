@@ -222,21 +222,27 @@ export function crdInRange(json, country, startDate, endDate, casesRecoveredDeat
 
     var s = 0
     var e = 0
- 
-    var sdInCases = false
-    for (const [date, cs] of Object.entries(cases)) {
-        if (date === sd) {
-          s = cs
-          sdInCases = true
+    try {
+        var sdInCases = false
+        for (const [date, cs] of Object.entries(cases)) {
+            if (date === sd) {
+            s = cs
+            sdInCases = true
+            }
         }
+    } catch {
+        console.log("error")
     }
-
-    var edInCases = false
-    for (const [date, cs] of Object.entries(cases)) {
-        if (date === ed) {
-          e = cs
-          edInCases = true
+    try {
+        var edInCases = false
+        for (const [date, cs] of Object.entries(cases)) {
+            if (date === ed) {
+            e = cs
+            edInCases = true
+            }
         }
+    } catch {
+        console.log("error")
     }
 
     if (sdInCases === false) {
@@ -249,3 +255,11 @@ export function crdInRange(json, country, startDate, endDate, casesRecoveredDeat
 
     return (e - s)
 }
+
+export async function getWorldCOVIDVaccination() {
+    let response = await axios.get(
+        "https://disease.sh/v3/covid-19/vaccine/coverage?lastdays=all"
+    )
+    return response.data;
+    // do something with myJson
+    }
