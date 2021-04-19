@@ -33,6 +33,8 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
     useEffect(() => {
         if (country.toLowerCase() === 'australia') {
             setShowRestrictionsTab('block')
+        } else {
+            setShowRestrictionsTab('none')
         }
     }, [country])
     useEffect(() => {
