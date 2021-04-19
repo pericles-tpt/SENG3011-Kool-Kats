@@ -46,13 +46,14 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 country = 'all'
             }
             console.log('getting covid data...')
-            setCovidData({cases: {}, recovered: {}, deaths: {}, timeline: {cases: {}, recovered: {}, deaths: {}}})
             const data = await getCOVIDCases(country)
+            console.log(data)
             setCovidData(data)
             console.log('done gettign covid data...')
         }
         getData()
     }, [location])
+
     useEffect(() => {
         console.log("start date/end date changed")
         var startYear, startMonth, startDay, startDateObj
@@ -77,6 +78,7 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
             setxNum(6)
         }
     }, [startDate, endDate])
+
     useEffect(() => {
         const date = new Date()
         const dateString = moment(date).subtract(1, 'days').format('M/D/YY')
@@ -103,7 +105,8 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 }
             }
         }
-    }, [location, covidData])
+    }, [covidData])
+
     useEffect(() => {
         async function getInfo() {
             var endDateObj = new Date()
