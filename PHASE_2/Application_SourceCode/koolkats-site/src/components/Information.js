@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PieChart from "./PieChart";
 import "./Information.css";
-import {
-  getPopularDiseases,
-  getOccurrences,
-} from "./RequestData";
+import { getPopularDiseases, getOccurrences } from "./RequestData";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import InfoNavBar from "./InfoNavBar";
@@ -82,6 +79,7 @@ function Information({ diseases, startDate, endDate, country }) {
             startDate={startDateString}
             endDate={endDateString}
             country={country}
+            showTopDiseases={showTopDiseases}
             setShowTopDiseases={setShowTopDiseases}
           />
         </Row>

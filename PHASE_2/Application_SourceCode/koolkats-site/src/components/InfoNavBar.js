@@ -12,6 +12,7 @@ import ArticlesModal from "./ArticlesModal";
 import CovidGraph from "./CovidGraph";
 
 const InfoNavBar = ({
+  showTopDiseases,
   setShowTopDiseases,
   country,
   diseases,
@@ -57,7 +58,9 @@ const InfoNavBar = ({
         <Row className="justify-content-center">
           <Nav.Item href="/topdisease">
             <Button
-              variant="outline-primary"
+              variant={
+                showTopDiseases === "block" ? "primary" : "outline-primary"
+              }
               className="m-1"
               onClick={() => {
                 setShowTopDiseases("block");
@@ -72,7 +75,11 @@ const InfoNavBar = ({
           </Nav.Item>
           <Nav.Item eventkey="/vaccination">
             <Button
-              variant="outline-primary"
+              variant={
+                showVaccinationPercentage === "block"
+                  ? "primary"
+                  : "outline-primary"
+              }
               className="m-1"
               onClick={() => {
                 setShowTopDiseases("none");
@@ -87,7 +94,9 @@ const InfoNavBar = ({
           </Nav.Item>
           <Nav.Item eventkey="/moreInfo">
             <Button
-              variant="outline-primary"
+              variant={
+                showViewArticles === "block" ? "primary" : "outline-primary"
+              }
               className="m-1"
               onClick={() => {
                 setShowTopDiseases("none");
@@ -117,7 +126,9 @@ const InfoNavBar = ({
           >
             <Button
               className="m-1"
-              variant="outline-primary"
+              variant={
+                showRestrictions === "block" ? "primary" : "outline-primary"
+              }
               onClick={() => {
                 setShowTopDiseases("none");
                 setShowViewArticles("none");
