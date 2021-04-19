@@ -19,6 +19,7 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
     const handleClose = () => setShowArticlesModal(false);
     const [showChange, setShowChange] = useState(false)
     const [showVaccinationPercentage, setShowVaccinationPercentage] = useState('none')
+    const [showRestrictionsTab, setShowRestrictionsTab] = useState('none')
     const onSelect = (selectedList, selectedItem) => {
         setSelectedDiseases([...diseaseList, selectedItem]);
     };
@@ -29,6 +30,11 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
         });
         setSelectedDiseases(selectedDiseasesCopy);
     };
+    useEffect(() => {
+        if (country.toLowerCase() === 'australia') {
+            setShowRestrictionsTab('block')
+        }
+    }, [country])
     useEffect(() => {
 
     }, [showArticlesModal, showRestrictions, showVaccinationPercentage, showViewArticles])
@@ -59,9 +65,7 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
                         setShowViewArticles('block')
                         setShowChange(true)
                         setShowVaccinationPercentage('none')
-                        if (country.toLowerCase() === 'australia') {
-                            setShowRestrictions('block')
-                        }
+                        setShowRestrictions('none')
                     }}>Disease Info</Button>
                 </Nav.Item>
                 <Nav.Item>
@@ -73,6 +77,17 @@ const InfoNavBar = ({setShowTopDiseases, country, diseases, startDate, endDate})
                     >
                         View related articles
                     </Button>
+                </Nav.Item>
+                <Nav.Item eventkey="/restrictions" style={{display: showRestrictionsTab}}>
+                    <Button variant="light" onClick={() => {
+                        setShowTopDiseases('none')
+                        setShowViewArticles('none')
+                        setShowChange(false)
+                        setShowVaccinationPercentage('none')
+                        if (country.toLowerCase() === 'australia') {
+                            setShowRestrictions('block')
+                        }
+                    }}>State Restrictions</Button>
                 </Nav.Item>
             </Nav>
             <Row 
