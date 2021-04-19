@@ -7,11 +7,12 @@ import {getDisease} from './RequestData'
 const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) => {
     const [showChart, setShowChart] = useState('block')
     const [cases, setCases] = useState([])
+    const [numValues, setNumValues] = useState(5)
     useEffect(() => {
-        if (showChart === 'block') {
-            setShowChart('none')
-        } else {
+        if (show) {
             setShowChart('block')
+        } else {
+            setShowChart('none')
         }
     }, [show])
     useEffect(() => {
@@ -65,7 +66,7 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
                     title: {
                         text: 'Year'
                     },
-                    categories: [startYear, endYear-5, endYear-4, endYear-3, endYear-2, endYear-1, endYear]
+                    categories: [endYear-5, endYear-4, endYear-3, endYear-2, endYear-1, endYear]
                 },
                 yAxis: {
                     title: {
@@ -74,9 +75,16 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
                 },
                 series: []
             }
+            var values = 5
             if (endYear != 2021) {
                 opts.xAxis.categories.push(2021)
+                values += 1
             }
+            if (startYear < endYear-5) {
+                opts.xAxis.categories.unshift(startYear)
+                values += 1
+            }
+            setNumValues(values)
             var dict = {}
             console.log(stats)
             for (var stat in stats) {
@@ -92,21 +100,18 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
             }
             console.log(dict)
             for (var key in dict) {
-                while (dict[key].length < 6) {
-                    dict[key].push(dict[key[0]])
-                }
-                if (endYear != 2021) {
-                    dict[key].push(dict[key[0]])
+                while (dict[key].length < numValues) {
+                    dict[key].push(dict[key][dict[key].length-1])
                 }
                 opts.series.push({name: key, data: dict[key]})
             }
             for (var dis in disease) {
                 if (!(disease[dis] in dict)) {
-                    if (endYear != 2021) {
-                        opts.series.push({name: disease[dis], data: dict[0,0,0,0,0,0,0]})
-                    } else {
-                        opts.series.push({name: disease[dis], data: dict[0,0,0,0,0,0]})
+                    var ddata = []
+                    while (ddata.length < numValues) {
+                        ddata.push(0)
                     }
+                    opts.series.push({name: disease[dis], data: ddata})
                 }
             }
             setOptions(opts)
