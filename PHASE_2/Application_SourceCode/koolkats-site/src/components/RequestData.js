@@ -222,8 +222,9 @@ export function crdInRange(json, country, startDate, endDate, casesRecoveredDeat
 
     var s = 0
     var e = 0
+
+    var sdInCases = false
     try {
-        var sdInCases = false
         for (const [date, cs] of Object.entries(cases)) {
             if (date === sd) {
             s = cs
@@ -233,8 +234,9 @@ export function crdInRange(json, country, startDate, endDate, casesRecoveredDeat
     } catch {
         console.log("error")
     }
+
+    var edInCases = false
     try {
-        var edInCases = false
         for (const [date, cs] of Object.entries(cases)) {
             if (date === ed) {
             e = cs
