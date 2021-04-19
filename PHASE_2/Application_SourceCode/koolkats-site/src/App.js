@@ -48,10 +48,10 @@ function App() {
   //   console.log(v)
   // }))
 
-  // Promise.resolve(getCOVIDCasesCountries('Australia,UK,US').then(function(v) {
-  //   console.log(v)
-  //   console.log('cases ' + crdInRange(v, 'Australia', '2005-01-01', '2025-01-01', 2))
-  // }))
+  Promise.resolve(getCOVIDCasesCountries('Australia,UK,US').then(function(v) {
+    console.log(v)
+    console.log('cases ' + crdInRange(v, 'Australia', '2021-03-18', '2025-04-18', 1))
+  }))
 
   return (
     <div className="App">

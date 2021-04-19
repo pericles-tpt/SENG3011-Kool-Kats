@@ -4,16 +4,19 @@ import Row from 'react-bootstrap/Row'
 import "bootstrap/dist/css/bootstrap.min.css";
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import {getCOVIDCases, crdInRange} from './RequestData'
+import {getCOVIDCases, getWorldCOVIDVaccination, getVaccinationPercentage} from './RequestData'
 import moment from 'moment'
 const CovidGraph = ({show, startDate, endDate, location}) => {
     const [totalCases, setTotalCases] = useState(0)
     const [totalDeaths, setTotalDeaths] = useState(0)
     const [totalRecovered, setTotalRecovered] = useState(0)
-    const [covidData, setCovidData] = useState({})
+    const [covidData, setCovidData] = useState({cases: {}, recovered: {}, deaths: {}, timeline: {cases: {}, recovered: {}, deaths: {}}})
     const [cases, setCases] = useState([0,0,0,0,0,0])
     const [deaths, setDeaths] = useState([0,0,0,0,0,0])
     const [recovered, setRecovered] = useState([0,0,0,0,0,0])
+    const [vaccinationPercentage, setVaccinationPercentage] = useState("...")
+    const [worldVaccinationData, setWorldVaccinationData] = useState(0)
+    const [xNum, setxNum] = useState(6)
     const [options, setOptions] = useState({
         chart: {
           type: 'spline'
@@ -23,8 +26,16 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
         },
         series: [
           {
-            data: [1, 2, 1, 4, 3, 6],
-            name: 'series-1'
+            data: [0,0,0,0,0,0],
+            name: 'cases'
+          },
+          {
+            data: [0,0,0,0,0,0],
+            name: 'recovered'
+          },
+          {
+            data: [0,0,0,0,0,0],
+            name: 'deaths'
           }
         ]
       })
@@ -34,11 +45,69 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
             if (country.toLowerCase() === 'world') {
                 country = 'all'
             }
+            console.log('getting covid data...')
             const data = await getCOVIDCases(country)
+            console.log(data)
             setCovidData(data)
+            console.log('done getting covid data...')
         }
         getData()
-    }, [startDate, endDate, location])
+    }, [location])
+
+    useEffect(() => {
+        console.log("start date/end date changed")
+        var startYear, startMonth, startDay, startDateObj
+        if (startDate) {
+            startYear = parseInt(startDate.split('-')[0])
+            startMonth = parseInt(startDate.split('-')[1])
+            startDay = parseInt(startDate.split('-')[2])
+            startDateObj = new Date (startYear, startMonth-1, startDay)
+        }
+        var endDateObj = new Date()
+        var endYear, endMonth, endDay
+        if (endDate) {
+            endYear = parseInt(endDate.split('-')[0])
+            endMonth = parseInt(endDate.split('-')[1])
+            endDay = parseInt(endDate.split('-')[2])
+            endDateObj = new Date (endYear, endMonth-1, endDay)
+        }
+        const minEndDate = moment(endDate).subtract(6, 'months').format('YYYY-MM-DD')
+        if (moment(startDate).isBefore(minEndDate)) {
+            setxNum(7)
+        } else {
+            setxNum(6)
+        }
+    }, [startDate, endDate])
+
+    useEffect(() => {
+        const date = new Date()
+        const dateString = moment(date).subtract(1, 'days').format('M/D/YY')
+        console.log(covidData)
+        if (location.toLowerCase() === 'world') {
+            if (covidData.cases[dateString]) {
+                setTotalCases(covidData.cases[dateString])
+            }
+            if (covidData.recovered[dateString]) {
+                setTotalRecovered(covidData.recovered[dateString])
+            }
+            if (covidData.deaths[dateString]) {
+                setTotalDeaths(covidData.deaths[dateString])
+            }
+        } else {
+            console.log(covidData.timeline)
+            if (covidData.timeline) {
+                if (covidData.timeline.cases[dateString]) {
+                    setTotalCases(covidData.timeline.cases[dateString])
+                }
+                if (covidData.timeline.recovered[dateString]) {
+                    setTotalRecovered(covidData.timeline.recovered[dateString])
+                }
+                if (covidData.timeline.deaths[dateString]) {
+                    setTotalDeaths(covidData.timeline.deaths[dateString])
+                }
+            }
+        }
+    }, [covidData])
     useEffect(() => {
         async function getInfo() {
             var endDateObj = new Date()
@@ -49,61 +118,131 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 endYear = parseInt(endDate.split('-')[0])
                 endMonth = parseInt(endDate.split('-')[1])
                 endDay = parseInt(endDate.split('-')[2].split('T')[0])
-                endDateObj = new Date(endYear, endMonth, endDay)
+                endDateObj = new Date(endYear, endMonth-1, endDay)
             }
-            var country = location
-            if (location.toLowerCase() === 'world') {
-                country = 'all'
-            } 
-            setTotalCases(crdInRange(covidData, country, '2020-01-22', new Date().toISOString().split('T')[0], 0))
-            setRecovered(crdInRange(covidData, country, '2020-01-22', new Date().toISOString().split('T')[0], 1))
-            setDeaths(crdInRange(covidData, country, '2020-01-22', new Date().toISOString().split('T')[0], 2))
             getCases(endDateObj)
             getDeaths(endDateObj)
             getRecovered(endDateObj)
         }
-        async function getCases(endDateObj) {
-            const date1 = moment(endDateObj).subtract(5, 'months').format('YYYY-MM-DD')
-            const date2 = moment(endDateObj).subtract(4, 'months').format('YYYY-MM-DD')
-            const date3 = moment(endDateObj).subtract(3, 'months').format('YYYY-MM-DD')
-            const date4 = moment(endDateObj).subtract(2, 'months').format('YYYY-MM-DD')
-            const date5 = moment(endDateObj).subtract(1, 'months').format('YYYY-MM-DD')
-            const mnth1 = crdInRange(covidData, location, startDate, date1, 0)
-            const mnth2 = crdInRange(covidData, location, startDate, date2, 0)
-            const mnth3 = crdInRange(covidData, location, startDate, date3, 0)
-            const mnth4 = crdInRange(covidData, location, startDate, date4, 0)
-            const mnth5 = crdInRange(covidData, location, startDate, date5, 0)
-            const mnth6 = crdInRange(covidData, location, startDate, endDateObj.toISOString().split('T')[0], 0)
-            setCases([mnth1, mnth2, mnth3, mnth4, mnth5, mnth6])
-
+        function getCases(endDateObj) {
+            const dateString = moment(endDateObj).subtract(1, 'days').format('M/D/YY')
+            const date1 = moment(endDateObj).subtract(5, 'months').format('M/D/YY')
+            const date2 = moment(endDateObj).subtract(4, 'months').format('M/D/YY')
+            const date3 = moment(endDateObj).subtract(3, 'months').format('M/D/YY')
+            const date4 = moment(endDateObj).subtract(2, 'months').format('M/D/YY')
+            const date5 = moment(endDateObj).subtract(1, 'months').format('M/D/YY')
+            var date0 = moment(startDate).format('M/D/YY')
+            var mnth0 = 0, mnth1 = 0, mnth2 = 0, mnth3 = 0, mnth4 = 0, mnth5 = 0, mnth6 = 0
+            if (location.toLowerCase() === 'world') {
+                mnth1 = covidData.cases[date1]
+                mnth2 = covidData.cases[date2]
+                mnth3 = covidData.cases[date3]
+                mnth4 = covidData.cases[date4]
+                mnth5 = covidData.cases[date5]
+                mnth6 = covidData.cases[dateString]
+                if (xNum == 7) {
+                    if (covidData.cases[date0]) {
+                        mnth0 = covidData.cases[date0]
+                    }
+                }
+            } else {
+                mnth1 = covidData.timeline.cases[date1]
+                mnth2 = covidData.timeline.cases[date2]
+                mnth3 = covidData.timeline.cases[date3]
+                mnth4 = covidData.timeline.cases[date4]
+                mnth5 = covidData.timeline.cases[date5]
+                mnth6 = covidData.timeline.cases[dateString]
+                if (xNum == 7) {
+                    if (covidData.timeline.cases[date0]) {
+                        mnth0 = covidData.timeline.cases[date0]
+                    }
+                }
+            }
+            var caseNums = [mnth1, mnth2, mnth3, mnth4, mnth5, mnth6]
+            if (xNum == 7) {
+                caseNums.unshift(mnth0)
+            }
+            setCases(caseNums)
         }
-        async function getDeaths(endDateObj) {
-            const date1 = moment(endDateObj).subtract(5, 'months').format('YYYY-MM-DD')
-            const date2 = moment(endDateObj).subtract(4, 'months').format('YYYY-MM-DD')
-            const date3 = moment(endDateObj).subtract(3, 'months').format('YYYY-MM-DD')
-            const date4 = moment(endDateObj).subtract(2, 'months').format('YYYY-MM-DD')
-            const date5 = moment(endDateObj).subtract(1, 'months').format('YYYY-MM-DD')
-            const mnth1 = crdInRange(covidData, location, startDate, date1, 2)
-            const mnth2 = crdInRange(covidData, location, startDate, date2, 2)
-            const mnth3 = crdInRange(covidData, location, startDate, date3, 2)
-            const mnth4 = crdInRange(covidData, location, startDate, date4, 2)
-            const mnth5 = crdInRange(covidData, location, startDate, date5, 2)
-            const mnth6 = crdInRange(covidData, location, startDate, endDateObj.toISOString().split('T')[0], 2)
-            setDeaths([mnth1, mnth2, mnth3, mnth4, mnth5, mnth6])
+        function getDeaths(endDateObj) {
+            const dateString = moment(endDateObj).subtract(1, 'days').format('M/D/YY')
+            const date1 = moment(endDateObj).subtract(5, 'months').format('M/D/YY')
+            const date2 = moment(endDateObj).subtract(4, 'months').format('M/D/YY')
+            const date3 = moment(endDateObj).subtract(3, 'months').format('M/D/YY')
+            const date4 = moment(endDateObj).subtract(2, 'months').format('M/D/YY')
+            const date5 = moment(endDateObj).subtract(1, 'months').format('M/D/YY')
+            var date0 = moment(startDate).format('M/D/YY')
+            var mnth0 = 0, mnth1 = 0, mnth2 = 0, mnth3 = 0, mnth4 = 0, mnth5 = 0, mnth6 = 0
+            if (location.toLowerCase() === 'world') {
+                mnth1 = covidData.deaths[date1]
+                mnth2 = covidData.deaths[date2]
+                mnth3 = covidData.deaths[date3]
+                mnth4 = covidData.deaths[date4]
+                mnth5 = covidData.deaths[date5]
+                mnth6 = covidData.deaths[dateString]
+                if (xNum == 7) {
+                    if (covidData.deaths[date0]) {
+                        mnth0 = covidData.deaths[date0]
+                    }
+                }
+            } else {
+                mnth1 = covidData.timeline.deaths[date1]
+                mnth2 = covidData.timeline.deaths[date2]
+                mnth3 = covidData.timeline.deaths[date3]
+                mnth4 = covidData.timeline.deaths[date4]
+                mnth5 = covidData.timeline.deaths[date5]
+                mnth6 = covidData.timeline.deaths[dateString]
+                if (xNum == 7) {
+                    if (covidData.timeline.deaths[date0]) {
+                        mnth0 = covidData.timeline.deaths[date0]
+                    }
+                }
+            }
+            var deathNums = [mnth1, mnth2, mnth3, mnth4, mnth5, mnth6]
+            if (xNum == 7) {
+                deathNums.unshift(mnth0)
+            }
+            setDeaths(deathNums)
         }
-        async function getRecovered(endDateObj) {
-            const date1 = moment(endDateObj).subtract(5, 'months').format('YYYY-MM-DD')
-            const date2 = moment(endDateObj).subtract(4, 'months').format('YYYY-MM-DD')
-            const date3 = moment(endDateObj).subtract(3, 'months').format('YYYY-MM-DD')
-            const date4 = moment(endDateObj).subtract(2, 'months').format('YYYY-MM-DD')
-            const date5 = moment(endDateObj).subtract(1, 'months').format('YYYY-MM-DD')
-            const mnth1 = crdInRange(covidData, location, startDate, date1, 1)
-            const mnth2 = crdInRange(covidData, location, startDate, date2, 1)
-            const mnth3 = crdInRange(covidData, location, startDate, date3, 1)
-            const mnth4 = crdInRange(covidData, location, startDate, date4, 1)
-            const mnth5 = crdInRange(covidData, location, startDate, date5, 1)
-            const mnth6 = crdInRange(covidData, location, startDate, endDateObj.toISOString().split('T')[0], 1)
-            setRecovered([mnth1, mnth2, mnth3, mnth4, mnth5, mnth6])
+        function getRecovered(endDateObj) {
+            const dateString = moment(endDateObj).subtract(1, 'days').format('M/D/YY')
+            const date1 = moment(endDateObj).subtract(5, 'months').format('M/D/YY')
+            const date2 = moment(endDateObj).subtract(4, 'months').format('M/D/YY')
+            const date3 = moment(endDateObj).subtract(3, 'months').format('M/D/YY')
+            const date4 = moment(endDateObj).subtract(2, 'months').format('M/D/YY')
+            const date5 = moment(endDateObj).subtract(1, 'months').format('M/D/YY')
+            var date0 = moment(startDate).format('M/D/YY')
+            var mnth0 = 0, mnth1 = 0, mnth2 = 0, mnth3 = 0, mnth4 = 0, mnth5 = 0, mnth6 = 0
+            if (location.toLowerCase() === 'world') {
+                mnth1 = covidData.recovered[date1]
+                mnth2 = covidData.recovered[date2]
+                mnth3 = covidData.recovered[date3]
+                mnth4 = covidData.recovered[date4]
+                mnth5 = covidData.recovered[date5]
+                mnth6 = covidData.recovered[dateString]
+                if (xNum == 7) {
+                    if (covidData.recovered[date0]) {
+                        mnth0 = covidData.recovered[date0]
+                    }
+                }
+            } else {
+                mnth1 = covidData.timeline.recovered[date1]
+                mnth2 = covidData.timeline.recovered[date2]
+                mnth3 = covidData.timeline.recovered[date3]
+                mnth4 = covidData.timeline.recovered[date4]
+                mnth5 = covidData.timeline.recovered[date5]
+                mnth6 = covidData.timeline.recovered[dateString]
+                if (xNum == 7) {
+                    if (covidData.timeline.recovered[date0]) {
+                        mnth0 = covidData.timeline.recovered[date0]
+                    }
+                }
+            }
+            var recNums = [mnth1, mnth2, mnth3, mnth4, mnth5, mnth6]
+            if (xNum == 7) {
+                recNums.unshift(mnth0)
+            }
+            setRecovered(recNums)
         }
         try {
             getInfo()
@@ -112,23 +251,22 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
         }
     }, [covidData])
     useEffect(() => {
+        console.log("xNum: ", xNum)
         var endDateObj = new Date()
-        var endYear = endDateObj.getFullYear()
-        var endMonth = endDateObj.getMonth()
-        var endDay = endDateObj.getDate()
         if (endDate) {
-            endYear = parseInt(endDate.split('-')[0])
-            endMonth = parseInt(endDate.split('-')[1])
-            endDay = parseInt(endDate.split('-')[2].split('T')[0])
+            const endYear = parseInt(endDate.split('-')[0])
+            const endMonth = parseInt(endDate.split('-')[1])
+            const endDay = parseInt(endDate.split('-')[2].split('T')[0])
             endDateObj = new Date (endYear, endMonth, endDay)
         }
+        const date0 = moment(startDate).format('YYYY-MM-DD')
         const date1 = moment(endDateObj).subtract(6, 'months').format('YYYY-MM-DD')
         const date2 = moment(endDateObj).subtract(5, 'months').format('YYYY-MM-DD')
         const date3 = moment(endDateObj).subtract(4, 'months').format('YYYY-MM-DD')
         const date4 = moment(endDateObj).subtract(3, 'months').format('YYYY-MM-DD')
         const date5 = moment(endDateObj).subtract(2, 'months').format('YYYY-MM-DD')
         const date6 = endDate.split('T')[0]
-        var opts = {
+        var graphOpts = {
             chart: {
                 type: 'spline'
             },
@@ -163,8 +301,34 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 data: recovered
             }]
         }
-        setOptions(opts)
-    }, [cases, recovered, deaths])
+        // if start date before graph
+        if (xNum == 7) {
+            graphOpts.xAxis.categories.unshift(date0)
+        }
+        setOptions(graphOpts)
+    }, [cases, recovered, deaths, xNum, startDate, endDate])
+    useEffect(() => {
+        async function getVaccinationInfo() {
+            var percentage = 0
+            if (location.toLowerCase() === 'world') {
+                const res = await getWorldCOVIDVaccination()
+                setWorldVaccinationData(res)
+            } else {
+                percentage = await getVaccinationPercentage(location)
+                if (percentage === 'n/a') {
+                    percentage = null
+                }
+            }
+            setVaccinationPercentage(percentage)
+        }
+        getVaccinationInfo()
+      }, [location])
+    useEffect(() => {
+        const date = new Date()
+        const dateString = moment(date).subtract(1, 'days').format('M/D/YY')
+        var totalVaccinations = worldVaccinationData[dateString]
+        setVaccinationPercentage(((totalVaccinations/7900000000)*100).toFixed(2))
+    }, [worldVaccinationData])
     return (
         <Container 
             className="justify-content-md-center" 
@@ -172,6 +336,9 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 margin: '5px', 
                 display: show
             }}>
+            <Row className="justify-content-md-center">
+                {(vaccinationPercentage) ? 'COVID-19 Vaccination Percentage: ' + vaccinationPercentage + '%' : 'Could not find vaccination percentage'}
+            </Row>
             <Row className="justify-content-md-center">
                 Total Cases: {totalCases}
             </Row>
@@ -182,14 +349,14 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 Total Recovered: {totalRecovered}
             </Row>
             <Row className="justify-content-md-center">
-            <div
-                style={{
-                    width: '400px',
-                    height: '300px'
-                }}
-            >
-                <HighchartsReact highcharts={Highcharts} options={options} />
-            </div>
+                <div
+                    style={{
+                        width: '400px',
+                        height: '300px'
+                    }}
+                >
+                    <HighchartsReact highcharts={Highcharts} options={options} />
+                </div>
             </Row>
         </Container>
     )

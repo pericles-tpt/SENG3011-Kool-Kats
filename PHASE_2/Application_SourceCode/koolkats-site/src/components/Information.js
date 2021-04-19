@@ -1,22 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import PieChart from "./PieChart";
-import Button from "react-bootstrap/Button";
 import "./Information.css";
-import axios from "axios";
 import {
   getPopularDiseases,
   getOccurrences,
-  getVaccinationPercentage,
-  getStateRestrictionAus,
 } from "./RequestData";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import InfoNavBar from "./InfoNavBar";
 
 function Information({ diseases, startDate, endDate, country }) {
-  const [startDateString, setStartDateString] = useState("");
-  const [endDateString, setEndDateString] = useState("");
+  const [startDateString, setStartDateString] = useState("1997-01-01");
+  const [endDateString, setEndDateString] = useState("2022-01-01");
   const [data, setData] = useState([]);
   const [graphTitle, setGraphTitle] = useState("");
   const [showTopDiseases, setShowTopDiseases] = useState("block");
@@ -80,8 +75,7 @@ function Information({ diseases, startDate, endDate, country }) {
   return (
     <div className="divOutline" style={{ overflow: "scroll" }}>
       <Container>
-        <h4>Information</h4>
-        <p>Country: {country}</p>
+        <h5>Country: {country}</h5>
         <Row>
           <InfoNavBar
             diseases={diseases}

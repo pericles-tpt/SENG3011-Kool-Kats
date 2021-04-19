@@ -52,3 +52,9 @@
 .logo {
   width: 160px;
 }
+
+.information-divider {
+  background-color: #eeeeee;
+  height: 2px;
+  margin-top: 4px;
+}
