@@ -49,7 +49,7 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
             const data = await getCOVIDCases(country)
             console.log(data)
             setCovidData(data)
-            console.log('done gettign covid data...')
+            console.log('done getting covid data...')
         }
         getData()
     }, [location])
@@ -82,6 +82,7 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
     useEffect(() => {
         const date = new Date()
         const dateString = moment(date).subtract(1, 'days').format('M/D/YY')
+        console.log(covidData)
         if (location.toLowerCase() === 'world') {
             if (covidData.cases[dateString]) {
                 setTotalCases(covidData.cases[dateString])
@@ -93,6 +94,7 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 setTotalDeaths(covidData.deaths[dateString])
             }
         } else {
+            console.log(covidData.timeline)
             if (covidData.timeline) {
                 if (covidData.timeline.cases[dateString]) {
                     setTotalCases(covidData.timeline.cases[dateString])
@@ -106,7 +108,6 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
             }
         }
     }, [covidData])
-
     useEffect(() => {
         async function getInfo() {
             var endDateObj = new Date()
@@ -314,6 +315,9 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 setWorldVaccinationData(res)
             } else {
                 percentage = await getVaccinationPercentage(location)
+                if (percentage === 'n/a') {
+                    percentage = null
+                }
             }
             setVaccinationPercentage(percentage)
         }
@@ -333,7 +337,7 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 display: show
             }}>
             <Row className="justify-content-md-center">
-                COVID-19 Vaccination Percentage: {vaccinationPercentage}%
+                {(vaccinationPercentage) ? 'COVID-19 Vaccination Percentage: ' + vaccinationPercentage + '%' : 'Could not find vaccination percentage'}
             </Row>
             <Row className="justify-content-md-center">
                 Total Cases: {totalCases}
