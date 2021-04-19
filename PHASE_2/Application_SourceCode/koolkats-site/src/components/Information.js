@@ -75,8 +75,7 @@ function Information({ diseases, startDate, endDate, country }) {
   return (
     <div className="divOutline" style={{ overflow: "scroll" }}>
       <Container>
-        <h4>Information</h4>
-        <p>Country: {country}</p>
+        <h5>Country: {country}</h5>
         <Row>
           <InfoNavBar
             diseases={diseases}
