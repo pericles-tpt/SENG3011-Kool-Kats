@@ -30,6 +30,11 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
             if (location.toLowerCase() === 'world') {
                 country = null
             } 
+            const startYear = parseInt(startDate.split('-')[0])
+            const startMonth = parseInt(startDate.split('-')[1])
+            const startDay = parseInt(startDate.split('-')[2])
+            console.log(startDate, endDate)
+            const start = await getDisease(startDate, new Date(startYear+1, startMonth-1, startDay).toISOString(), disease, country)
             const yr1 = await getDisease(startDate, new Date(endYear-5, endMonth-1, endDay).toISOString(), disease, country)
             const yr2 = await getDisease(startDate, new Date(endYear-4, endMonth-1, endDay).toISOString(), disease, country)
             const yr3 = await getDisease(startDate, new Date(endYear-3, endMonth-1, endDay).toISOString(), disease, country)
@@ -37,7 +42,7 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
             const yr5 = await getDisease(startDate, new Date(endYear-1, endMonth-1, endDay).toISOString(), disease, country)
             const yr6 = await getDisease(startDate, endDate, disease, location)
             const currCases = await getDisease(startDate, new Date().toISOString(), disease, country)
-            const stats = [yr1, yr2, yr3, yr4, yr5, yr6, currCases]
+            const stats = [start, yr1, yr2, yr3, yr4, yr5, yr6]
             var opts = {
                 chart: {
                     type: 'spline'
@@ -52,13 +57,13 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
                     label: {
                         connectorAllowed: false
                     },
-                    pointStart: endYear-5
+                    pointStart: startYear
                 },
                 xAxis: {
                     title: {
                         text: 'Year'
                     },
-                    categories: [endYear-5, endYear-4, endYear-3, endYear-2, endYear-1, endYear]
+                    categories: [startYear, endYear-5, endYear-4, endYear-3, endYear-2, endYear-1, endYear]
                 },
                 yAxis: {
                     title: {
@@ -102,7 +107,6 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
                     }
                 }
             }
-            //setCases(currCases)
             setOptions(opts)
         }
         try {
@@ -120,8 +124,8 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
         },
         series: [
           {
-            data: [1, 2, 1, 4, 3, 6],
-            name: 'series-1'
+            data: [0,0,0,0,0,0,0],
+            name: disease
           }
         ]
       })

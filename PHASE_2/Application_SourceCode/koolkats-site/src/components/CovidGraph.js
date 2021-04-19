@@ -46,6 +46,7 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 country = 'all'
             }
             console.log('getting covid data...')
+            setCovidData({cases: {}, recovered: {}, deaths: {}, timeline: {cases: {}, recovered: {}, deaths: {}}})
             const data = await getCOVIDCases(country)
             setCovidData(data)
             console.log('done gettign covid data...')
@@ -58,7 +59,7 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
         if (startDate) {
             startYear = parseInt(startDate.split('-')[0])
             startMonth = parseInt(startDate.split('-')[1])
-            startDay = parseInt(startDate.split('-'))
+            startDay = parseInt(startDate.split('-')[2])
             startDateObj = new Date (startYear, startMonth-1, startDay)
         }
         var endDateObj = new Date()
@@ -66,7 +67,7 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
         if (endDate) {
             endYear = parseInt(endDate.split('-')[0])
             endMonth = parseInt(endDate.split('-')[1])
-            endDay = parseInt(endDate.split('-'))
+            endDay = parseInt(endDate.split('-')[2])
             endDateObj = new Date (endYear, endMonth-1, endDay)
         }
         const minEndDate = moment(endDate).subtract(6, 'months').format('YYYY-MM-DD')
@@ -90,14 +91,16 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 setTotalDeaths(covidData.deaths[dateString])
             }
         } else {
-            if (covidData.timeline.cases[dateString]) {
-                setTotalCases(covidData.timeline.cases[dateString])
-            }
-            if (covidData.timeline.recovered[dateString]) {
-                setTotalRecovered(covidData.timeline.recovered[dateString])
-            }
-            if (covidData.timeline.deaths[dateString]) {
-                setTotalDeaths(covidData.timeline.deaths[dateString])
+            if (covidData.timeline) {
+                if (covidData.timeline.cases[dateString]) {
+                    setTotalCases(covidData.timeline.cases[dateString])
+                }
+                if (covidData.timeline.recovered[dateString]) {
+                    setTotalRecovered(covidData.timeline.recovered[dateString])
+                }
+                if (covidData.timeline.deaths[dateString]) {
+                    setTotalDeaths(covidData.timeline.deaths[dateString])
+                }
             }
         }
     }, [location, covidData])
@@ -299,7 +302,7 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
             graphOpts.xAxis.categories.unshift(date0)
         }
         setOptions(graphOpts)
-    }, [cases, recovered, deaths, xNum])
+    }, [cases, recovered, deaths, xNum, startDate, endDate])
     useEffect(() => {
         async function getVaccinationInfo() {
             var percentage = 0
