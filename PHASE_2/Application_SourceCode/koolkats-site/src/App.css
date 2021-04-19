@@ -47,6 +47,13 @@
 
 .results {
   margin-top: 1%;
+  justify-content: center;
+}
+
+@media (max-width: 1200px) {
+  .results {
+    flex-wrap: wrap;
+  }
 }
 
 .logo {

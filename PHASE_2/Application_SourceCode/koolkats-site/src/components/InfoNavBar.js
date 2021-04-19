@@ -54,96 +54,99 @@ const InfoNavBar = ({
   ]);
   return (
     <Container>
-      <Nav defaultActiveKey="/topdisease">
-        <Row className="justify-content-center">
-          <Nav.Item href="/topdisease">
-            <Button
-              variant={
-                showTopDiseases === "block" ? "primary" : "outline-primary"
-              }
-              className="m-1"
-              onClick={() => {
-                setShowTopDiseases("block");
-                setShowViewArticles("none");
-                setShowChange(false);
-                setShowVaccinationPercentage("none");
-                setShowRestrictions("none");
-              }}
-            >
-              {country !== "World" ? "Top Diseases" : "Top Countries"}
-            </Button>
-          </Nav.Item>
-          <Nav.Item eventkey="/vaccination">
-            <Button
-              variant={
-                showVaccinationPercentage === "block"
-                  ? "primary"
-                  : "outline-primary"
-              }
-              className="m-1"
-              onClick={() => {
-                setShowTopDiseases("none");
-                setShowViewArticles("none");
-                setShowChange(false);
-                setShowVaccinationPercentage("block");
-                setShowRestrictions("none");
-              }}
-            >
-              COVID Info
-            </Button>
-          </Nav.Item>
-          <Nav.Item eventkey="/moreInfo">
-            <Button
-              variant={
-                showViewArticles === "block" ? "primary" : "outline-primary"
-              }
-              className="m-1"
-              onClick={() => {
-                setShowTopDiseases("none");
-                setShowViewArticles("block");
-                setShowChange(true);
-                setShowVaccinationPercentage("none");
-                setShowRestrictions("none");
-              }}
-            >
-              Disease Info
-            </Button>
-          </Nav.Item>
-          <Nav.Item>
-            <Button
-              className="m-1"
-              variant="outline-primary"
-              onClick={() => {
-                setShowArticlesModal(!showArticlesModal);
-              }}
-            >
-              View related articles
-            </Button>
-          </Nav.Item>
-          <Nav.Item
-            eventkey="/restrictions"
-            style={{ display: showRestrictionsTab }}
-          >
-            <Button
-              className="m-1"
-              variant={
-                showRestrictions === "block" ? "primary" : "outline-primary"
-              }
-              onClick={() => {
-                setShowTopDiseases("none");
-                setShowViewArticles("none");
-                setShowChange(false);
-                setShowVaccinationPercentage("none");
-                if (country.toLowerCase() === "australia") {
-                  setShowRestrictions("block");
+      <Row className="justify-content-center">
+        <Nav defaultActiveKey="/topdisease">
+          <Row className="justify-content-center">
+            <Nav.Item href="/topdisease">
+              <Button
+                variant={
+                  showTopDiseases === "block" ? "primary" : "outline-primary"
                 }
-              }}
+                className="m-1"
+                onClick={() => {
+                  setShowTopDiseases("block");
+                  setShowViewArticles("none");
+                  setShowChange(false);
+                  setShowVaccinationPercentage("none");
+                  setShowRestrictions("none");
+                }}
+              >
+                {country !== "World" ? "Top Diseases" : "Top Countries"}
+              </Button>
+            </Nav.Item>
+            <Nav.Item eventkey="/vaccination">
+              <Button
+                variant={
+                  showVaccinationPercentage === "block"
+                    ? "primary"
+                    : "outline-primary"
+                }
+                className="m-1"
+                onClick={() => {
+                  setShowTopDiseases("none");
+                  setShowViewArticles("none");
+                  setShowChange(false);
+                  setShowVaccinationPercentage("block");
+                  setShowRestrictions("none");
+                }}
+              >
+                COVID Info
+              </Button>
+            </Nav.Item>
+            <Nav.Item eventkey="/moreInfo">
+              <Button
+                variant={
+                  showViewArticles === "block" ? "primary" : "outline-primary"
+                }
+                className="m-1"
+                onClick={() => {
+                  setShowTopDiseases("none");
+                  setShowViewArticles("block");
+                  setShowChange(true);
+                  setShowVaccinationPercentage("none");
+                  setShowRestrictions("none");
+                }}
+              >
+                Disease Info
+              </Button>
+            </Nav.Item>
+            <Nav.Item>
+              <Button
+                className="m-1"
+                variant="outline-primary"
+                onClick={() => {
+                  setShowArticlesModal(!showArticlesModal);
+                }}
+              >
+                View related articles
+              </Button>
+            </Nav.Item>
+            <Nav.Item
+              eventkey="/restrictions"
+              style={{ display: showRestrictionsTab }}
             >
-              State Restrictions
-            </Button>
-          </Nav.Item>
-        </Row>
-      </Nav>
+              <Button
+                className="m-1"
+                variant={
+                  showRestrictions === "block" ? "primary" : "outline-primary"
+                }
+                onClick={() => {
+                  setShowTopDiseases("none");
+                  setShowViewArticles("none");
+                  setShowChange(false);
+                  setShowVaccinationPercentage("none");
+                  if (country.toLowerCase() === "australia") {
+                    setShowRestrictions("block");
+                  }
+                }}
+              >
+                State Restrictions
+              </Button>
+            </Nav.Item>
+          </Row>
+        </Nav>
+      </Row>
+
       <div className="information-divider"></div>
       <Row className="justify-content-md-center">
         <ArticlesModal
