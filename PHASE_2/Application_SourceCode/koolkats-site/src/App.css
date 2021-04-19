@@ -41,7 +41,7 @@
 .filter-input-container {
   border: solid 1px #888888;
   border-radius: 10px;
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
   padding: 2%;
 }
 
@@ -49,3 +49,6 @@
   margin-top: 1%;
 }
 
+.logo {
+  width: 160px;
+}
