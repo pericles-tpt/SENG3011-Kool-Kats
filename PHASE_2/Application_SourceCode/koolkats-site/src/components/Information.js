@@ -10,8 +10,8 @@ import Row from "react-bootstrap/Row";
 import InfoNavBar from "./InfoNavBar";
 
 function Information({ diseases, startDate, endDate, country }) {
-  const [startDateString, setStartDateString] = useState("");
-  const [endDateString, setEndDateString] = useState("");
+  const [startDateString, setStartDateString] = useState("1997-01-01");
+  const [endDateString, setEndDateString] = useState("2022-01-01");
   const [data, setData] = useState([]);
   const [graphTitle, setGraphTitle] = useState("");
   const [showTopDiseases, setShowTopDiseases] = useState("block");
