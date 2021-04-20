@@ -6,18 +6,97 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import {getStateRestrictionAus} from './RequestData'
 
 const RestrictionsOverlay = ({show}) => {
-    const [restrictions, setRestrictions] = useState('')
-    const [state, setState] = useState('')
+    const [restrictions, setRestrictions] = useState([{'...': 'Could not get restrictions'}])
+    const [state, setState] = useState('NSW')
     useEffect(() => {
+        console.log('state changed ', state)
         async function getInfo() {
+            console.log("in get info...")
+            if (state === 'NSW') {
+                setRestrictions([
+                    {'ACT': 'ACT->NSW'}, 
+                    {'QLD': 'QLD->NSW'}, 
+                    {'VIC': 'VIC->NSW'},
+                    {'WA': 'WA->NSW'},
+                    {'SA': 'SA->NSW'},
+                    {'NT': 'NT->NSW'},
+                    {'TAS': 'TAS->NSW'}
+                ])
+            } else if (state === 'ACT') {
+                setRestrictions([
+                    {'NSW': 'NSW->ACT'}, 
+                    {'QLD': 'QLD->ACT'}, 
+                    {'VIC': 'VIC->ACT'},
+                    {'WA': 'WA->ACT'},
+                    {'SA': 'SA->ACT'},
+                    {'NT': 'NT->ACT'},
+                    {'TAS': 'TAS->ACT'}
+                ])
+            } else if (state === 'TAS') {
+                setRestrictions([
+                    {'ACT': 'ACT->TAS'},
+                    {'NSW': 'NSW->TAS'}, 
+                    {'QLD': 'QLD->TAS'}, 
+                    {'VIC': 'VIC->TAS'},
+                    {'WA': 'WA->TAS'},
+                    {'SA': 'SA->TAS'},
+                    {'NT': 'NT->TAS'}
+                ])
+            } else if (state === 'VIC') {
+                setRestrictions([
+                    {'ACT': 'ACT->VIC'},
+                    {'NSW': 'NSW->VIC'}, 
+                    {'QLD': 'QLD->VIC'}, 
+                    {'WA': 'WA->VIC'},
+                    {'SA': 'SA->VIC'},
+                    {'NT': 'NT->VIC'},
+                    {'TAS': 'TAS->VIC'}
+                ])
+            } else if (state === 'QLD') {
+                setRestrictions([
+                    {'ACT': 'ACT->QLD'},
+                    {'NSW': 'NSW->QLD'}, 
+                    {'VIC': 'VIC->QLD'}, 
+                    {'WA': 'WA->QLD'},
+                    {'SA': 'SA->QLD'},
+                    {'NT': 'NT->QLD'},
+                    {'TAS': 'TAS->QLD'}
+                ])
+            } else if (state === 'NT') {
+                setRestrictions([
+                    {'ACT': 'ACT->NT'},
+                    {'NSW': 'NSW->NT'}, 
+                    {'VIC': 'VIC->NT'}, 
+                    {'QLD': 'QLD->NT'}, 
+                    {'WA': 'WA->NT'},
+                    {'SA': 'SA->NT'},
+                    {'TAS': 'TAS->NT'}
+                ])
+            } else if (state === 'SA') {
+                setRestrictions([
+                    {'ACT': 'ACT->SA'},
+                    {'NSW': 'NSW->SA'}, 
+                    {'VIC': 'VIC->SA'}, 
+                    {'QLD': 'QLD->SA'}, 
+                    {'WA': 'WA->SA'},
+                    {'NT': 'NT->SA'},
+                    {'TAS': 'TAS->SA'}
+                ])
+            } else if (state === 'WA') {
+                setRestrictions([
+                    {'ACT': 'ACT->WA'},
+                    {'NSW': 'NSW->WA'}, 
+                    {'VIC': 'VIC->WA'}, 
+                    {'QLD': 'QLD->WA'}, 
+                    {'SA': 'SA->WA'},
+                    {'NT': 'NT->WA'},
+                    {'TAS': 'TAS->WA'}
+                ])
+            } 
             const res = await getStateRestrictionAus()
             setRestrictions(res)
         }
-        try {
-            getInfo()
-        } catch {
-            setRestrictions('Could not get restrictions')
-        }
+        getInfo()
     }, [state])
     return (
         <Container 
@@ -40,20 +119,26 @@ const RestrictionsOverlay = ({show}) => {
                 </DropdownButton>
             </Row>
             <Row className="justify-content-md-center">
-                <RestrictionsForState state={state} restriction={restrictions}/>
+                {restrictions.map((rule, index) => (<RestrictionsForState num={index} stateTo={state} restriction={rule}/>))}
             </Row>
         </Container>
     )
 }
 
-const RestrictionsForState = ({state, restriction}) => {
-    if (state === '') {
-        return null
-    }
+const RestrictionsForState = ({num, stateTo, restriction}) => {
+    console.log(stateTo, restriction, num)
+    const ruleNum = num + 1
+    const state = Object.keys(restriction)
+    const rule = restriction[state]
     return (
-        <Row>
-            {state} restrictions: {restriction}
-        </Row>
+        <Container>
+            <Row>
+                {ruleNum + '. Travel Restrictions from ' + state + ' to ' +stateTo+ ': '}
+            </Row>
+            <Row>
+                {(rule) ? rule: 'Could not get restrictions'}
+            </Row>
+        </Container>
     )
 }
 
