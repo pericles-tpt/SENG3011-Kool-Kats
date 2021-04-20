@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PieChart from "./PieChart";
 import "./Information.css";
-import {
-  getPopularDiseases,
-  getOccurrences,
-} from "./RequestData";
+import { getPopularDiseases, getOccurrences } from "./RequestData";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import InfoNavBar from "./InfoNavBar";
@@ -75,14 +72,14 @@ function Information({ diseases, startDate, endDate, country }) {
   return (
     <div className="divOutline" style={{ overflow: "scroll" }}>
       <Container>
-        <h4>Information</h4>
-        <p>Country: {country}</p>
+        <h5>Country: {country}</h5>
         <Row>
           <InfoNavBar
             diseases={diseases}
             startDate={startDateString}
             endDate={endDateString}
             country={country}
+            showTopDiseases={showTopDiseases}
             setShowTopDiseases={setShowTopDiseases}
           />
         </Row>

@@ -6,7 +6,7 @@ import getDisease, {
   getVaccinationPercentage,
   getStateRestrictionAus,
   getCOVIDCasesCountries,
-  crdInRange
+  crdInRange,
 } from "./components/RequestData";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -59,12 +59,7 @@ function App() {
       <Container>
         <Row className="align-items-center justify-content-center">
           <Col>
-            <Image
-              src={logo}
-              alt="Logo"
-              roundedCircle
-              style={{ width: "160px" }}
-            />
+            <Image src={logo} alt="Logo" className="logo" roundedCircle />
           </Col>
           <Col xs={10}>
             <FilterInputs
@@ -90,14 +85,12 @@ function App() {
           setSelectedCountry={setSelectedCountry}
         />
         {showInformation && (
-          <Router>
-            <Information
-              diseases={selectedDiseases}
-              startDate={startDate}
-              endDate={endDate}
-              country={selectedCountry}
-            />
-          </Router>
+          <Information
+            diseases={selectedDiseases}
+            startDate={startDate}
+            endDate={endDate}
+            country={selectedCountry}
+          />
         )}
       </div>
     </div>
