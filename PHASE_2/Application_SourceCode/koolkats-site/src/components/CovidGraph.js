@@ -335,16 +335,16 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 display: show
             }}>
             <Row className="justify-content-md-center">
-                {(vaccinationPercentage) ? 'COVID-19 Vaccination Percentage: ' + vaccinationPercentage + '%' : 'Could not find COVID-19 vaccination percentage'}
+                💉 {(vaccinationPercentage) ? 'COVID-19 Vaccination Percentage: ' + vaccinationPercentage + '%' : 'Could not find COVID-19 vaccination percentage'}
             </Row>
             <Row className="justify-content-md-center">
-                🦠 Total Cases: {totalCases}
+                🦠 Cases: {totalCases}
             </Row>
             <Row className="justify-content-md-center">
-                💀 Total Deaths: {totalDeaths}
+                💀 Deaths: {totalDeaths}
             </Row>
             <Row className="justify-content-md-center">
-                Total Recovered: {totalRecovered}
+                🏃 Recovered: {totalRecovered}
             </Row>
             <Row className="justify-content-md-center">
                 <div
