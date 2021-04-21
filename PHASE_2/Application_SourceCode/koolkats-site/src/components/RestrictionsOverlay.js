@@ -155,7 +155,7 @@ const RestrictionsOverlay = ({show}) => {
             <Row className="justify-content-md-center">
                 {restrictions[stateTo][stateFrom]}
             </Row>
-            <Row className="justify-content-md-center">
+            <Row >
                 For more information, view {link.join('\n')}
             </Row>
         </Container>
