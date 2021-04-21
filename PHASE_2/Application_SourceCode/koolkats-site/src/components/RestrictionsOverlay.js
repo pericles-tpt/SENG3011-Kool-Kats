@@ -78,7 +78,8 @@ const RestrictionsOverlay = ({show}) => {
             'SA': 'All interstate arrivals must complete a G2G PASS declaration to enter WA.',
             'NT': 'All interstate arrivals must complete a G2G PASS declaration to enter WA.',
             'TAS': 'All interstate arrivals must complete a G2G PASS declaration to enter WA.'
-        }
+        },
+        '--': {}
     })
     const [stateFrom, setStateFrom] = useState('NSW')
     const [stateTo, setStateTo] = useState('ACT')
@@ -88,28 +89,28 @@ const RestrictionsOverlay = ({show}) => {
         async function getInfo() {
             console.log("in get info...")
             const links = []
-            if (stateTo === 'NSW' || stateFrom === 'NSW') {
+            if (stateTo === 'NSW' || stateFrom === 'NSW' || (stateFrom === '--' && stateTo === '--')) {
                 links.push('https://www.nsw.gov.au/covid-19/rules/border-restrictions')
             } 
-            if (stateTo === 'ACT' || stateFrom === 'ACT') {
+            if (stateTo === 'ACT' || stateFrom === 'ACT' || (stateFrom === '--' && stateTo === '--')) {
                 links.push('https://www.covid19.act.gov.au/community/travel')
             } 
-            if (stateTo === 'TAS' || stateFrom === 'TAS') {
+            if (stateTo === 'TAS' || stateFrom === 'TAS' || (stateFrom === '--' && stateTo === '--')) {
                 links.push('https://coronavirus.tas.gov.au/travellers-and-visitors/coming-to-tasmania')
             } 
-            if (stateTo === 'VIC' || stateFrom === 'VIC') {
+            if (stateTo === 'VIC' || stateFrom === 'VIC' || (stateFrom === '--' && stateTo === '--')) {
                 links.push('https://www.coronavirus.vic.gov.au/travel-restrictions')
             } 
-            if (stateTo === 'QLD' || stateFrom === 'QLD') {
+            if (stateTo === 'QLD' || stateFrom === 'QLD' || (stateFrom === '--' && stateTo === '--')) {
                 links.push('https://www.covid19.qld.gov.au/government-actions/border-closing')
             } 
-            if (stateTo === 'NT' || stateFrom === 'NT') {
+            if (stateTo === 'NT' || stateFrom === 'NT' || (stateFrom === '--' && stateTo === '--')) {
                 links.push('https://coronavirus.nt.gov.au/travel/quarantine')
             } 
-            if (stateTo === 'SA' || stateFrom === 'SA') {
+            if (stateTo === 'SA' || stateFrom === 'SA' || (stateFrom === '--' && stateTo === '--')) {
                 links.push('https://www.covid-19.sa.gov.au/restrictions-and-responsibilities/travel-restrictions')
             } 
-            if (stateTo === 'WA' || stateFrom === 'WA') {
+            if (stateTo === 'WA' || stateFrom === 'WA' || (stateFrom === '--' && stateTo === '--')) {
                 links.push('https://www.wa.gov.au/organisation/department-of-the-premier-and-cabinet/covid-19-coronavirus-travel-and-quarantine')
             } 
             setLink(links)
@@ -128,7 +129,7 @@ const RestrictionsOverlay = ({show}) => {
             <Row className="justify-content-md-center">
                 Travel Restrictions From 
                 <DropdownButton id="dropdown-item-button" title={stateFrom}>
-                    <Dropdown.Item as="button" onClick={() => setStateFrom('')}>None</Dropdown.Item>
+                    <Dropdown.Item as="button" onClick={() => setStateFrom('--')}>--</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => setStateFrom('ACT')}>ACT (Canberra)</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => setStateFrom('NSW')}>New South Wales</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => setStateFrom('NT')}>Northern Territory</Dropdown.Item>
@@ -140,7 +141,7 @@ const RestrictionsOverlay = ({show}) => {
                 </DropdownButton>
                 To
                 <DropdownButton id="dropdown-item-button" title={stateTo}>
-                    <Dropdown.Item as="button" onClick={() => setStateTo('')}>None</Dropdown.Item>
+                    <Dropdown.Item as="button" onClick={() => setStateTo('--')}>--</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => setStateTo('ACT')}>ACT (Canberra)</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => setStateTo('NSW')}>New South Wales</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => setStateTo('NT')}>Northern Territory</Dropdown.Item>
