@@ -46,14 +46,13 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 country = 'all'
             }
             console.log('getting covid data...')
+            //setCovidData({cases: {}, recovered: {}, deaths: {}, timeline: {cases: {}, recovered: {}, deaths: {}}})
             const data = await getCOVIDCases(country)
-            console.log(data)
             setCovidData(data)
             console.log('done getting covid data...')
         }
         getData()
     }, [location])
-
     useEffect(() => {
         console.log("start date/end date changed")
         var startYear, startMonth, startDay, startDateObj
@@ -78,7 +77,6 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
             setxNum(6)
         }
     }, [startDate, endDate])
-
     useEffect(() => {
         const date = new Date()
         const dateString = moment(date).subtract(1, 'days').format('M/D/YY')
@@ -337,13 +335,13 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 display: show
             }}>
             <Row className="justify-content-md-center">
-                {(vaccinationPercentage) ? 'COVID-19 Vaccination Percentage: ' + vaccinationPercentage + '%' : 'Could not find vaccination percentage'}
+                {(vaccinationPercentage) ? 'COVID-19 Vaccination Percentage: ' + vaccinationPercentage + '%' : 'Could not find COVID-19 vaccination percentage'}
             </Row>
             <Row className="justify-content-md-center">
-                Total Cases: {totalCases}
+                🦠 Total Cases: {totalCases}
             </Row>
             <Row className="justify-content-md-center">
-                Total Deaths: {totalDeaths}
+                💀 Total Deaths: {totalDeaths}
             </Row>
             <Row className="justify-content-md-center">
                 Total Recovered: {totalRecovered}
