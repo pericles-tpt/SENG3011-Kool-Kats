@@ -24,7 +24,7 @@ function App() {
   const [selectedDiseases, setSelectedDiseases] = React.useState([]);
   const [selectedCountry, setSelectedCountry] = React.useState("World");
   // const [startDate, setStartDate] = React.useState(new Date(2021, 0, 1));
-  const [startDate, setStartDate] = React.useState(new Date(2021, 0, 1));
+  const [startDate, setStartDate] = React.useState(new Date(2010, 0, 1));
   const [endDate, setEndDate] = React.useState(new Date());
 
   const [showInformation, setShowInformation] = React.useState(false);
