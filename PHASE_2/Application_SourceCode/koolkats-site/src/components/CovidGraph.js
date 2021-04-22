@@ -78,35 +78,6 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
         }
     }, [startDate, endDate])
     useEffect(() => {
-        const date = new Date()
-        const dateString = moment(date).subtract(1, 'days').format('M/D/YY')
-        console.log(covidData)
-        if (location.toLowerCase() === 'world') {
-            if (covidData.cases[dateString]) {
-                setTotalCases(covidData.cases[dateString])
-            }
-            if (covidData.recovered[dateString]) {
-                setTotalRecovered(covidData.recovered[dateString])
-            }
-            if (covidData.deaths[dateString]) {
-                setTotalDeaths(covidData.deaths[dateString])
-            }
-        } else {
-            console.log(covidData.timeline)
-            if (covidData.timeline) {
-                if (covidData.timeline.cases[dateString]) {
-                    setTotalCases(covidData.timeline.cases[dateString])
-                }
-                if (covidData.timeline.recovered[dateString]) {
-                    setTotalRecovered(covidData.timeline.recovered[dateString])
-                }
-                if (covidData.timeline.deaths[dateString]) {
-                    setTotalDeaths(covidData.timeline.deaths[dateString])
-                }
-            }
-        }
-    }, [covidData])
-    useEffect(() => {
         async function getInfo() {
             var endDateObj = new Date()
             var endYear = endDateObj.getFullYear()
@@ -118,9 +89,39 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
                 endDay = parseInt(endDate.split('-')[2].split('T')[0])
                 endDateObj = new Date(endYear, endMonth-1, endDay)
             }
+            updateNumbers()
             getCases(endDateObj)
             getDeaths(endDateObj)
             getRecovered(endDateObj)
+        }
+        function updateNumbers() {
+            const date = new Date()
+            const dateString = moment(date).subtract(1, 'days').format('M/D/YY')
+            console.log(covidData)
+            if (location.toLowerCase() === 'world') {
+                if (covidData.cases[dateString]) {
+                    setTotalCases(covidData.cases[dateString])
+                }
+                if (covidData.recovered[dateString]) {
+                    setTotalRecovered(covidData.recovered[dateString])
+                }
+                if (covidData.deaths[dateString]) {
+                    setTotalDeaths(covidData.deaths[dateString])
+                }
+            } else {
+                console.log(covidData.timeline)
+                if (covidData.timeline) {
+                    if (covidData.timeline.cases[dateString]) {
+                        setTotalCases(covidData.timeline.cases[dateString])
+                    }
+                    if (covidData.timeline.recovered[dateString]) {
+                        setTotalRecovered(covidData.timeline.recovered[dateString])
+                    }
+                    if (covidData.timeline.deaths[dateString]) {
+                        setTotalDeaths(covidData.timeline.deaths[dateString])
+                    }
+                }
+            }
         }
         function getCases(endDateObj) {
             const dateString = moment(endDateObj).subtract(1, 'days').format('M/D/YY')
