@@ -259,7 +259,7 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
         } catch {
             setTotalCases('Not enough information found')
         }
-    }, [covidData])
+    }, [covidData, startDate, endDate])
     useEffect(() => {
         console.log("xNum: ", xNum)
         var endDateObj = new Date()
