@@ -127,7 +127,7 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
           type: 'spline'
         },
         title: {
-          text: 'Change in cases of ' + disease + 'over time'
+          text: 'Change in cases of diseases over time'
         },
         series: [
           {
@@ -143,9 +143,6 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
                 margin: '5px', 
                 display: showChart
             }}>
-            <Row className="justify-content-md-center">
-                Cases: {cases}
-            </Row>
             <Row className="justify-content-md-center">
             <div
                 style={{
