@@ -97,34 +97,45 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
         function updateNumbers() {
             const date = new Date()
             const dateString = moment(date).subtract(1, 'days').format('M/D/YY')
-            console.log(covidData)
+            const oldDate = moment(date).subtract(2, 'days').format('M/D/YY')
             if (location.toLowerCase() === 'world') {
                 if (covidData.cases[dateString]) {
                     setTotalCases(covidData.cases[dateString])
+                } else if (covidData.cases[oldDate]) {
+                    setTotalCases(covidData.cases[oldDate])
                 }
                 if (covidData.recovered[dateString]) {
                     setTotalRecovered(covidData.recovered[dateString])
+                } else if (covidData.recovered[oldDate]) {
+                    setTotalRecovered(covidData.recovered[oldDate])
                 }
                 if (covidData.deaths[dateString]) {
                     setTotalDeaths(covidData.deaths[dateString])
+                } else if (covidData.deaths[oldDate]) {
+                    setTotalDeaths(covidData.deaths[oldDate])
                 }
             } else {
-                console.log(covidData.timeline)
                 if (covidData.timeline) {
                     if (covidData.timeline.cases[dateString]) {
                         setTotalCases(covidData.timeline.cases[dateString])
+                    } else if (covidData.timeline.cases[oldDate]) {
+                        setTotalCases(covidData.timeline.cases[oldDate])
                     }
                     if (covidData.timeline.recovered[dateString]) {
                         setTotalRecovered(covidData.timeline.recovered[dateString])
+                    } else if (covidData.timeline.recovered[oldDate]) {
+                        setTotalRecovered(covidData.timeline.recovered[oldDate])
                     }
                     if (covidData.timeline.deaths[dateString]) {
                         setTotalDeaths(covidData.timeline.deaths[dateString])
+                    } else if (covidData.timeline.deaths[oldDate]) {
+                        setTotalDeaths(covidData.timeline.deaths[oldDate])
                     }
                 }
             }
         }
         function getCases(endDateObj) {
-            const dateString = moment(endDateObj).subtract(1, 'days').format('M/D/YY')
+            const dateString = moment(endDateObj).subtract(2, 'days').format('M/D/YY')
             const date1 = moment(endDateObj).subtract(5, 'months').format('M/D/YY')
             const date2 = moment(endDateObj).subtract(4, 'months').format('M/D/YY')
             const date3 = moment(endDateObj).subtract(3, 'months').format('M/D/YY')
@@ -164,7 +175,7 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
             setCases(caseNums)
         }
         function getDeaths(endDateObj) {
-            const dateString = moment(endDateObj).subtract(1, 'days').format('M/D/YY')
+            const dateString = moment(endDateObj).subtract(2, 'days').format('M/D/YY')
             const date1 = moment(endDateObj).subtract(5, 'months').format('M/D/YY')
             const date2 = moment(endDateObj).subtract(4, 'months').format('M/D/YY')
             const date3 = moment(endDateObj).subtract(3, 'months').format('M/D/YY')
@@ -204,7 +215,7 @@ const CovidGraph = ({show, startDate, endDate, location}) => {
             setDeaths(deathNums)
         }
         function getRecovered(endDateObj) {
-            const dateString = moment(endDateObj).subtract(1, 'days').format('M/D/YY')
+            const dateString = moment(endDateObj).subtract(2, 'days').format('M/D/YY')
             const date1 = moment(endDateObj).subtract(5, 'months').format('M/D/YY')
             const date2 = moment(endDateObj).subtract(4, 'months').format('M/D/YY')
             const date3 = moment(endDateObj).subtract(3, 'months').format('M/D/YY')
