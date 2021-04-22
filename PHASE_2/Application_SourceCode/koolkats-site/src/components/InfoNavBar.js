@@ -173,6 +173,7 @@ const InfoNavBar = ({
               isObject={false}
               onSelect={onSelect}
               onRemove={onRemove}
+              defaultValue={diseases}
             />
           </Col>
         </Row>
