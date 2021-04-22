@@ -54,7 +54,7 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
                     enabled: false,
                 },
                 title: {
-                    text: 'Change in cases of ' + disease + ' over time'
+                    text: 'Change in cases of diseases over time'
                 },
                 series: {
                     label: {
@@ -100,12 +100,18 @@ const ChangeInCasesOverTime = ({show, startDate, endDate, location, disease}) =>
             }
             console.log(dict)
             for (var key in dict) {
+                if (key === '') {
+                    continue
+                }
                 while (dict[key].length < numValues) {
                     dict[key].push(dict[key][dict[key].length-1])
                 }
                 opts.series.push({name: key, data: dict[key]})
             }
             for (var dis in disease) {
+                if (dis === '') {
+                    continue
+                }
                 if (!(disease[dis] in dict)) {
                     var ddata = []
                     while (ddata.length < numValues) {

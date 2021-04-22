@@ -156,7 +156,7 @@ const RestrictionsOverlay = ({show}) => {
                 {restrictions[stateTo][stateFrom]}
             </Row>
             <Row >
-                For more information, view {link.join('\n')}
+                For more information, view {link.join(', \n')}
             </Row>
         </Container>
     )
