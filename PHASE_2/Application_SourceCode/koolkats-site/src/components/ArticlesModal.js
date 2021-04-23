@@ -17,11 +17,6 @@ const ArticlesModal = ({
   endDate,
 }) => {
   // article modal parent object
-  /*
-    const [show, setShow] = useState(true);
-    const handleClose = () => setShow(false);
-    <ArticlesModal handleClose={handleClose} show={show} location="France" disease={selectedDiseases} startDate={startDate} endDate={endDate}/>
-    */
   const [articles, setArticles] = useState([]);
   const [showSpinner, setShowSpinner] = useState("block");
   const [reverseArticles, setReverseArticles] = useState(false);

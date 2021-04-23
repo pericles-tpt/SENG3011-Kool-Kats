@@ -37,14 +37,14 @@ const MapChart = ({
       end = endDate.toISOString().split("T")[0] + "T00:00:00";
     }
     var cur_date = new Date().toISOString().split(".")[0];
-    console.log(cur_date)
+    console.log(cur_date);
     if (startDate == null && endDate != null) {
       start = "1997-01-01T00:00:00";
     } else if (startDate != null && endDate == null) {
       end = cur_date;
     } else if (startDate == null && endDate == null) {
       start = "1997-01-01T00:00:00";
-        end = cur_date;
+      end = cur_date;
     }
 
     console.log("fetching data for map");
@@ -58,112 +58,108 @@ const MapChart = ({
   }, [selectedDiseases, startDate, endDate]);
 
   async function fetchData(diseases, start, end, covid) {
-    var results = await getOccurrences(diseases, start, end)
-      .then((res) => {
-        // Set Max
-        //console.log(res.locations);
-        var tempLocation = res.locations;
-        var length = tempLocation.length;
-        var tempMax = 1;
-        //setMax(1);
-        //console.log(length);
-        for (var i = 0; i < length; i++) {
-          if (tempLocation[i]["cases"] > tempMax) {
-            tempMax = tempLocation[i]["cases"];
-            console.log("max " + tempMax);
-          }
+    var results = await getOccurrences(diseases, start, end).then((res) => {
+      // Set Max
+      //console.log(res.locations);
+      var tempLocation = res.locations;
+      var length = tempLocation.length;
+      var tempMax = 1;
+      //setMax(1);
+      //console.log(length);
+      for (var i = 0; i < length; i++) {
+        if (tempLocation[i]["cases"] > tempMax) {
+          tempMax = tempLocation[i]["cases"];
+          console.log("max " + tempMax);
         }
-        setMax(tempMax);
-        setData(res.locations);
-        var countries = [];
-        for (var i = 0; i < length; i++) {
-          countries[i] = tempLocation[i]["name"];
-        }
-        console.log(tempLocation);
-        console.log(countries);
-        var countriesQuery = countries.join(",");
-        console.log(countriesQuery);
-        const date1 = start;
-        const date2 = end;
-
-        const DAY_UNIT_IN_MILLISECONDS = 24 * 3600 * 1000;
-
-        const diffInMilliseconds = new Date(date1).getTime() - new Date(date2).getTime();
-        const diffInDays = diffInMilliseconds / DAY_UNIT_IN_MILLISECONDS;
-        var noDays = Math.floor(Math.abs(diffInDays));
-        var results = {'Days': noDays, 'Countries': countriesQuery};
-        return results;
-        
-      });
-      var countriesQuery = results['Countries'];
-      var noDays = results['Days'];
-      if (covid) {
-        await getCOVIDCasesCountries(countriesQuery, noDays).then(res => {
-            //console.log(res);
-            var timeline_length = res.length;
-            var timeline = {};
-            if (timeline_length > 1) {
-              for (var i = 0; i < timeline_length; i++) {
-                
-                if (!(res[i] == null)) {
-                  //console.log(res[i]);
-                  timeline[res[i]['country']] = res[i]['timeline']['cases'];
-                  //timeline.push(res[i]['timeline']['cases']);
-                }
-              }
-          } else {
-            timeline[res[0]['country']] = res[0]['timeline']['cases'];
-          }
-
-            // Get total
-            var total = 0;
-            var total_length = timeline.length;
-            for (var key in timeline) {
-              var cases_length = timeline[key];
-              var total = 0;
-              for (var time in timeline[key]) {
-                total += timeline[key][time];
-              }
-              timeline[key]['total'] = total;
-              
-            }
-            console.log(timeline);
-          
-          var new_data = data;
-          console.log(new_data);
-          var tempMax = 0;
-
-            for (var d in timeline) {
-              var length = new_data.length;
-              if (!(d == undefined)) {
-                var Found = false;
-              for (var i = 0; i < length; i++) {
-                //console.log(new_data[i]["name"])
-                if (new_data[i]["name"].toLowerCase() === d.toLowerCase() || new_data[i]["name"].toLowerCase().includes(d.toLowerCase()) || d.toLowerCase().includes(new_data[i]["name"].toLowerCase())) {
-                  console.log('Country ' + d + timeline[d]['total']);
-                  new_data[i]["cases"] += timeline[d]['total'];
-                  if (timeline[d]['total'] > tempMax)
-                    tempMax = timeline[d]['total'];
-                  Found = true;
-                }
-              }
-              // Handle the case the country wasn't found
-              if (!Found) {
-                console.log('Country ' + d + timeline[d]['total']);
-                var list_item = {};
-                list_item["name"] = d;
-                list_item["cases"] = timeline[d]["total"];
-                if (timeline[d]['total'] > tempMax)
-                    tempMax = timeline[d]['total'];
-                new_data.push(list_item);
-              }
-            }
-            // Get data
-            setMax(tempMax);
-            setData(new_data);
-          }
-        });
       }
+      setMax(tempMax);
+      setData(res.locations);
+      var countries = [];
+      for (var i = 0; i < length; i++) {
+        countries[i] = tempLocation[i]["name"];
+      }
+      var countriesQuery = countries.join(",");
+      const date1 = start;
+      const date2 = end;
+
+      const DAY_UNIT_IN_MILLISECONDS = 24 * 3600 * 1000;
+
+      const diffInMilliseconds =
+        new Date(date1).getTime() - new Date(date2).getTime();
+      const diffInDays = diffInMilliseconds / DAY_UNIT_IN_MILLISECONDS;
+      var noDays = Math.floor(Math.abs(diffInDays));
+      var results = { Days: noDays, Countries: countriesQuery };
+      return results;
+    });
+    var countriesQuery = results["Countries"];
+    var noDays = results["Days"];
+    if (covid) {
+      await getCOVIDCasesCountries(countriesQuery, noDays).then((res) => {
+        var timeline_length = res.length;
+        var timeline = {};
+        if (timeline_length > 1) {
+          for (var i = 0; i < timeline_length; i++) {
+            if (!(res[i] == null)) {
+              timeline[res[i]["country"]] = res[i]["timeline"]["cases"];
+              //timeline.push(res[i]['timeline']['cases']);
+            }
+          }
+        } else {
+          timeline[res[0]["country"]] = res[0]["timeline"]["cases"];
+        }
+
+        // Get total
+        var total = 0;
+        var total_length = timeline.length;
+        for (var key in timeline) {
+          var cases_length = timeline[key];
+          var total = 0;
+          for (var time in timeline[key]) {
+            total += timeline[key][time];
+          }
+          timeline[key]["total"] = total;
+        }
+        console.log(timeline);
+
+        var new_data = data;
+        console.log(new_data);
+        var tempMax = 0;
+
+        for (var d in timeline) {
+          var length = new_data.length;
+          if (!(d == undefined)) {
+            var Found = false;
+            for (var i = 0; i < length; i++) {
+              //console.log(new_data[i]["name"])
+              if (
+                new_data[i]["name"].toLowerCase() === d.toLowerCase() ||
+                new_data[i]["name"].toLowerCase().includes(d.toLowerCase()) ||
+                d.toLowerCase().includes(new_data[i]["name"].toLowerCase())
+              ) {
+                console.log("Country " + d + timeline[d]["total"]);
+                new_data[i]["cases"] += timeline[d]["total"];
+                if (timeline[d]["total"] > tempMax)
+                  tempMax = timeline[d]["total"];
+                Found = true;
+              }
+            }
+            // Handle the case the country wasn't found
+            if (!Found) {
+              console.log("Country " + d + timeline[d]["total"]);
+              var list_item = {};
+              list_item["name"] = d;
+              list_item["cases"] = timeline[d]["total"];
+              if (timeline[d]["total"] > tempMax)
+                tempMax = timeline[d]["total"];
+              new_data.push(list_item);
+            }
+          }
+          // Get data
+          setMax(tempMax);
+          setData(new_data);
+        }
+      });
+    }
   }
 
   const color = scaleLinear().domain([1, max]).range(["#ffedea", "#ff5233"]);
@@ -194,13 +190,15 @@ const MapChart = ({
           {({ geographies }) =>
             geographies.map((geo) => {
               const d = data.find(
-                (s) => 
+                (s) =>
                   s["name"]
                     .toLowerCase()
                     .includes(geo.properties.NAME.toLowerCase()) ||
                   geo.properties.NAME.toLowerCase().includes(
                     s["name"].toLowerCase()
-                  ) || geo.properties.NAME.toLowerCase().includes("congo") && s["name"].toLowerCase().includes("congo")
+                  ) ||
+                  (geo.properties.NAME.toLowerCase().includes("congo") &&
+                    s["name"].toLowerCase().includes("congo"))
               );
 
               return (

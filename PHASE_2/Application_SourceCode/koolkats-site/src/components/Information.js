@@ -32,7 +32,6 @@ function Information({ diseases, startDate, endDate, country }) {
   function fetchData() {
     if (country === "World" && diseases.length > 0) {
       setGraphTitle(`Top Countries with Occurences of Selected Disease(s)`);
-      console.log("calling getOccurences");
       getOccurrences(diseases, startDateString, endDateString)
         .then((r) => {
           setData(
@@ -50,7 +49,6 @@ function Information({ diseases, startDate, endDate, country }) {
     } else if (country !== "World") {
       // country selected so get top diseases in that country
       setGraphTitle(`Top Diseases in ${country}`);
-      console.log("calling getPopularDisases");
       getPopularDiseases(startDateString, endDateString, country)
         .then((r) => {
           console.log(r);

@@ -76,17 +76,7 @@ export default function FilterInputs({
     });
     setSelectedDiseases(selectedDiseasesCopy);
   };
-
   //   to convert input date to format for API request - dateObject.toISOString().split('T')[0] + "T00:00:00"
-
-  //   React.useEffect(() => {
-  //     console.log(endDate.toISOString().split("T")[0] + "T00:00:00");
-  //   }, [endDate]);
-
-  //   React.useEffect(() => {
-  //     console.log(selectedDiseases);
-  //   }, [selectedDiseases]);
-
   return (
     <>
       <Form>
